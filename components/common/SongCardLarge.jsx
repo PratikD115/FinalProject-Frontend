@@ -4,6 +4,9 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 
 export default function SongCardLarge({ cover, name, artistName }) {
+
+
+  // const handleOnClick 
   return (
     <>
       <div className="img relative h-40">

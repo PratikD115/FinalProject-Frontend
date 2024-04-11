@@ -53,8 +53,8 @@ export default function Header() {
             />
           </div>
 
-          <Link href ="/signup" className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black">
-            <span className="mr-1"> SignUp</span>
+          <Link href ="/login" className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black">
+            <span className="mr-1">LogIn </span>
             <LoginIcon fontSize="small" />
           </Link>
         </div>

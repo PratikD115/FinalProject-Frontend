@@ -12,11 +12,25 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { useState, useEffect, useRef } from "react";
+import { gql, useQuery } from "@apollo/client";
 
-const song =
-  "https://res.cloudinary.com/ddiy656zq/video/upload/v1712307664/song-audio/sz0zqbjksuixinnjwi20.mp3";
-
+const SONGS = gql`
+  query {
+    getAllActiveSongs(page: 1, limit: 10) {
+      id
+      title
+      artist {
+        id
+        name
+      }
+      streamingLink
+      imageLink
+      mood
+    }
+  }
+`;
 export default function Player() {
+  const { loading, error, data } = useQuery(SONGS);
   const audioPlayer = useRef();
   const [index, setIndex] = useState(0);
   const [volume, setVolume] = useState(30);
@@ -25,15 +39,27 @@ export default function Player() {
   const [elapsed, setElapsed] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playlist, setPlaylist] = useState([]);
-  const [currentSong] = useState(song);
+  const [currentSong, setCurrentSong] = useState("");
 
+  let songs;
+  useEffect(() => {
+    if (data) {
+      const { getAllActiveSongs } = data;
+      // songs = getAllActiveSongs.map((songObject) => {
+      //   return songObject.streamingLink;
+      // });
 
- 
+      setPlaylist(getAllActiveSongs);
+      setCurrentSong(getAllActiveSongs[0]);
+    }
+  }, [data]);
+  // const  currentSong=
+  //   "https://res.cloudinary.com/ddiy656zq/video/upload/v1712306854/song-audio/ionyx2fcxvfzkcvzq5il.mp3"
+
   useEffect(() => {
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
-
     if (isPlaying) {
       setInterval(() => {
         const _duration = Math.floor(audioPlayer?.current?.duration);
@@ -70,11 +96,11 @@ export default function Player() {
   function toggleSkipForward() {
     if (index >= playlist.length - 1) {
       setIndex(0);
-      audioPlayer.current.src = playlist[0];
+      audioPlayer.current.src = playlist[0].streamingLink;
       audioPlayer.current.play();
     } else {
       setIndex((prev) => prev + 1);
-      audioPlayer.current.src = playlist[index + 1];
+      audioPlayer.current.src = playlist[index + 1].streamingLink;
       audioPlayer.current.play();
     }
   }
@@ -82,7 +108,7 @@ export default function Player() {
   function toggleSkipBackward() {
     if (index > 0) {
       setIndex((prev) => prev - 1);
-      audioPlayer.current.src = playlist[index - 1];
+      audioPlayer.current.src = playlist[index - 1].streamingLink;
       audioPlayer.current.play();
     }
   }
@@ -120,16 +146,14 @@ export default function Player() {
     }
   };
 
-  
   return (
     <div className="bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white">
-      <audio src={currentSong} ref={audioPlayer} muted={mute} />
+      <audio src={currentSong.streamingLink} ref={audioPlayer} muted={mute} />
       <Slider
-        aria-label="Small"
         value={elapsed}
         max={duration}
         size="small"
-        className="w-[95vw] mx-6  text-green-500 py-2 mt-1  mr-5"
+        className="w-[95vw] mx-6 text-green-500 py-2 mt-1  mr-5"
       />
 
       <div className=" pb-1">
@@ -138,16 +162,18 @@ export default function Player() {
             <Image
               height={100}
               width={100}
-              src={img}
+              src={playlist[index]?.imageLink}
               alt="img"
-              className="h-16 w-20 rounded-md border-2 border-gray-400 mr-5"
+              className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />
 
             <div className="text mt-2">
               <h3 className="text-base text-gray-400 font-semibold">
-                Song Name
+                {playlist[index]?.title}
               </h3>
-              <span className="text-gray-500 text-sm">by Arijit singh</span>
+              <span className="text-gray-500 text-sm">
+                {playlist[index]?.artist?.name}
+              </span>
             </div>
           </div>
           <div className="flex items-center">
@@ -186,7 +212,7 @@ export default function Player() {
           <div className="ml-10">
             <div className="pl-20">
               <p className="text-gray-400 text-sm">
-                {formatTime(elapsed)} / {formatTime(duration - elapsed)}
+                {formatTime(elapsed)} / {formatTime(duration)}
               </p>
             </div>
 

@@ -1,8 +1,8 @@
 import { treading } from "../../public/data/data";
 import Slider from "react-slick";
 import Title from "../common/Title";
-import { gql, useQuery } from "@apollo/client";
 import ArtistCard from "../common/ArtistCard";
+import { gql, useQuery } from "@apollo/client";
 
 
 const GET_DATA = gql`
@@ -28,7 +28,7 @@ export default function Treading() {
     infinite: true,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     responsive: [
       {
         breakpoint: 800,

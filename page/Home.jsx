@@ -11,9 +11,9 @@ export default function Home() {
       <Hero />
       <LayoutSidebar>
         <Treading />
-        <New />
-        <Recommand />
-      </LayoutSidebar>
+       <New />
+       <Recommand />
+      </LayoutSidebar>  
       <Info />
     </div>
   );

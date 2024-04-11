@@ -20,6 +20,10 @@ const songDetails = gql`
 
 export default function New() {
   const { loading, error, data } = useQuery(songDetails);
+
+  function handleClick() {
+    
+  }
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -38,8 +42,9 @@ export default function New() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
           {data.getAllActiveSongs.map((item, i) => (
-            <div className="box card hero" key={item.id}>
+            <div className="box card hero" key={item.id} >
               <SongCardLarge
+                onClick={handleClick}
                 cover={item.imageLink}
                 name={item.title}
                 artistName={item.artist.name}
