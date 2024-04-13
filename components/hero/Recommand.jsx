@@ -31,10 +31,9 @@ export default function Recommand() {
           {data.getAllActiveSongs.map((item, i) => (
             <SongCardSmall
               key={i}
-              // onClick={playMusic}
-              cover={item.imageLink}
+              image={item.imageLink}
               name={item.title}
-              tag={item.artist.name}
+              artistName={item.artist.name}
               i={item.id}
             />
           ))}

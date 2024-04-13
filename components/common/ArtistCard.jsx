@@ -2,13 +2,14 @@ import Image from "next/image";
 import { AiFillPlayCircle, AiOutlineHeart } from "react-icons/ai";
 import { BsPlayCircle, BsThreeDots } from "react-icons/bs";
 
-export default function ArtistCard({ cover, name, tag }) {
+export default function ArtistCard({onClick, image, name, tag }) {
   return (
     <>
       <div className="img relative h-60 rounded-full">
         <Image
-          src={cover}
+          src={image}
           alt="cover"
+          onClick={onClick}
           height={300}
           width={300}
           className="  w-full h-full object-cover bg-white rounded-full shadow-custom"

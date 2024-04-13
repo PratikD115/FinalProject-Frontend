@@ -5,7 +5,7 @@ export default function Artist() {
   return (
     <>
       <LayoutSidebar>
-        <Artists />
+       <Artists />
       </LayoutSidebar>
     </>
   );

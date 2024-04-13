@@ -29,19 +29,18 @@ export default function Header() {
         <div className="menu">
           <ul className="flex">
             <li className="mx-5 py-2">
-              <Link href="/">Discover</Link>
+              <Link href="/music">Discover</Link>
             </li>
             <li className="mx-5 py-2">
-              <Link href="/browser">Browser</Link>
+              <Link href="/music/browser">Browser</Link>
             </li>
 
             <li className="mx-5 py-2">
-              <Link href="/artist">Artist</Link>
+              <Link href="/music/artist">Artist</Link>
             </li>
           </ul>
         </div>
 
-        {/* profile  */}
         <div className="profile flex items-center">
           <div className="img w-10 h-10 rounded-full">
             <Image
@@ -53,7 +52,7 @@ export default function Header() {
             />
           </div>
 
-          <Link href ="/login" className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black">
+          <Link href ="/auth/login" className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black">
             <span className="mr-1">LogIn </span>
             <LoginIcon fontSize="small" />
           </Link>

@@ -1,13 +1,12 @@
-import { treading } from "../../public/data/data";
 import Slider from "react-slick";
 import Title from "../common/Title";
 import ArtistCard from "../common/ArtistCard";
 import { gql, useQuery } from "@apollo/client";
-
-
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 const GET_DATA = gql`
   query {
-    getAllActiveArtist{
+    getAllActiveArtist {
       id
       name
       imageLink
@@ -17,12 +16,25 @@ const GET_DATA = gql`
   }
 `;
 
-export default function Treading() {
+export default function PopulerArtist() {
   const { loading, error, data } = useQuery(GET_DATA);
+  const [artistInfo, setArtistInfo] = useState([]);
+  const router = useRouter();
 
-   if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    if (data) {
+      const { getAllActiveArtist } = data;
+      setArtistInfo(getAllActiveArtist);
+    }
+  });
+
+  function handleClick(id) {
+    router.push(`/artist/${id}`)
+  }
+
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-  
+
   const settings = {
     dots: false,
     infinite: true,
@@ -53,7 +65,12 @@ export default function Treading() {
         {data.getAllActiveArtist.map((item, i) => (
           <div className="box card hero m-5" key={i}>
             <div className="mr-5">
-              <ArtistCard cover={item.imageLink} name={item.name}  tag={item.tag} />
+              <ArtistCard
+                onClick={()=>handleClick(item.id)}
+                image={item.imageLink}
+                name={item.name}
+                tag={item.tag}
+              />
             </div>
           </div>
         ))}

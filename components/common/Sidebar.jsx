@@ -30,9 +30,9 @@ export default function Sidebar() {
         {data.getAllActiveSongs.map((item, i) => (
           <div key={i} className="mb-3">
             <SongCardSmall
-              cover={item.imageLink}
+              image={item.imageLink}
               name={item.title}
-              tag={item.artist.name}
+              artistName={item.artist.name}
               i={i}
             />
           </div>

@@ -32,7 +32,7 @@ const SONGS = gql`
 export default function Player() {
   const { loading, error, data } = useQuery(SONGS);
   const audioPlayer = useRef();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(5);
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(false);
   const [mute, setMute] = useState(false);
@@ -45,16 +45,11 @@ export default function Player() {
   useEffect(() => {
     if (data) {
       const { getAllActiveSongs } = data;
-      // songs = getAllActiveSongs.map((songObject) => {
-      //   return songObject.streamingLink;
-      // });
 
       setPlaylist(getAllActiveSongs);
-      setCurrentSong(getAllActiveSongs[0]);
+      setCurrentSong(getAllActiveSongs[index]);
     }
   }, [data]);
-  // const  currentSong=
-  //   "https://res.cloudinary.com/ddiy656zq/video/upload/v1712306854/song-audio/ionyx2fcxvfzkcvzq5il.mp3"
 
   useEffect(() => {
     if (audioPlayer.current) {
@@ -158,7 +153,7 @@ export default function Player() {
 
       <div className=" pb-1">
         <div className="mx-3 flex justify-between h-full md:justify-between items-center">
-          <div className="flex  w-60 ml-5">
+          <div className="flex ml-5">
             <Image
               height={100}
               width={100}
@@ -167,12 +162,12 @@ export default function Player() {
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />
 
-            <div className="text mt-2">
+            <div className="text mt-2 w-60">
               <h3 className="text-base text-gray-400 font-semibold">
                 {playlist[index]?.title}
               </h3>
-              <span className="text-gray-500 text-sm">
-                {playlist[index]?.artist?.name}
+              <span className="text-gray-500 text-sm overflow-ellipsis">
+                {playlist[index]?.artist?.name} -{playlist[index]?.title}
               </span>
             </div>
           </div>

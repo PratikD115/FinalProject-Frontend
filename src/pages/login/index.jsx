@@ -1,6 +1,6 @@
 import Image from "next/image";
 import img from "../../../public/images/login.jpg";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function LoginForm() {
   return (
@@ -80,7 +80,10 @@ export default function LoginForm() {
               </div>
             </form>
             <div className="text-sm mt-16">
-              Create new account: <Link href="/signup" className="text-sky-600 underline">signup</Link>
+              Create new account:{" "}
+              <Link href="/signup" className="text-sky-600 underline">
+                signup
+              </Link>
             </div>
           </div>
         </div>
