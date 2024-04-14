@@ -5,7 +5,7 @@ import { BsPlayCircle, BsThreeDots } from "react-icons/bs";
 export default function ArtistCard({onClick, image, name, tag }) {
   return (
     <>
-      <div className="img relative h-60 rounded-full">
+      <div className="img relative h-48 rounded-full border-2 border-gray-500">
         <Image
           src={image}
           alt="cover"

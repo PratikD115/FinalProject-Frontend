@@ -1,5 +1,5 @@
 import Image from "next/image";
-import img from "../../../public/images/login.jpg";
+import img from "@/public/images/login.jpg";
 import Link from "next/link";
 
 export default function LoginForm() {

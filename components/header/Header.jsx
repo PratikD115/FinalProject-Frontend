@@ -7,9 +7,13 @@ import { AiOutlineMenu } from "react-icons/ai";
 import LoginIcon from "@mui/icons-material/Login";
 
 export default function Header() {
-  const activeNavLink = (isActive) => (isActive ? "active" : "NavLink");
+  
   const [isMenu, setIsMenu] = useState(false);
+  const [dropDown, setDropDown] = useState(false)
 
+  function handleClick() {
+    setDropDown(prev => !prev);
+  }
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-screen h-[10vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
@@ -19,24 +23,24 @@ export default function Header() {
         {/* logo */}
         <div className="logo flex">
           <h2
-            className="text-2xl ml-3 font-extrabold"
+            className="text-2xl ml-3 font-extrabold "
             style={{ fontFamily: "Dancing Script" }}
           >
             Musical Moment
           </h2>
         </div>
 
-        <div className="menu">
+        <div className="menu font-[lato]">
           <ul className="flex">
             <li className="mx-5 py-2">
-              <Link href="/music">Discover</Link>
+              <Link href="/">Discover</Link>
             </li>
             <li className="mx-5 py-2">
-              <Link href="/music/browser">Browser</Link>
+              <Link href="/browser">Browser</Link>
             </li>
 
             <li className="mx-5 py-2">
-              <Link href="/music/artist">Artist</Link>
+              <Link href="/artist">Artist</Link>
             </li>
           </ul>
         </div>
@@ -48,12 +52,38 @@ export default function Header() {
               alt="profile"
               width="40px"
               height="40px"
+              onClick={handleClick}
               className="img w-10 h-10 bg-red-300 rounded-full object-cover cursor-pointer"
             />
+            {dropDown && (
+              <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg mr-10">
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                >
+                  Profile
+                </Link>
+                <Link
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                >
+                  Settings
+                </Link>
+                <Link
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                >
+                  Log out
+                </Link>
+              </div>
+            )}
           </div>
 
-          <Link href ="/auth/login" className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black">
-            <span className="mr-1">LogIn </span>
+          <Link
+            href="/login"
+            className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black font-[lato]"
+          >
+            <span className="">LogIn</span>
             <LoginIcon fontSize="small" />
           </Link>
         </div>

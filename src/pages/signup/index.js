@@ -1,6 +1,6 @@
 import Image from "next/image";
-import img from "../../../public/images/login.jpg";
 import Link from 'next/link';
+import img from '@/public/images/login.jpg'
 export default function LoginForm() {
   return (
     <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">

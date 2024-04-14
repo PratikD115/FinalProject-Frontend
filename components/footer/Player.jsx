@@ -1,4 +1,3 @@
-import img from "../../public/images/b4.jpg";
 import Image from "next/image";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
@@ -12,58 +11,45 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { useState, useEffect, useRef } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { playlistActions } from "@/slices/playlistSlice";
+import { useRouter } from "next/router";
 
-const SONGS = gql`
-  query {
-    getAllActiveSongs(page: 1, limit: 10) {
-      id
-      title
-      artist {
-        id
-        name
-      }
-      streamingLink
-      imageLink
-      mood
-    }
-  }
-`;
 export default function Player() {
-  const { loading, error, data } = useQuery(SONGS);
+  const playlist = useSelector((state) => state.playlist);
+  const index = useSelector((state) => state.index);
   const audioPlayer = useRef();
-  const [index, setIndex] = useState(5);
   const [volume, setVolume] = useState(30);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [mute, setMute] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [playlist, setPlaylist] = useState([]);
-  const [currentSong, setCurrentSong] = useState("");
+  const currentSong = playlist?.[index];
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  let songs;
-  useEffect(() => {
-    if (data) {
-      const { getAllActiveSongs } = data;
-
-      setPlaylist(getAllActiveSongs);
-      setCurrentSong(getAllActiveSongs[index]);
-    }
-  }, [data]);
+  
 
   useEffect(() => {
+    
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
     if (isPlaying) {
+      audioPlayer.current.play();
+     
       setInterval(() => {
+         
         const _duration = Math.floor(audioPlayer?.current?.duration);
         const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
         setDuration(_duration);
         setElapsed(_elapsed);
+        if (_duration === _elapsed) {
+          toggleSkipForward()
+        }
       }, 100);
     }
-  }, [volume, isPlaying]);
+  }, [volume, isPlaying, index]);
 
   function formatTime(time) {
     if (time && !isNaN(time)) {
@@ -90,11 +76,12 @@ export default function Player() {
 
   function toggleSkipForward() {
     if (index >= playlist.length - 1) {
-      setIndex(0);
-      audioPlayer.current.src = playlist[0].streamingLink;
+      dispatch(playlistActions.nextSong(0));
+      audioPlayer.current.src = playlist[index].streamingLink;
       audioPlayer.current.play();
     } else {
-      setIndex((prev) => prev + 1);
+      // setIndex((prev) => prev + 1);
+      dispatch(playlistActions.nextSong(index + 1));
       audioPlayer.current.src = playlist[index + 1].streamingLink;
       audioPlayer.current.play();
     }
@@ -102,8 +89,8 @@ export default function Player() {
 
   function toggleSkipBackward() {
     if (index > 0) {
-      setIndex((prev) => prev - 1);
-      audioPlayer.current.src = playlist[index - 1].streamingLink;
+      dispatch(playlistActions.nextSong(index - 1));
+      audioPlayer.current.src = playlist[index].streamingLink;
       audioPlayer.current.play();
     }
   }
@@ -142,8 +129,13 @@ export default function Player() {
   };
 
   return (
-    <div className="bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white">
-      <audio src={currentSong.streamingLink} ref={audioPlayer} muted={mute} />
+    <div className="bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
+      <audio
+        src={currentSong?.streamingLink}
+        autoplay
+        ref={audioPlayer}
+        muted={mute}
+      />
       <Slider
         value={elapsed}
         max={duration}
@@ -157,7 +149,7 @@ export default function Player() {
             <Image
               height={100}
               width={100}
-              src={playlist[index]?.imageLink}
+              src={currentSong?.imageLink}
               alt="img"
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />

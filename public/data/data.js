@@ -45,25 +45,25 @@ export const hero2 = [
     id: 1,
     name: "Pull Up",
     tag: "Summerella",
-    cover: "/images/b4.jpg",
+    cover: "/images/hero21.jpg",
   },
   {
     id: 2,
     name: "Fireworks",
     tag: "Kygo",
-    cover: "/images/b1.jpg",
+    cover: "/images/hero22.jpg",
   },
   {
     id: 3,
     name: "I Wanna Be In the Cavalry",
     tag: "Jeremy Scott",
-    cover: "/images/b2.jpg",
+    cover: "/images/hero23.jpg",
   },
   {
     id: 4,
     name: "What A Time To Be Alive",
     tag: "Judith Garcia",
-    cover: "/images/b3.jpg",
+    cover: "/images/hero24.jpg",
   },
 ];
 export const treading = [

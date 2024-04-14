@@ -25,9 +25,9 @@ export default function SongCardLarge({ cover, name, artistName }) {
           </div>
         </div>
       </div>
-      <div className="text mt-2">
-        <h3 className="text-sm text-gray-400 font-medium">{name}</h3>
-        <span className=" text-sm text-gray-300">{artistName}</span>
+      <div className="text mt-1 font-[lato]">
+        <h3 className="text-sm text-gray-300 font-medium">{name}</h3>
+        <span className=" text-sm text-gray-400">{artistName}</span>
       </div>
     </>
   );
