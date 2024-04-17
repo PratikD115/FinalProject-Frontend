@@ -13,7 +13,7 @@ const recommandedSongs = gql`
         id
         name
       }
-      duration
+      
       imageLink
     }
   }

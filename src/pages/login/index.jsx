@@ -1,8 +1,53 @@
 import Image from "next/image";
 import img from "@/public/images/login.jpg";
 import Link from "next/link";
+import { LOGIN } from "@/Query/authQuery";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
+import { useMutation } from "@apollo/client";
+import Cookies from "js-cookie";
 
 export default function LoginForm() {
+  const [error, setError] = useState(null);
+  const router = useRouter();
+
+  const [login, { loading }] = useMutation(LOGIN, {
+    onError: (err) => {
+      setError(err);
+    },
+  });
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
+  const setAuthTokenInCookie = (token) => {
+    const authToken = `Bearer ${token}`;
+    console.log(authToken);
+    Cookies.set("authToken", authToken, { expires: 7 });
+  };
+
+  async function handleLogIn(event) {
+    event.preventDefault();
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+
+    const { data } = await login({
+      variables: {
+        email: enteredEmail,
+        password: enteredPassword,
+      },
+    });
+    
+    if (data) {
+      setAuthTokenInCookie(data.login.token);router.push("/");
+    }
+
+    
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <div className="container mx-auto h-[80%]  w-[56%]">
@@ -22,19 +67,20 @@ export default function LoginForm() {
                 <i className="fab fa-twitter"></i>
               </a>
             </div>
-            <form action="#" className="signin-form">
+            <form onSubmit={handleLogIn} className="signin-form">
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="username"
                 >
-                  USERNAME
+                  EMAIL
                 </label>
                 <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Username"
+                  ref={emailInputRef}
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="email"
                   required
                   className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
                 />
@@ -47,6 +93,7 @@ export default function LoginForm() {
                   PASSWORD
                 </label>
                 <input
+                  ref={passwordInputRef}
                   type="password"
                   id="password"
                   name="password"

@@ -4,12 +4,12 @@ export const hindiTop20Playlist = gql`
     getAllActiveSongs(page: 2, limit: 10) {
       id
       title
-      duration
       imageLink
       streamingLink
       artist {
         id
         name
+        imageLink
       }
     }
   }
@@ -20,12 +20,12 @@ export const EnglishTop20Playlist = gql`
     getAllActiveSongs(page: 1, limit: 10) {
       id
       title
-      duration
       imageLink
       streamingLink
       artist {
         id
         name
+        imageLink
       }
     }
   }

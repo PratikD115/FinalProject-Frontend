@@ -14,6 +14,8 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "@/slices/playlistSlice";
 import { useRouter } from "next/router";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Link from "next/link";
 
 export default function Player() {
   const playlist = useSelector((state) => state.playlist);
@@ -28,24 +30,20 @@ export default function Player() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  
-
   useEffect(() => {
-    
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
     if (isPlaying) {
       audioPlayer.current.play();
-     
+
       setInterval(() => {
-         
         const _duration = Math.floor(audioPlayer?.current?.duration);
         const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
         setDuration(_duration);
         setElapsed(_elapsed);
         if (_duration === _elapsed) {
-          toggleSkipForward()
+          toggleSkipForward();
         }
       }, 100);
     }
@@ -77,7 +75,7 @@ export default function Player() {
   function toggleSkipForward() {
     if (index >= playlist.length - 1) {
       dispatch(playlistActions.nextSong(0));
-      audioPlayer.current.src = playlist[index].streamingLink;
+      audioPlayer.current.src = playlist[index]?.streamingLink;
       audioPlayer.current.play();
     } else {
       // setIndex((prev) => prev + 1);
@@ -128,11 +126,16 @@ export default function Player() {
     }
   };
 
+  function handleviewMore() {
+    console.log("handle More ");
+    router.push('/queue')
+  }
+
   return (
     <div className="bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
       <audio
         src={currentSong?.streamingLink}
-        autoplay
+        autoPlay
         ref={audioPlayer}
         muted={mute}
       />
@@ -145,7 +148,10 @@ export default function Player() {
 
       <div className=" pb-1">
         <div className="mx-3 flex justify-between h-full md:justify-between items-center">
-          <div className="flex ml-5">
+          <div className="flex ml-5 items-center">
+            <div className="cursor-pointer"onClick={handleviewMore}>
+              <MoreVertIcon />
+            </div>
             <Image
               height={100}
               width={100}
@@ -154,7 +160,7 @@ export default function Player() {
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />
 
-            <div className="text mt-2 w-60">
+            <div className="text mt-2 w-44">
               <h3 className="text-base text-gray-400 font-semibold">
                 {playlist[index]?.title}
               </h3>

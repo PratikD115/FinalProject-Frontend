@@ -1,7 +1,32 @@
 import Image from "next/image";
-import Link from 'next/link';
-import img from '@/public/images/login.jpg'
+import Link from "next/link";
+import img from "@/public/images/login.jpg";
+import { useMutation } from "@apollo/client";
+import { useRef } from "react";
+import {  useRouter } from "next/router";
+import { SIGNUP } from "@/Query/authQuery";
+
+
 export default function LoginForm() {
+  const nameInputRef = useRef();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const router = useRouter()
+
+  const [signUp, { loading, error, data }] = useMutation(SIGNUP);
+  
+  async function handleSingUp(event) {
+    event.preventDefault();
+    const enteredName = nameInputRef.current.value;
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+    const { data } = await signUp({
+      variables: { email: enteredEmail, name: enteredName, password: enteredPassword },
+    });
+    console.log(data);  
+    router.push("/login")
+  }
+
   return (
     <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <div className="container mx-auto h-[80%]  w-[56%]">
@@ -13,7 +38,7 @@ export default function LoginForm() {
             <h3 className="text-2xl font-bold mb-2 flex justify-center">
               SignUp
             </h3>
-            <form action="#" className="signin-form">
+            <form onSubmit={handleSingUp} className="signin-form">
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -22,6 +47,7 @@ export default function LoginForm() {
                   USERNAME
                 </label>
                 <input
+                  ref={nameInputRef}
                   type="text"
                   id="username"
                   name="username"
@@ -38,6 +64,7 @@ export default function LoginForm() {
                   E MAIL
                 </label>
                 <input
+                  ref={emailInputRef}
                   type="text"
                   id="email"
                   name="email"
@@ -54,6 +81,7 @@ export default function LoginForm() {
                   PASSWORD
                 </label>
                 <input
+                  ref={passwordInputRef}
                   type="password"
                   id="password"
                   name="password"
@@ -65,16 +93,17 @@ export default function LoginForm() {
               <div className="mb-6">
                 <button
                   type="submit"
+                  
                   className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   SignUp
                 </button>
               </div>
-             
             </form>
             <div className="text-sm mt-14">
-              Already have account: <Link href="/login" className="text-sky-600 underline">
-                 login
+              Already have account:{" "}
+              <Link href="/login" className="text-sky-600 underline">
+                login
               </Link>
             </div>
           </div>

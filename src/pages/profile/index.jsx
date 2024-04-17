@@ -4,7 +4,7 @@ export default function Profile() {
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ... h-screen">
       <Layout>
-        <div>in the main</div>
+        <div>in the user Profile</div>
       </Layout>
     </div>
   );

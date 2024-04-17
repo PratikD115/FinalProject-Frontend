@@ -11,7 +11,7 @@ const mostLikedSong = gql`
         id
         name
       }
-      duration
+      
       imageLink
     }
   }

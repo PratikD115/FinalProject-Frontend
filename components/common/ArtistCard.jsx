@@ -12,7 +12,7 @@ export default function ArtistCard({onClick, image, name, tag }) {
           onClick={onClick}
           height={300}
           width={300}
-          className="  w-full h-full object-cover bg-white rounded-full shadow-custom"
+          className="w-full h-full object-cover bg-white rounded-full shadow-custom"
         />
 
         <div className="overlay absolute bottom-0 right-0 text-white">

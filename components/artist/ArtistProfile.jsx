@@ -6,31 +6,13 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SongCardSmall from "../common/SongCardSmall";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { green } from "@mui/material/colors";
-
-const ARTIST = gql`
-  query ($id: String!) {
-    getArtistById(id: $id) {
-      id
-      name
-      imageLink
-      dateOfBirth
-      nationality
-      genres
-      biography
-      songs {
-        id
-        title
-        genres
-        language
-        imageLink
-      }
-    }
-  }
-`;
+import { useDispatch } from "react-redux";
+import { playlistActions } from "@/slices/playlistSlice";
+import { ARTIST } from "@/Query/something";
 
 export default function ArtistProfile() {
   const params = useParams();
+  const dispatch = useDispatch();
   console.log(params);
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
@@ -45,6 +27,17 @@ export default function ArtistProfile() {
       setArtistInfo(getArtistById);
     }
   }, [params, data]);
+
+  function handlePlayNow() {
+    console.log("play the song of artist");
+    console.log(artistInfo.songs);
+    dispatch(
+      playlistActions.setPlaylistAndIndex({
+        playlist: artistInfo.songs,
+        index: 0,
+      })
+    );
+  }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -67,7 +60,9 @@ export default function ArtistProfile() {
           <div className="text-2xl text-gray-300  flex items-center justify-start  pl-4 font-[lato]">
             About {artistInfo.name}
           </div>
-          <div className="text-base text-gray-400 mt-4 px-5">{artistInfo.biography}</div>
+          <div className="text-base text-gray-400 mt-4 px-5">
+            {artistInfo.biography}
+          </div>
         </div>
       </div>
 
@@ -81,7 +76,8 @@ export default function ArtistProfile() {
           </span>
         </div>
         <div className="flex mt-10 pl-5">
-          <Button 
+          <Button
+            onClick={handlePlayNow}
             variant="contained"
             startIcon={<PlayArrowIcon />}
             className="rounded-full mr-5 pt-2 bg-green-500 hover:bg-green-600"

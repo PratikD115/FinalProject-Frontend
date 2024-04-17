@@ -4,7 +4,7 @@ import SongCardLarge from "../common/SongCardLarge";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { playlistActions } from "@/slices/playlistSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function SongPlaylist({ title, query }) {
 
