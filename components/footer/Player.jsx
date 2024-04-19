@@ -12,14 +12,14 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { playlistActions } from "@/slices/playlistSlice";
+import { playlistActions } from "@/store/playlistSlice";
 import { useRouter } from "next/router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
 
 export default function Player() {
-  const playlist = useSelector((state) => state.playlist);
-  const index = useSelector((state) => state.index);
+  const { playlist } = useSelector((state) => state.playlist);
+  const { index } = useSelector((state) => state.playlist);
   const audioPlayer = useRef();
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -128,7 +128,7 @@ export default function Player() {
 
   function handleviewMore() {
     console.log("handle More ");
-    router.push('/queue')
+    router.push("/queue");
   }
 
   return (
@@ -148,8 +148,8 @@ export default function Player() {
 
       <div className=" pb-1">
         <div className="mx-3 flex justify-between h-full md:justify-between items-center">
-          <div className="flex ml-5 items-center">
-            <div className="cursor-pointer"onClick={handleviewMore}>
+          <div className="flex items-center">
+            <div className="cursor-pointer" onClick={handleviewMore}>
               <MoreVertIcon />
             </div>
             <Image
@@ -160,7 +160,7 @@ export default function Player() {
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />
 
-            <div className="text mt-2 w-44">
+            <div className="text h-auto w-44">
               <h3 className="text-base text-gray-400 font-semibold">
                 {playlist[index]?.title}
               </h3>

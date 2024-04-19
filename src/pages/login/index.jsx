@@ -5,25 +5,21 @@ import { LOGIN } from "@/Query/authQuery";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
-import Cookies from "js-cookie";
+import { setAuthTokenInCookie } from "@/utils/Authfunctions";
+import { useDispatch } from "react-redux";
+import { userActions } from "@/store/userSlice";
 
 export default function LoginForm() {
   const [error, setError] = useState(null);
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
   const [login, { loading }] = useMutation(LOGIN, {
     onError: (err) => {
       setError(err);
     },
   });
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-
-  const setAuthTokenInCookie = (token) => {
-    const authToken = `Bearer ${token}`;
-    console.log(authToken);
-    Cookies.set("authToken", authToken, { expires: 7 });
-  };
 
   async function handleLogIn(event) {
     event.preventDefault();
@@ -32,20 +28,23 @@ export default function LoginForm() {
 
     const { data } = await login({
       variables: {
+
         email: enteredEmail,
         password: enteredPassword,
       },
     });
-    
-    if (data) {
-      setAuthTokenInCookie(data.login.token);router.push("/");
-    }
 
-    
+    if (data) {
+      const { token, ...user } = data.login;
+     
+      setAuthTokenInCookie(token);
+      dispatch(userActions.login({user, token}));
+      router.push("/");
+    }
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  {
+    error && <div>Error: {error.message}</div>;
   }
 
   return (

@@ -3,16 +3,15 @@ import Title from "../common/Title";
 import SongCardLarge from "../common/SongCardLarge";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { playlistActions } from "@/slices/playlistSlice";
+import { playlistActions } from "@/store/playlistSlice";
 import { useDispatch } from "react-redux";
 
 export default function SongPlaylist({ title, query }) {
-
   const { loading, error, data } = useQuery(query);
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
-  
+
   useEffect(() => {
     if (data) {
       const { getAllActiveSongs } = data;
@@ -21,12 +20,12 @@ export default function SongPlaylist({ title, query }) {
   });
 
   function handleViewMore() {
-    dispatch(playlistActions.setPlaylistAndIndex({ playlist, index : 0 }));
+    dispatch(playlistActions.setPlaylistAndIndex({ playlist, index: 0 }));
     router.push("/queue");
   }
 
   function handleSongClick(playlist, index) {
-    dispatch(playlistActions.setPlaylistAndIndex({playlist, index}));
+    dispatch(playlistActions.setPlaylistAndIndex({ playlist, index }));
   }
 
   if (loading) return <p>Loading...</p>;
@@ -46,7 +45,6 @@ export default function SongPlaylist({ title, query }) {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
-      
           {playlist?.map((item, index) => (
             <div
               className="box card hero"

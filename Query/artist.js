@@ -5,8 +5,7 @@ export const ARTIST = gql`
       id
       name
       imageLink
-      dateOfBirth
-      nationality
+      dateOfBirth     
       genres
       biography
       songs {

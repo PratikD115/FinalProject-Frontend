@@ -1,18 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import logo from "../../public/images/logo.png";
 import Link from "next/link";
-import profile from "../../public/images/b4.jpg";
+import profile from "../../public/images/profile.webp";
 import { AiOutlineMenu } from "react-icons/ai";
 import LoginIcon from "@mui/icons-material/Login";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "@/store/userSlice";
+import Cookies from "js-cookie";
+
 
 export default function Header() {
-  
+  const { isLogin } = useSelector((state) => state.user);
   const [isMenu, setIsMenu] = useState(false);
-  const [dropDown, setDropDown] = useState(false)
+  const [dropDown, setDropDown] = useState(false);
+  const dispatch = useDispatch()
+  function handleLogOut() {
+    Cookies.remove("authToken");
+    dispatch(userActions.logout());
+
+  }
 
   function handleClick() {
-    setDropDown(prev => !prev);
+    setDropDown((prev) => !prev);
   }
   return (
     <header
@@ -46,46 +56,50 @@ export default function Header() {
         </div>
 
         <div className="profile flex items-center">
-          <div className="img w-10 h-10 rounded-full">
-            <Image
-              src={profile}
-              alt="profile"
-              width="40px"
-              height="40px"
-              onClick={handleClick}
-              className="img w-10 h-10 bg-red-300 rounded-full object-cover cursor-pointer"
-            />
-            {dropDown && (
-              <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg mr-10">
-                <Link
-                  href="/profile"
-                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                >
-                  Profile
-                </Link>
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                >
-                  Settings
-                </Link>
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                >
-                  Log out
-                </Link>
-              </div>
-            )}
-          </div>
+          {isLogin && (
+            <div className="img w-10 h-10 rounded-full mr-5">
+              <Image
+                src={profile}
+                alt="profile"
+                width="40px"
+                height="40px"
+                onClick={handleClick}
+                className="img w-10 h-10 bg-red-300 rounded-full object-cover cursor-pointer"
+              />
+              {dropDown && (
+                <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg mr-10">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                  >
+                    Settings
+                  </Link>
+                  <div
+                    onClick={handleLogOut}
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                  >
+                    Log out
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
-          <Link
-            href="/login"
-            className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black font-[lato]"
-          >
-            <span className="">LogIn</span>
-            <LoginIcon fontSize="small" />
-          </Link>
+          {!isLogin && (
+            <Link
+              href="/login"
+              className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black font-[lato]"
+            >
+              <span className="">LogIn</span>
+              <LoginIcon fontSize="small" />
+            </Link>
+          )}
         </div>
       </div>
 

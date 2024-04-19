@@ -11,7 +11,7 @@ const GET_DATA = gql`
       name
       imageLink
       dateOfBirth
-      nationality
+     
     }
   }
 `;

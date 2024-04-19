@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import SongCardSmall from "./common/SongCardSmall";
 
 export default function Playlist() {
-  const { playlist } = useSelector((state) => state);
-  const { index } = useSelector((state) => state);
+  const {playlist}  = useSelector((state) => state.playlist);
+  const  {index}  = useSelector((state) => state.playlist);
   console.log(playlist);
   console.log("index of the song id " + index);
 

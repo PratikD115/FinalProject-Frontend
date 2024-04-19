@@ -7,8 +7,8 @@ import SongCardSmall from "../common/SongCardSmall";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
-import { playlistActions } from "@/slices/playlistSlice";
-import { ARTIST } from "@/Query/something";
+import { ARTIST } from "@/Query/artist";
+import { playlistActions } from "@/store/playlistSlice";
 
 export default function ArtistProfile() {
   const params = useParams();
