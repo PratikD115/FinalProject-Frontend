@@ -1,6 +1,6 @@
 import "@/src/styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import Player from "@/components/footer/Player";
+import Player from "@/components/player/Player";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import store from "@/store";

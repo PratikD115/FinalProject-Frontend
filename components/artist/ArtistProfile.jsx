@@ -7,18 +7,22 @@ import SongCardSmall from "../common/SongCardSmall";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
-import { ARTIST } from "@/Query/artist";
+import { ARTIST } from "@/Query/artistQuery";
 import { playlistActions } from "@/store/playlistSlice";
 
 export default function ArtistProfile() {
   const params = useParams();
   const dispatch = useDispatch();
-  console.log(params);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
       id: params?.artistId,
+      page,
+      limit,
     },
   });
+  console.log(data);
   const [artistInfo, setArtistInfo] = useState({});
 
   useEffect(() => {
@@ -38,12 +42,15 @@ export default function ArtistProfile() {
       })
     );
   }
+  function handleViewMore() {
+    setLimit(20)
+  }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className=" flex pb-52">
+    <div className=" flex pb-52 ">
       <div className="w-[30%] p-5">
         <div className="img relative h-64 w-64 m-auto">
           <Image
@@ -105,6 +112,11 @@ export default function ArtistProfile() {
                 i={song.id}
               />
             ))}
+          </div>
+          <div className="flex justify-center ">
+            <button onClick={handleViewMore} className="text-gray-500">
+              view more
+            </button>
           </div>
         </div>
       </div>

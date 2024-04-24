@@ -1,4 +1,5 @@
 import Image from "next/image";
+import songImage from "@/public/images/songImage.png";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
@@ -37,18 +38,26 @@ export default function Player() {
     if (isPlaying) {
       audioPlayer.current.play();
 
-      setInterval(() => {
-        const _duration = Math.floor(audioPlayer?.current?.duration);
-        const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
+      const interval = setInterval(() => {
+        const _duration = Math.floor(audioPlayer.current?.duration);
+        const _elapsed = Math.floor(audioPlayer.current?.currentTime);
         setDuration(_duration);
         setElapsed(_elapsed);
         if (_duration === _elapsed) {
           toggleSkipForward();
         }
       }, 100);
+
+      return () => clearInterval(interval);
     }
   }, [volume, isPlaying, index]);
 
+  const handleSliderChange = (event, newValue) => {
+    setElapsed(newValue);
+    if (newValue) {
+      audioPlayer.current.currentTime = newValue;
+    }
+  };
   function formatTime(time) {
     if (time && !isNaN(time)) {
       const minutes =
@@ -142,6 +151,7 @@ export default function Player() {
       <Slider
         value={elapsed}
         max={duration}
+        onChange={handleSliderChange} // Triggered when the slider is moved
         size="small"
         className="w-[95vw] mx-6 text-green-500 py-2 mt-1  mr-5"
       />
@@ -155,7 +165,7 @@ export default function Player() {
             <Image
               height={100}
               width={100}
-              src={currentSong?.imageLink}
+              src={currentSong ? currentSong.imageLink : songImage}
               alt="img"
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />

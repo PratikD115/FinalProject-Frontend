@@ -1,23 +1,9 @@
 import React from "react";
-import { recommand } from "../../public/data/data";
 import Title from "../common/Title";
-import { gql, useQuery } from "@apollo/client";
+import {  useQuery } from "@apollo/client";
 import SongCardSmall from "../common/SongCardSmall";
+import { recommandedSongs } from "@/Query/playlistQuery";
 
-const recommandedSongs = gql`
-  query {
-    getAllActiveSongs {
-      id
-      title
-      artist {
-        id
-        name
-      }
-      
-      imageLink
-    }
-  }
-`;
 export default function Recommand() {
   const { loading, error, data } = useQuery(recommandedSongs);
    if (loading) return <p>Loading...</p>;

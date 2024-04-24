@@ -28,7 +28,6 @@ export default function LoginForm() {
 
     const { data } = await login({
       variables: {
-
         email: enteredEmail,
         password: enteredPassword,
       },

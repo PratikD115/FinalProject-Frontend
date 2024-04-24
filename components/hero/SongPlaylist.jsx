@@ -7,7 +7,9 @@ import { playlistActions } from "@/store/playlistSlice";
 import { useDispatch } from "react-redux";
 
 export default function SongPlaylist({ title, query }) {
-  const { loading, error, data } = useQuery(query);
+  const { loading, error, data } = useQuery(query, {
+    variables: { page: 2, limit: 10 },
+  });
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
@@ -46,15 +48,14 @@ export default function SongPlaylist({ title, query }) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
           {playlist?.map((item, index) => (
-            <div
-              className="box card hero"
-              key={index}
-              onClick={() => handleSongClick(playlist, index)}
-            >
+            <div className="box card hero" key={index}>
               <SongCardLarge
+                handleClick={() => handleSongClick(playlist, index)}
                 cover={item.imageLink}
                 name={item.title}
                 artistName={item.artist.name}
+                songId={item.id}
+                songUrl={item.streamingLink}
               />
             </div>
           ))}

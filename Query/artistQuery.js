@@ -1,14 +1,15 @@
 import { gql } from "@apollo/client";
+
 export const ARTIST = gql`
-  query ($id: String!) {
+  query ($id: String!, $page: Float!, $limit: Float!) {
     getArtistById(id: $id) {
       id
       name
       imageLink
-      dateOfBirth     
+      dateOfBirth
       genres
       biography
-      songs {
+      songs(page: $page, limit: $limit) {
         id
         title
         genres
@@ -19,6 +20,17 @@ export const ARTIST = gql`
           name
         }
       }
+    }
+  }
+`;
+
+export const GET_DATA = gql`
+  query {
+    getAllActiveArtist {
+      id
+      name
+      imageLink
+      dateOfBirth
     }
   }
 `;

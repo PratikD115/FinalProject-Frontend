@@ -9,20 +9,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "@/store/userSlice";
 import Cookies from "js-cookie";
 
-
 export default function Header() {
   const { isLogin } = useSelector((state) => state.user);
   const [isMenu, setIsMenu] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   function handleLogOut() {
     Cookies.remove("authToken");
     dispatch(userActions.logout());
-
   }
 
   function handleClick() {
     setDropDown((prev) => !prev);
+  }
+  function handleClose() {
+    console.log("fdk");
   }
   return (
     <header
@@ -57,15 +58,16 @@ export default function Header() {
 
         <div className="profile flex items-center">
           {isLogin && (
-            <div className="img w-10 h-10 rounded-full mr-5">
+            <div className="img w-10 h-10 rounded-full mr-10">
               <Image
                 src={profile}
                 alt="profile"
                 width="40px"
                 height="40px"
                 onClick={handleClick}
-                className="img w-10 h-10 bg-red-300 rounded-full object-cover cursor-pointer"
+                className="img w-9 h-9 bg-red-300 rounded-full object-cover cursor-pointer"
               />
+
               {dropDown && (
                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg mr-10">
                   <Link

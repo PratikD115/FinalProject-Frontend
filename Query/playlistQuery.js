@@ -1,7 +1,8 @@
 import { gql } from "@apollo/client";
+
 export const hindiTop20Playlist = gql`
-  query {
-    getAllActiveSongs(page: 2, limit: 10) {
+  query ($page: Int!, $limit: Int!) {
+    getAllActiveSongs(page: $page, limit: $limit) {
       id
       title
       imageLink
@@ -16,8 +17,8 @@ export const hindiTop20Playlist = gql`
 `;
 
 export const EnglishTop20Playlist = gql`
-  query {
-    getAllActiveSongs(page: 1, limit: 10) {
+  query ($page: Int!, $limit: Int!) {
+    getAllActiveSongs(page: $page, limit: $limit) {
       id
       title
       imageLink
@@ -31,4 +32,55 @@ export const EnglishTop20Playlist = gql`
   }
 `;
 
+export const mostLikedSong = gql`
+  query {
+    getAllActiveSongs(limit: 7) {
+      id
+      title
+      artist {
+        id
+        name
+      }
+      imageLink
+    }
+  }
+`;
 
+export const recommandedSongs = gql`
+  query {
+    getAllActiveSongs {
+      id
+      title
+      artist {
+        id
+        name
+      }
+      imageLink
+    }
+  }
+`;
+
+export const songDownload = gql`
+  mutation ($url: String!) {
+    downloadSong(url: $url)
+  }
+`;
+export const createNewPlaylist = gql`
+  mutation ($songId: String!, $playlistName: String!, $userId: String!) {
+    createNewPlaylist(
+      songId: $songId
+      playlistName: $playlistName
+      userId: $userId
+    ) {
+      id
+    }
+  }
+`;
+
+export const addSongToPlaylist = gql`
+  mutation ($playlistId: String!, $songId: String!) {
+    addSongToPlaylist(playlistId: $playlistId, songId: $songId) {
+      id
+    }
+  }
+`;

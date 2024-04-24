@@ -21,7 +21,7 @@ export default function LoginForm() {
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
     const { data } = await signUp({
-      variables: { email: enteredEmail, name: enteredName, password: enteredPassword },
+      variables: { email: enteredEmail, name: enteredName, password: enteredPassword, role : "artist" },
     });
     console.log(data);  
     router.push("/login")
