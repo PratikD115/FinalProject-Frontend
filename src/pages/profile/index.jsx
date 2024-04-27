@@ -1,54 +1,132 @@
-import { uploadProfile } from "@/Query/userQuery";
+import { userInfo, uploadImageQuery } from "@/Query/userQuery";
+import ArtistCard from "@/components/common/ArtistCard";
+import SongCardLarge from "@/components/common/SongCardLarge";
+import Title from "@/components/common/Title";
 import Layout from "@/components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
-import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function Profile() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadImage] = useMutation(uploadProfile);
   const { user } = useSelector((state) => state.user);
-  const {loading, error, data } = useQuery()
-  
+  const { loading, error, data, refetch } = useQuery(userInfo, {
+    variables: {
+      userId: user?.id,
+    },
+  });
+  const [userProfile, setUserProfile] = useState();
+  const [image, setImage] = useState(null);
+  const [uploadImage] = useMutation(uploadImageQuery);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
-    setSelectedImage(file);
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
+    console.log(event.target.files[0]);
   };
-  const handleImageUpload = async () => {
-    if (!selectedImage) {
 
-      alert("Please select an image first");
-      return ;
-    }
-
+  const handleUpload = async () => {
+   
     try {
-      console.log(selectedImage)
-      const { data } = await uploadImage({
+      const response = await uploadImage({
         variables: {
-          image: selectedImage,
+          image: image,
           userId: user?.id,
-        }
+        },
       });
-      
-      console.log("Image uploaded successfully:", data);
+      console.log(response.data.uploadImage);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (refetch) {
+      refetch();
+    }
+  }, [refetch]);
+
+  useEffect(() => {
+    if (data) {
+      setUserProfile(data.getUserById);
+    }
+  });
+
   return (
-    <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ... min-h-screen">
+    <div className="min-h-screen  bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ... font-[lato] text-white">
       <Layout>
         <div className="flex">
-          <div className="w-[30%] border-2 border-gray-500">
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            <button onClick={handleImageUpload} className="text-white">
-              Upload Image
-            </button>
+          <div className="w-[20%] ">
+            <div className="card hero box w-52 m-auto mt-8  mx-auto ">
+              <div className=" flex justify-center mx-auto">
+                <ArtistCard
+                  image={userProfile?.profile}
+                  name={userProfile?.name}
+                />
+              </div>
+            </div>
+            <br />
+            <br />
+            <div className="px-3 flex justify-end w-auto">
+              <input type="file" onChange={handleImageChange} />
+
+              <EditIcon
+                onClick={handleUpload}
+                fontSize="small"
+                className="text-gray-500 hover:text-gray-200"
+              />
+            </div>
+            <div className="mt-10">
+              <Title className="text-sm" title={"Your Playlists"} />
+              <div className="">
+                {userProfile?.playlist.map((playlist, index) => (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className="w-full my-1 bg-gray-500 hover:bg-gray-400"
+                  >
+                    {playlist.playlistName}
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="w-[70%] border-2 border-gray-500">
-            About user and other information like favorite song and playlist
+
+          <div className="w-[80%] px-5">
+            <div className="mt-5">
+              <Title title={"Your Favourite :"} />
+              <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
+                {userProfile?.favourite?.map((item, index) => (
+                  <div className="box card hero" key={index}>
+                    <SongCardLarge
+                      handleClick={() => handleSongClick(playlist, index)}
+                      cover={item.imageLink}
+                      name={item.title}
+                      artistName={item.artist.name}
+                      songId={item.id}
+                      songUrl={item.streamingLink}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-5">
+              <Title title={"Followed Artist :"} />
+              <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
+                {userProfile?.favourite?.map((item, index) => (
+                  <div className="box card hero" key={index}>
+                    <SongCardLarge
+                      handleClick={() => handleSongClick(playlist, index)}
+                      cover={item.imageLink}
+                      name={item.title}
+                      artistName={item.artist.name}
+                      songId={item.id}
+                      songUrl={item.streamingLink}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </Layout>

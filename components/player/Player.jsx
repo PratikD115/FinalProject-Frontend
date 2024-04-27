@@ -90,6 +90,9 @@ export default function Player() {
       // setIndex((prev) => prev + 1);
       dispatch(playlistActions.nextSong(index + 1));
       audioPlayer.current.src = playlist[index + 1].streamingLink;
+      if (!isPlaying) {
+        togglePlay();
+      }
       audioPlayer.current.play();
     }
   }
@@ -98,6 +101,9 @@ export default function Player() {
     if (index > 0) {
       dispatch(playlistActions.nextSong(index - 1));
       audioPlayer.current.src = playlist[index].streamingLink;
+      if (!isPlaying) {
+        togglePlay();
+      }
       audioPlayer.current.play();
     }
   }
@@ -136,7 +142,6 @@ export default function Player() {
   };
 
   function handleviewMore() {
-    console.log("handle More ");
     router.push("/queue");
   }
 
@@ -157,7 +162,7 @@ export default function Player() {
       />
 
       <div className=" pb-1">
-        <div className="mx-3 flex justify-between h-full md:justify-between items-center">
+        <div className="mx-3 flex justify-between md:justify-between items-center h-full">
           <div className="flex items-center">
             <div className="cursor-pointer" onClick={handleviewMore}>
               <MoreVertIcon />

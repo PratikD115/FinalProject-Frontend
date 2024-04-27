@@ -2,29 +2,48 @@ import { useState } from "react";
 import Image from "next/image";
 import logo from "../../public/images/logo.png";
 import Link from "next/link";
-import profile from "../../public/images/profile.webp";
 import { AiOutlineMenu } from "react-icons/ai";
 import LoginIcon from "@mui/icons-material/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "@/store/userSlice";
 import Cookies from "js-cookie";
+import { Button, Divider, Menu, MenuItem } from "@mui/material";
+import { useRouter } from "next/router";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Header() {
   const { isLogin } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
+
+  const router = useRouter();
+
   const [isMenu, setIsMenu] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
-  function handleLogOut() {
+  const handleAsArtistClick = () => {
+    router.push("/asArtist");
+  };
+  function handleLogoutClick() {
+    handleClose();
     Cookies.remove("authToken");
     dispatch(userActions.logout());
   }
 
-  function handleClick() {
-    setDropDown((prev) => !prev);
-  }
-  function handleClose() {
-    console.log("fdk");
-  }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    handleClose();
+    router.push("/profile");
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-screen h-[10vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
@@ -59,37 +78,58 @@ export default function Header() {
         <div className="profile flex items-center">
           {isLogin && (
             <div className="img w-10 h-10 rounded-full mr-10">
-              <Image
-                src={profile}
-                alt="profile"
-                width="40px"
-                height="40px"
+              <Button
+                aria-controls="simple-menu"
+                aria-haspopup="true"
                 onClick={handleClick}
-                className="img w-9 h-9 bg-red-300 rounded-full object-cover cursor-pointer"
-              />
+              >
+                <Image
+                  src={user.profile}
+                  alt="profile"
+                  width={40}
+                  height={40}
+                  onClick={handleClick}
+                  className="img w-9 h-9 bg-red-300 rounded-full object-cover cursor-pointer"
+                />
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleProfileClick}>
+                  <PersonIcon fontSize="small" className="mr-2" />
+                  Profile
+                </MenuItem>
 
-              {dropDown && (
-                <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg mr-10">
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                  >
-                    Settings
-                  </Link>
-                  <div
-                    onClick={handleLogOut}
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 hover:rounded-md"
-                  >
-                    Log out
+                <MenuItem onClick={handleLogoutClick}>
+                  <LogoutIcon fontSize="small" className="mr-2" />
+                  Log out
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleAsArtistClick} className="flex ">
+                  <HandshakeIcon fontSize="small" className="mr-2" />
+                  <div>
+                    Join{" "}
+                    <span
+                      style={{ fontFamily: "Dancing Script" }}
+                      className="font-extrabold text-lg text-green-600"
+                    >
+                      MusicalMoment{" "}
+                    </span>
+                    <br />
+                    as a{" "}
+                    <span
+                      style={{ fontFamily: "Dancing Script" }}
+                      className="font-extrabold text-lg text-red-600"
+                    >
+                      Artist
+                    </span>
                   </div>
-                </div>
-              )}
+                </MenuItem>
+              </Menu>
             </div>
           )}
 

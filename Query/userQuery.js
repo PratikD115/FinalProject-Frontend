@@ -9,7 +9,6 @@ export const addToFavourite = gql`
   }
 `;
 
-
 export const getAllPlaylist = gql`
   query ($userId: String!) {
     getUserById(userId: $userId) {
@@ -21,10 +20,51 @@ export const getAllPlaylist = gql`
   }
 `;
 
-export const uploadProfile = gql`
-  mutation ($image: Upload!, $userId: String!) {
+export const uploadImageQuery = gql`
+  mutation ($userId: String!, $image: Upload!) {
     uploadImage(image: $image, userId: $userId) {
       id
+      name
+      email
+      password
+      role
+      favourite {
+        id
+        title
+        genres
+      }
+      playlist {
+        id
+        playlistName
+      }
+      profile
+    }
+  }
+`;
+
+export const userInfo = gql`
+  query ($userId: String!) {
+    getUserById(userId: $userId) {
+      id
+      name
+      email
+      password
+      role
+      favourite {
+        id
+        title
+        imageLink
+        streamingLink
+
+        artist {
+          name
+        }
+      }
+      playlist {
+        id
+        playlistName
+      }
+      profile
     }
   }
 `;

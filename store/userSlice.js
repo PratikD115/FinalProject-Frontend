@@ -5,6 +5,7 @@ const initialState = {
   isLogin: false,
   role: null,
   assignedToken: null,
+  profile: null
 };
 
 const userSlice = createSlice({
@@ -16,6 +17,7 @@ const userSlice = createSlice({
       state.isLogin = true;
       state.role = action.payload.user.role;
       state.assignedToken = action.payload.token;
+      
     },
     logout(state) {
       console.log('in the logout actions')
@@ -23,6 +25,7 @@ const userSlice = createSlice({
       state.isLogin = false;
       state.role = null;
       state.assignedToken = null;
+     
     },
   },
 });

@@ -35,7 +35,7 @@ export default function LoginForm() {
 
     if (data) {
       const { token, ...user } = data.login;
-     
+      console.log(user);
       setAuthTokenInCookie(token);
       dispatch(userActions.login({user, token}));
       router.push("/");
@@ -47,7 +47,7 @@ export default function LoginForm() {
   }
 
   return (
-    <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
+    <section className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <div className="container mx-auto h-[80%]  w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">
