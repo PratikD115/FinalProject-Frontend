@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AiOutlineMenu } from "react-icons/ai";
 import LoginIcon from "@mui/icons-material/Login";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "@/store/userSlice";
+import { userActions } from "../../store/userSlice";
 import Cookies from "js-cookie";
 import { Button, Divider, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/router";
@@ -14,14 +14,14 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Header() {
-  const { isLogin } = useSelector((state) => state.user);
-  const { user } = useSelector((state) => state.user);
+  const { isLogin } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: any) => state.user);
 
   const router = useRouter();
 
   const [isMenu, setIsMenu] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState < any >( null);
   const dispatch = useDispatch();
   const handleAsArtistClick = () => {
     router.push("/asArtist");
@@ -32,7 +32,7 @@ export default function Header() {
     dispatch(userActions.logout());
   }
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

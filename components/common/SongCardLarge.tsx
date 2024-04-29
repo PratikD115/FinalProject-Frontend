@@ -7,15 +7,24 @@ import { useSelector } from "react-redux";
 import { Alert, Menu, MenuItem, Snackbar } from "@mui/material";
 import AutohideSnackbar from "../pop-ups/information";
 import { useRouter } from "next/router";
-import { addToFavourite } from "@/Query/userQuery";
+import { addToFavourite } from "../../Query/userQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import UserPlaylist from "../pop-ups/userPlaylist";
 import {
   addSongToPlaylist,
   createNewPlaylist,
   songDownload,
-} from "@/Query/playlistQuery";
+} from "../../Query/playlistQuery";
 import { SendToMobileRounded } from "@mui/icons-material";
+
+interface SongCardLargeProps {
+  handleClick: () => void;
+  cover: string;
+  name: string;
+  artistName: string;
+  songId: string;
+  songUrl: string;
+}
 
 export default function SongCardLarge({
   handleClick,
@@ -24,30 +33,27 @@ export default function SongCardLarge({
   artistName,
   songId,
   songUrl,
-}) {
+}: SongCardLargeProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
-  const { isLogin } = useSelector((state) => state.user);
-  const { user } = useSelector((state) => state.user);
+  const { isLogin } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: any) => state.user);
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<any>(null);
   const [userPlaylist, setUserPlaylist] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [downloadSong] = useMutation(songDownload);
   const [createPlaylist] = useMutation(createNewPlaylist);
   const [songToPlaylist] = useMutation(addSongToPlaylist);
+  const [error , setError] = useState<null | Error>(null)
 
-  const handleDotsClick = (event) => {
-    console.log(event.currentTarget);
+  const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
   };
 
-  async function closeUserPlaylist(result, name, id) {
-    console.log(result);
+  async function closeUserPlaylist(result: boolean, name: string, id: string) {
     if (result) {
       if (id) {
-        console.log(id);
-        console.log("want to add song");
         const { data } = await songToPlaylist({
           variables: {
             songId: songId,
@@ -55,8 +61,6 @@ export default function SongCardLarge({
           },
         });
       } else if (name) {
-        console.log(name);
-        console.log("want to create new Playlist");
         const { data } = await createPlaylist({
           variables: {
             userId: user?.id,
@@ -68,7 +72,7 @@ export default function SongCardLarge({
     }
     setUserPlaylist(false);
   }
-  const base64ToBlob = (base64String) => {
+  const base64ToBlob = (base64String: string) => {
     const byteCharacters = atob(base64String);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
@@ -79,10 +83,9 @@ export default function SongCardLarge({
   };
   const fileName = user?.Id;
 
-  async function handleDotsClose(options) {
+  async function handleDotsClose(options: string) {
     if (isLogin) {
       if (options === "add to playlist") {
-        console.log("playlist");
         setUserPlaylist(true);
       } else if (options === "download") {
         try {
@@ -118,7 +121,7 @@ export default function SongCardLarge({
   }
 
   const [addFavorite, { loading }] = useMutation(addToFavourite, {
-    onError: (err) => {
+    onError: (err : Error) => {
       setError(err);
     },
   });
@@ -128,14 +131,13 @@ export default function SongCardLarge({
       setOpenDialog(true);
     } else {
       setOpen(true);
-      // router.push('/login');
     }
   };
 
-  const handleCloseDialog = (agreed) => {
+  const handleCloseDialog = (agreed: boolean) => {
     setOpenDialog(false);
     if (agreed) {
-      const { data } = addFavorite({
+      addFavorite({
         variables: {
           userId: user?.id,
           songId: songId,

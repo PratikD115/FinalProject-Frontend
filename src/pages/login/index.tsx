@@ -1,30 +1,33 @@
 import Image from "next/image";
-import img from "@/public/images/login.jpg";
+import img from "../../../public/images/login.jpg";
 import Link from "next/link";
-import { LOGIN } from "@/Query/authQuery";
+import { LOGIN } from "../../../Query/authQuery";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { setAuthTokenInCookie } from "@/utils/Authfunctions";
+import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
-import { userActions } from "@/store/userSlice";
+import { userActions } from "../../../store/userSlice";
 
-export default function LoginForm() {
-  const [error, setError] = useState(null);
+const  LoginForm : React.FC =()=> {
+  const [error, setError]  = useState<Error | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [login, { loading }] = useMutation(LOGIN, {
-    onError: (err) => {
+    onError: (err: Error) => {
       setError(err);
     },
   });
+  function handleAsArtist() {
+    router.push('/asArtist')
+  }
 
-  async function handleLogIn(event) {
+  async function handleLogIn(event: React.FormEvent) {
     event.preventDefault();
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
+    const enteredEmail = emailInputRef.current?.value;
+    const enteredPassword = passwordInputRef.current?.value;
 
     const { data } = await login({
       variables: {
@@ -37,7 +40,7 @@ export default function LoginForm() {
       const { token, ...user } = data.login;
       console.log(user);
       setAuthTokenInCookie(token);
-      dispatch(userActions.login({user, token}));
+      dispatch(userActions.login({ user, token }));
       router.push("/");
     }
   }
@@ -78,7 +81,7 @@ export default function LoginForm() {
                   type="email"
                   id="email"
                   name="email"
-                  placeholder="email"
+                  placeholder="Email"
                   required
                   className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
                 />
@@ -108,23 +111,10 @@ export default function LoginForm() {
                   LogIn
                 </button>
               </div>
-              <div className="flex items-center justify-between">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox text-blue-500"
-                  />
-                  <span className="ml-2 text-gray-700">Remember me</span>
-                </label>
-                <a
-                  className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-                  href="#"
-                >
-                  Forgot Password?
-                </a>
-              </div>
             </form>
-            <div className="text-sm mt-16">
+
+            <div onClick={handleAsArtist} className="text-gray-500 mt-10">Join as a Artist</div>
+            <div className="text-sm mt-10">
               Create new account:{" "}
               <Link href="/signup" className="text-sky-600 underline">
                 signup
@@ -136,3 +126,4 @@ export default function LoginForm() {
     </section>
   );
 }
+export default LoginForm;

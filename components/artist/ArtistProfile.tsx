@@ -1,40 +1,60 @@
 import { gql, useQuery } from "@apollo/client";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SongCardSmall from "../common/SongCardSmall";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
-import { ARTIST } from "@/Query/artistQuery";
-import { playlistActions } from "@/store/playlistSlice";
+import { ARTIST } from "../../Query/artistQuery";
+import { playlistActions } from "../../store/playlistSlice";
+import SongCardSmall from "../common/SongCardSmall";
+
+interface ArtistInfo {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  biography: string;
+  imageLink: string;
+  songs: Song[];
+}
+
+interface Song {
+  id: string;
+  title: string;
+  imageLink: string;
+}
 
 export default function ArtistProfile() {
-  const params = useParams();
+  const router = useRouter();
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
-      id: params?.artistId,
+      id: router.query.artistId as string,
       page,
       limit,
     },
   });
-  console.log(data);
-  const [artistInfo, setArtistInfo] = useState({});
+
+  const [artistInfo, setArtistInfo] = useState<ArtistInfo>({
+    id: "",
+    name: "",
+    dateOfBirth: "",
+    biography: "",
+    imageLink: "",
+    songs: [],
+  });
 
   useEffect(() => {
     if (data) {
       const { getArtistById } = data;
       setArtistInfo(getArtistById);
     }
-  }, [params, data]);
+  }, [router.query.artistId, data]);
 
   function handlePlayNow() {
-    console.log("play the song of artist");
-    console.log(artistInfo.songs);
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist: artistInfo.songs,
@@ -42,15 +62,16 @@ export default function ArtistProfile() {
       })
     );
   }
+
   function handleViewMore() {
-    setLimit(20)
+    setLimit(20);
   }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className=" flex pb-52 ">
+    <div className="flex pb-52">
       <div className="w-[30%] p-5">
         <div className="img relative h-64 w-64 m-auto">
           <Image
@@ -63,8 +84,8 @@ export default function ArtistProfile() {
           />
         </div>
 
-        <div className="  border border-gray-800 rounded-xl p-2 mt-5">
-          <div className="text-2xl text-gray-300  flex items-center justify-start  pl-4 font-[lato]">
+        <div className="border border-gray-800 rounded-xl p-2 mt-5">
+          <div className="text-2xl text-gray-300 flex items-center justify-start pl-4 font-[lato]">
             About {artistInfo.name}
           </div>
           <div className="text-base text-gray-400 mt-4 px-5">
@@ -74,8 +95,8 @@ export default function ArtistProfile() {
       </div>
 
       <div className="w-[60%] p-6">
-        <div className="flex  items-center mt-10">
-          <div className=" text-gray-400 text-3xl font-bold mr-2 font-[lato]">
+        <div className="flex items-center mt-10">
+          <div className="text-gray-400 text-3xl font-bold mr-2 font-[lato]">
             {artistInfo.name}
           </div>
           <span className="text-sm text-gray-500 font-normal mt-2">
@@ -106,6 +127,7 @@ export default function ArtistProfile() {
           <div className="mt-5">
             {artistInfo.songs?.map((song) => (
               <SongCardSmall
+                key={song.id}
                 image={song.imageLink}
                 name={song.title}
                 artistName={artistInfo.name}

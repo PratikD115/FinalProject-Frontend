@@ -1,18 +1,28 @@
-import Image from "next/image";
 import React from "react";
-import {  AiOutlineHeart } from "react-icons/ai";
-import {  BsThreeDots } from "react-icons/bs";
+import { AiOutlineHeart } from "react-icons/ai";
+import { BsThreeDots } from "react-icons/bs";
 
-export default function SongCardSmall({ image, name, artistName, i }) {
+interface SongCardSmallProps {
+  image: string;
+  name: string;
+  artistName: string;
+  i: string;
+}
+
+const SongCardSmall: React.FC<SongCardSmallProps> = ({
+  image,
+  name,
+  artistName,
+  i,
+}) => {
   return (
     <>
       <div
         className="box card relative flex hover:bg-gray-600  p-1 rounded-md transition ease-in-out cursor-pointer "
         key={i}
       >
-       
         <div className="img relative h-16 w-16 ml-2 mr-7">
-          <Image
+          <img
             src={image}
             alt="cover"
             height={64}
@@ -35,4 +45,6 @@ export default function SongCardSmall({ image, name, artistName, i }) {
       </div>
     </>
   );
-}
+};
+
+export default SongCardSmall;

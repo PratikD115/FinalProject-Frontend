@@ -1,8 +1,7 @@
-import Layout from "@/components/layout/Layout";
-import Home from "@/page/Home";
+import Layout from "../../components/layout/Layout";
+import Home from "../../page/Home";
 
-
-export default function Music() {
+const Music: React.FC = () => {
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <Layout>
@@ -10,4 +9,6 @@ export default function Music() {
       </Layout>
     </div>
   );
-}
+};
+
+export default Music;

@@ -2,7 +2,7 @@ import React from "react";
 import Title from "../common/Title";
 import {  useQuery } from "@apollo/client";
 import SongCardSmall from "../common/SongCardSmall";
-import { recommandedSongs } from "@/Query/playlistQuery";
+import { recommandedSongs } from "../../Query/playlistQuery";
 
 export default function Recommand() {
   const { loading, error, data } = useQuery(recommandedSongs);

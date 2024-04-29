@@ -1,15 +1,15 @@
-import { searchArtist, searchSong } from "@/Query/searchQuery";
-import ArtistCard from "@/components/common/ArtistCard";
-import SongCardLarge from "@/components/common/SongCardLarge";
-import Title from "@/components/common/Title";
-import SearchBar from "@/components/searchBar/SearchBar";
+import { searchArtist, searchSong } from "../Query/searchQuery";
+import ArtistCard from "../components/common/ArtistCard";
+import SongCardLarge from "../components/common/SongCardLarge";
+import Title from "../components/common/Title";
+import SearchBar from "../components/searchBar/SearchBar";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Browser() {
-  const [clicked, setClicked] = useState(false);
-  const [query, setQuery] = useState("");
+  const [clicked, setClicked] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>("");
   const router = useRouter();
   const {
     loading: songLoading,

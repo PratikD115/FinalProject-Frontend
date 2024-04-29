@@ -3,7 +3,7 @@ import Title from "../common/Title";
 import SongCardLarge from "../common/SongCardLarge";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { playlistActions } from "@/store/playlistSlice";
+import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch } from "react-redux";
 
 export default function SongPlaylist({ title, query }) {

@@ -1,8 +1,8 @@
-import { userInfo, uploadImageQuery } from "@/Query/userQuery";
-import ArtistCard from "@/components/common/ArtistCard";
-import SongCardLarge from "@/components/common/SongCardLarge";
-import Title from "@/components/common/Title";
-import Layout from "@/components/layout/Layout";
+import { userInfo, uploadImageQuery } from "../../../Query/userQuery";
+import ArtistCard from "../../../components/common/ArtistCard";
+import SongCardLarge from "../../../components/common/SongCardLarge";
+import Title from "../../../components/common/Title";
+import Layout from "../../../components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";

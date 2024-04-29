@@ -1,25 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import img from "@/public/images/login.jpg";
+import img from "../../../public/images/login.jpg";
 import { useMutation } from "@apollo/client";
 import { useRef } from "react";
 import {  useRouter } from "next/router";
-import { SIGNUP } from "@/Query/authQuery";
+import { SIGNUP } from "../../../Query/authQuery";
 
 
 export default function LoginForm() {
-  const nameInputRef = useRef();
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter()
 
   const [signUp, { loading, error, data }] = useMutation(SIGNUP);
   
-  async function handleSingUp(event) {
+  async function handleSingUp(event : React.FormEvent) {
     event.preventDefault();
-    const enteredName = nameInputRef.current.value;
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
+    const enteredName = nameInputRef.current?.value;
+    const enteredEmail = emailInputRef.current?.value;
+    const enteredPassword = passwordInputRef.current?.value;
     const { data } = await signUp({
       variables: { email: enteredEmail, name: enteredName, password: enteredPassword, role : "artist" },
     });

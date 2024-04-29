@@ -2,7 +2,13 @@ import Image from "next/image";
 import { AiFillPlayCircle, AiOutlineHeart } from "react-icons/ai";
 import { BsPlayCircle, BsThreeDots } from "react-icons/bs";
 
-export default function ArtistCard({onClick, image, name}) {
+interface ArtistCardProps {
+  onClick?: () => void;
+  image: string;
+  name: string;
+}
+
+export default function ArtistCard({ onClick, image, name }: ArtistCardProps) {
   return (
     <>
       <div className="img relative h-44 rounded-full border-2 border-gray-500">

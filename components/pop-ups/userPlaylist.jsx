@@ -1,4 +1,4 @@
-import { getAllPlaylist } from "@/Query/userQuery";
+import { getAllPlaylist } from "../../Query/userQuery";
 import { useQuery } from "@apollo/client";
 import {
   Button,

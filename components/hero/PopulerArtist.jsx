@@ -4,7 +4,7 @@ import ArtistCard from "../common/ArtistCard";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { GET_DATA } from "@/Query/artistQuery";
+import { GET_DATA } from "../../Query/artistQuery";
 
 export default function PopulerArtist() {
   const { loading, error, data } = useQuery(GET_DATA);
