@@ -15,7 +15,7 @@ const Home: React.FC = () => {
       <Hero />
       <LayoutSidebar>
         <PopulerArtist />
-        <SongPlaylist title="Hindi Top 20" query={hindiTop20Playlist} />
+               <SongPlaylist title="Hindi Top 20" query={hindiTop20Playlist} />
         <SongPlaylist title="English Top 20" query={EnglishTop20Playlist} />
         <Recommand />
       </LayoutSidebar>

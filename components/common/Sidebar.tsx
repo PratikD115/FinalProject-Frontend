@@ -20,7 +20,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <section className="sidebar hero">
+      <section className="sidebar hero ">
         <Title title={" Most Liked songs"} />
 
         {data.getAllActiveSongs.map((item: Song, i: number) => (

@@ -18,19 +18,31 @@ export default function Profile() {
   });
   const [userProfile, setUserProfile] = useState();
   const [image, setImage] = useState(null);
-  const [uploadImage] = useMutation(uploadImageQuery);
+  const [uploadImage] = useMutation(uploadImageQuery, {
+    context: {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  });
 
   const handleImageChange = (event) => {
     setImage(event.target.files[0]);
-    console.log(event.target.files[0]);
   };
 
   const handleUpload = async () => {
-   
+    const fileJSON = {
+      name: image.name,
+      type: image.type,
+      size: image.size,
+      lastModified: image.lastModified,
+      // Add more properties if needed
+    };
+    console.log(fileJSON);
     try {
       const response = await uploadImage({
         variables: {
-          image: image,
+          image: fileJSON,
           userId: user?.id,
         },
       });

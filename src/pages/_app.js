@@ -2,8 +2,10 @@ import "../styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Player from "../../components/player/Player";
 import { useRouter } from "next/router";
+import MainLayout from "../../components/MainLayout";
 import { Provider } from "react-redux";
 import store from "../../store";
+
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
@@ -23,6 +25,7 @@ const App = ({ Component, pageProps }) => {
       <ApolloProvider client={client}>
         <Component {...pageProps} />
         {display && <Player />}
+        <MainLayout />
       </ApolloProvider>
     </Provider>
   );

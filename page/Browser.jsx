@@ -8,8 +8,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Browser() {
-  const [clicked, setClicked] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>("");
+  const [clicked, setClicked] = useState(false);
+  const [query, setQuery] = useState("");
   const router = useRouter();
   const {
     loading: songLoading,
@@ -48,7 +48,9 @@ export default function Browser() {
       <SearchBar onSearch={handleSearch} />
       {!songData && !artistData && (
         <>
-          <div className="text-gray-500 mt-10 text-xl">Search your favorite song and artist...</div>
+          <div className="text-gray-500 mt-10 text-xl">
+            Search your favorite song and artist...
+          </div>
         </>
       )}
 

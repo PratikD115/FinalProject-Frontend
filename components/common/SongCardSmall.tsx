@@ -6,7 +6,7 @@ interface SongCardSmallProps {
   image: string;
   name: string;
   artistName: string;
-  i: string;
+  i: string | number;
 }
 
 const SongCardSmall: React.FC<SongCardSmallProps> = ({
