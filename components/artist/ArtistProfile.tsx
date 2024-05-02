@@ -1,14 +1,16 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ARTIST } from "../../Query/artistQuery";
 import { playlistActions } from "../../store/playlistSlice";
 import SongCardSmall from "../common/SongCardSmall";
+import { addArtist } from "../../Query/userQuery";
+import toast from "react-hot-toast";
 
 interface ArtistInfo {
   id: string;
@@ -28,6 +30,7 @@ interface Song {
 export default function ArtistProfile() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user } = useSelector((state: any) => state.user);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const { loading, error, data } = useQuery(ARTIST, {
@@ -37,6 +40,8 @@ export default function ArtistProfile() {
       limit,
     },
   });
+
+  const [addArtistToFollow] = useMutation(addArtist);
 
   const [artistInfo, setArtistInfo] = useState<ArtistInfo>({
     id: "",
@@ -61,6 +66,16 @@ export default function ArtistProfile() {
         index: 0,
       })
     );
+  }
+
+  async function handleFollow() {
+    const { data } = await addArtistToFollow({
+      variables: {
+        userId: user.id,
+        artistId: router.query.artistId,
+      },
+    });
+    toast.success(`Now, you are following , ${artistInfo.name}`)
   }
 
   function handleViewMore() {
@@ -114,6 +129,7 @@ export default function ArtistProfile() {
           </Button>
           <Button
             variant="outlined"
+            onClick={handleFollow}
             startIcon={<AddIcon />}
             className="rounded-full mr-5"
           >

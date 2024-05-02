@@ -16,7 +16,7 @@ export const hindiTop20Playlist = gql`
   }
 `;
 
-export const EnglishTop20Playlist = gql`
+export const englishTop20Playlist = gql`
   query ($page: Int!, $limit: Int!) {
     getAllActiveSongs(page: $page, limit: $limit) {
       id
@@ -30,6 +30,20 @@ export const EnglishTop20Playlist = gql`
       }
     }
   }
+`;export const punjabiTop20Playlist = gql`
+query ($page: Int!, $limit: Int!) {
+  getAllActiveSongs(page: $page, limit: $limit) {
+    id
+    title
+    imageLink
+    streamingLink
+    artist {
+      id
+      name
+      imageLink
+    }
+  }
+}
 `;
 
 export const mostLikedSong = gql`

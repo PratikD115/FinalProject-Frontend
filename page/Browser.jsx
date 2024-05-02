@@ -80,7 +80,7 @@ export default function Browser() {
             <div className="mb-10">
               <Title title={"Searched Artist :"} />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 sm:grid-cols-1 gap-5">
+            <div className="grid grid-cols-3 md:grid-cols-4 sm:grid-cols-1 gap-5">
               {artistData.searchArtist.map((artist) => (
                 <div className="mr-5">
                   <ArtistCard

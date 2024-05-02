@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
+import StarIcon from "@mui/icons-material/Star";
 
 export default function Header() {
   const { isLogin } = useSelector((state: any) => state.user);
@@ -20,8 +21,7 @@ export default function Header() {
   const router = useRouter();
 
   const [isMenu, setIsMenu] = useState(false);
-  const [dropDown, setDropDown] = useState(false);
-  const [anchorEl, setAnchorEl] = useState < any >( null);
+  const [anchorEl, setAnchorEl] = useState<any>(null);
   const dispatch = useDispatch();
   const handleAsArtistClick = () => {
     router.push("/asArtist");
@@ -43,7 +43,9 @@ export default function Header() {
     handleClose();
     router.push("/profile");
   };
-
+  const handlePremium = () => {
+    router.push("/subscription");
+  };
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-screen h-[10vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
@@ -75,7 +77,15 @@ export default function Header() {
           </ul>
         </div>
 
-        <div className="profile flex items-center">
+        <div className="profile flex items-center ">
+          
+          <div
+            className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-2 flex items-center mt-1"
+            onClick={handlePremium}
+          >
+            <StarIcon className="text-yellow-500 mr-1" />
+            Premium
+          </div>
           {isLogin && (
             <div className="img w-10 h-10 rounded-full mr-10">
               <Button
@@ -132,7 +142,6 @@ export default function Header() {
               </Menu>
             </div>
           )}
-
           {!isLogin && (
             <Link
               href="/login"

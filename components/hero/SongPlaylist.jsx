@@ -6,20 +6,20 @@ import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch } from "react-redux";
 
-export default function SongPlaylist({ title, query }) {
-  const { loading, error, data } = useQuery(query, {
-    variables: { page: 2, limit: 10 },
-  });
+export default function SongPlaylist({ title, playlistData }) {
+  // const { loading, error, data } = useQuery(query, {
+  //   variables: { page: 1, limit: 10 },
+  // });
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
 
   useEffect(() => {
-    if (data) {
-      const { getAllActiveSongs } = data;
+    if (playlistData) {
+      const { getAllActiveSongs } = playlistData;
       setPlaylist(getAllActiveSongs);
     }
-  });
+  },[playlistData]);
 
   function handleViewMore() {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index: 0 }));
@@ -30,9 +30,7 @@ export default function SongPlaylist({ title, query }) {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index }));
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
+  
   return (
     <>
       <section className="treading hero mt-4 cursor-pointer">

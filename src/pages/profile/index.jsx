@@ -124,18 +124,16 @@ export default function Profile() {
             </div>
             <div className="mt-5">
               <Title title={"Followed Artist :"} />
-              <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
-                {userProfile?.favourite?.map((item, index) => (
-                  <div className="box card hero" key={index}>
-                    <SongCardLarge
-                      handleClick={() => handleSongClick(playlist, index)}
-                      cover={item.imageLink}
-                      name={item.title}
-                      artistName={item.artist.name}
-                      songId={item.id}
-                      songUrl={item.streamingLink}
-                    />
-                  </div>
+              <div className="grid grid-cols-3 md:grid-cols-5 sm:grid-cols-1 gap-5">
+                {userProfile?.follow?.map((item, i) => (
+                  
+                
+                      <ArtistCard
+                  image={item.imageLink}
+                  name={item.name}
+                />
+                    
+               
                 ))}
               </div>
             </div>

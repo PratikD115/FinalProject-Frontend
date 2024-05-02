@@ -34,3 +34,16 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const User = gql`
+  query ($userId: String!) {
+    getUserById(userId: $userId) {
+      id
+      name
+      email
+      role
+      profile
+      
+    }
+  }
+`;

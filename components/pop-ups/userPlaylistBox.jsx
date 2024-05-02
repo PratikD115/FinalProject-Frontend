@@ -8,7 +8,6 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -41,18 +40,25 @@ export default function UserPlaylist({ onClose }) {
       refetch();
     }
   }, [refetch]);
+
+  // if user click on the playlist
   const handlePlaylistClick = (index, prePlaylist) => {
     setSelectedButtonIndex(index);
     setSelectedPlaylist(prePlaylist);
     console.log(prePlaylist);
   };
+
+  // if user want to create new playlist 
+  const handleCreateNew = () => {
+    setIsCreateNew((prev) => !prev);
+  };
+
+// input the data from the user 
   const handleChange = (event) => {
     setInputValue(event.target.value);
     console.log(event.target.value);
   };
-  const handleCreateNew = () => {
-    setIsCreateNew((prev) => !prev);
-  };
+
   return (
     <Dialog open={true} onClose={onClose}>
       <DialogTitle>Add to the Playlist</DialogTitle>

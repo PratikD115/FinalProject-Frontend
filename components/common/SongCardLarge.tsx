@@ -9,13 +9,14 @@ import AutohideSnackbar from "../pop-ups/information";
 import { useRouter } from "next/router";
 import { addToFavourite } from "../../Query/userQuery";
 import { useMutation, useQuery } from "@apollo/client";
-import UserPlaylist from "../pop-ups/userPlaylist";
+import UserPlaylist from "../pop-ups/userPlaylistBox";
 import {
   addSongToPlaylist,
   createNewPlaylist,
   songDownload,
 } from "../../Query/playlistQuery";
 import { SendToMobileRounded } from "@mui/icons-material";
+import toast from "react-hot-toast";
 
 interface SongCardLargeProps {
   handleClick: () => void;
@@ -35,7 +36,6 @@ export default function SongCardLarge({
   songUrl,
 }: SongCardLargeProps) {
   const [openDialog, setOpenDialog] = useState(false);
-  const [open, setOpen] = useState(false);
   const { isLogin } = useSelector((state: any) => state.user);
   const { user } = useSelector((state: any) => state.user);
   const router = useRouter();
@@ -115,7 +115,7 @@ export default function SongCardLarge({
       }
       setAnchorEl(null);
     } else {
-      setOpen(true);
+      toast.error("Please login to use functionality")
       setAnchorEl(null);
     }
   }
@@ -130,8 +130,7 @@ export default function SongCardLarge({
     if (isLogin) {
       setOpenDialog(true);
     } else {
-      setOpen(true);
-    }
+      toast.error("Please login to use functionality")    }
   };
 
   const handleCloseDialog = (agreed: boolean) => {
@@ -149,7 +148,7 @@ export default function SongCardLarge({
   };
 
   const handleClose = () => {
-    setOpen(false);
+    toast.error("Please login to use functionality")
   };
 
   return (
@@ -166,14 +165,18 @@ export default function SongCardLarge({
 
         <div className="overlay absolute bottom-0 right-0 text-white">
           <div className="flex p-3">
+            {/* add to favourite */}
             <AiOutlineHeart
               onClick={handleOpenDialog}
               size={22}
               className="mx-3"
             />
+            {/* open the confirmation box */}
             <AlertDialog open={openDialog} onClose={handleCloseDialog} />
 
+            {/* three dot option */}
             <BsThreeDots onClick={handleDotsClick} size={22} />
+            {/* open the box for more options */}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -186,16 +189,11 @@ export default function SongCardLarge({
                 Download
               </MenuItem>
             </Menu>
+            {/* if user click on the playlist button then open the new box */}
             {userPlaylist && <UserPlaylist onClose={closeUserPlaylist} />}
           </div>
         </div>
-        {open && (
-          <AutohideSnackbar
-            open={open}
-            onClose={handleClose}
-            message={"Please Login to use Functionality"}
-          />
-        )}
+        
       </div>
       <div className="text mt-1 font-[lato]">
         <h3 className="text-sm text-gray-300 font-medium">{name}</h3>

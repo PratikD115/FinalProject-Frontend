@@ -25,9 +25,9 @@ export default function LayoutSidebar({ children }: LayoutSidebarProps): JSX.Ele
       const sidebarEl = document.querySelector(".sidebar") as HTMLElement;
       const scrollTop = window.scrollY;
       if (scrollTop >= (sidebarTop - 10)) {
-        sidebarEl.classList.add("is-sticky");
+        sidebarEl?.classList.add("is-sticky");
       } else {
-        sidebarEl.classList.remove("is-sticky");
+        sidebarEl?.classList.remove("is-sticky");
       }
     };
 

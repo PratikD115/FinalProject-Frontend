@@ -64,7 +64,30 @@ export const userInfo = gql`
         id
         playlistName
       }
+      follow {
+        name
+        imageLink
+      }
       profile
     }
   }
 `;
+
+export const addArtist = gql`
+  mutation ($userId: String!, $artistId: String!) {
+    addArtistToUser(userId: $userId, artistId: $artistId) {
+      id
+      name
+      email
+      password
+      role
+      follow {
+        id
+        name
+        language
+      }
+      profile
+    }
+  }
+`;
+

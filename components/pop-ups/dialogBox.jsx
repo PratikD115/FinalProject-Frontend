@@ -16,10 +16,10 @@ export default function AlertDialog({ open, onClose }) {
       aria-describedby="alert-dialog-description"
       className="font-[lato] "
     >
-      <DialogContent className="bg-gray-300">
+      <DialogContent className="bg-gray-100">
         Add Song to Your Favorite Playlist ?
       </DialogContent>
-      <DialogActions className="bg-gray-300">
+      <DialogActions className="bg-gray-100">
         <Button className="text-red-500" onClick={() => handleClose(false)}>
           CLOSE
         </Button>

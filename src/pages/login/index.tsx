@@ -8,45 +8,39 @@ import { useMutation } from "@apollo/client";
 import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../../store/userSlice";
+import toast from "react-hot-toast";
 
-const  LoginForm : React.FC =()=> {
-  const [error, setError]  = useState<Error | null>(null);
+const LoginForm: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const [login, { loading }] = useMutation(LOGIN, {
-    onError: (err: Error) => {
-      setError(err);
-    },
-  });
-  function handleAsArtist() {
-    router.push('/asArtist')
-  }
+  const [login] = useMutation(LOGIN);
 
   async function handleLogIn(event: React.FormEvent) {
     event.preventDefault();
     const enteredEmail = emailInputRef.current?.value;
     const enteredPassword = passwordInputRef.current?.value;
 
-    const { data } = await login({
-      variables: {
-        email: enteredEmail,
-        password: enteredPassword,
-      },
-    });
+    try {
+      const { data } = await login({
+        variables: {
+          email: enteredEmail,
+          password: enteredPassword,
+        },
+      });
 
-    if (data) {
-      const { token, ...user } = data.login;
-      console.log(user);
-      setAuthTokenInCookie(token);
-      dispatch(userActions.login({ user, token }));
-      router.push("/");
+      if (data) {
+        const { token, ...user } = data.login;
+        console.log(user);
+        setAuthTokenInCookie(token);
+        dispatch(userActions.login({ user, token }));
+        toast.success("Successfully login!");
+        router.push("/");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
-  }
-
-  {
-    error && <div>Error: {error.message}</div>;
   }
 
   return (
@@ -113,7 +107,6 @@ const  LoginForm : React.FC =()=> {
               </div>
             </form>
 
-            <div onClick={handleAsArtist} className="text-gray-500 mt-10">Join as a Artist</div>
             <div className="text-sm mt-10">
               Create new account:{" "}
               <Link href="/signup" className="text-sky-600 underline">
@@ -125,5 +118,5 @@ const  LoginForm : React.FC =()=> {
       </div>
     </section>
   );
-}
+};
 export default LoginForm;
