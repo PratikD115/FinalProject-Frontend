@@ -4,20 +4,28 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { paymentQuery } from "../../../Query/planQuery";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 export default function Subscription() {
   const [payment] = useMutation(paymentQuery);
   const { user } = useSelector((state) => state.user);
-
+  const { isLogin } = useSelector((state) => state.user);
+  const router = useRouter();
   const handlePayment = async (price) => {
-    const { data } = await payment({
-      variables: {
-        price,
-        userId: user?.id,
-      },
-    });
-    if (data) {
-      window.open(data.createSubscription, "_blank");
+    if (isLogin) {
+      const { data } = await payment({
+        variables: {
+          price,
+          userId: user?.id,
+        },
+      });
+      if (data) {
+        window.open(data.createSubscription, "_blank");
+      }
+    } else {
+      toast.error("Please login for Add Subscription");
+      router.push("/login");
     }
   };
   return (

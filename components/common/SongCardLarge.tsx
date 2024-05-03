@@ -17,6 +17,8 @@ import {
 } from "../../Query/playlistQuery";
 import { SendToMobileRounded } from "@mui/icons-material";
 import toast from "react-hot-toast";
+import ReactLoading from 'react-loading';
+
 
 interface SongCardLargeProps {
   handleClick: () => void;
@@ -186,7 +188,7 @@ export default function SongCardLarge({
                 Add to Playlist
               </MenuItem>
               <MenuItem onClick={() => handleDotsClose("download")}>
-                Download
+            {downloading ?<ReactLoading type="bars" color="#2ecc71" height={25} width={25} className="ml-9"/> :<div>Download</div>}
               </MenuItem>
             </Menu>
             {/* if user click on the playlist button then open the new box */}

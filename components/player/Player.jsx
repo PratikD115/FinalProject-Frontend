@@ -17,6 +17,7 @@ import { playlistActions } from "../../store/playlistSlice";
 import { useRouter } from "next/router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function Player() {
   const { playlist } = useSelector((state) => state.playlist);
@@ -142,7 +143,12 @@ export default function Player() {
   };
 
   function handleviewMore() {
-    router.push("/queue");
+    if (currentSong) {
+      router.push("/queue");
+    }
+    else {
+      toast.error('please select the playlist')
+    }
   }
 
   return (

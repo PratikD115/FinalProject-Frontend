@@ -13,6 +13,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import StarIcon from "@mui/icons-material/Star";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const { isLogin } = useSelector((state: any) => state.user);
@@ -23,6 +24,7 @@ export default function Header() {
   const [isMenu, setIsMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const dispatch = useDispatch();
+  const [hovered, setHovered] = useState(false);
   const handleAsArtistClick = () => {
     router.push("/asArtist");
   };
@@ -44,7 +46,8 @@ export default function Header() {
     router.push("/profile");
   };
   const handlePremium = () => {
-    router.push("/subscription");
+    
+      router.push("/subscription");
   };
   return (
     <header
@@ -53,37 +56,44 @@ export default function Header() {
       {/* desktop and tablet */}
       <div className="hidden md:flex justify-between px-7 p-2">
         {/* logo */}
+        
         <div className="logo flex">
+          <Link href="/">
           <h2
-            className="text-2xl ml-3 font-extrabold "
+            className={`text-2xl ml-3 font-extrabold mt-1 mr-5 ${router.pathname === '/' ? 'active' : ''}`}
             style={{ fontFamily: "Dancing Script" }}
           >
-            Musical Moment
+           Musical Moment
           </h2>
-        </div>
-
-        <div className="menu font-[lato]">
+          </Link>
+          <div className="menu font-[lato]">
           <ul className="flex">
-            <li className="mx-5 py-2">
+            {/* <li className="mx-5 py-2">
               <Link href="/">Discover</Link>
-            </li>
-            <li className="mx-5 py-2">
+            </li> */}
+            <li className={`mx-5 py-2 ${router.pathname === '/browser' ? 'active' : ''}`}>
               <Link href="/browser">Browser</Link>
             </li>
 
-            <li className="mx-5 py-2">
-              <Link href="/artist">Artist</Link>
+            <li className={`mx-5 py-2 ${router.pathname === '/about' ? 'active' : ''}`}>
+              <Link href="/about">About Us</Link>
+            </li>
+            <li className={`mx-5 py-2 ${router.pathname === '/contact' ? 'active' : ''}`}>
+              <Link href="/contact">Contact Us</Link>
             </li>
           </ul>
         </div>
 
+        </div>
+        
+
         <div className="profile flex items-center ">
           
           <div
-            className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-2 flex items-center mt-1"
+            className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center "
             onClick={handlePremium}
           >
-            <StarIcon className="text-yellow-500 mr-1" />
+            <StarIcon fontSize="small" className="text-yellow-500" />
             Premium
           </div>
           {isLogin && (

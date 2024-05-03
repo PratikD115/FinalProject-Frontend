@@ -7,7 +7,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps): JSX.Element {
   return (
-    <div className="mb-0">
+    <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 min-h-screen text-gray-300 pb-56">
       <Header />
       <main className="pt-[10vh]">{children}</main>
     </div>

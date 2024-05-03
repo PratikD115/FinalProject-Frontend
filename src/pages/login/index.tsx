@@ -35,7 +35,7 @@ const LoginForm: React.FC = () => {
         console.log(user);
         setAuthTokenInCookie(token);
         dispatch(userActions.login({ user, token }));
-        toast.success("Successfully login!");
+        toast.success("Login SuccessFully !");
         router.push("/");
       }
     } catch (error: any) {
