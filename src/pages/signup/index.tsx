@@ -32,7 +32,7 @@ export default function LoginForm() {
       <div className="container mx-auto h-[80%]  w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">
-            <Image src={img} alt="" className="h-full w-full" />
+            <Image src={img} alt="lk" className="h-full w-full" />
           </div>
           <div className="md:w-1/2 px-6 py-4">
             <h3 className="text-2xl font-bold mb-2 flex justify-center">

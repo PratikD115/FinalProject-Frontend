@@ -64,7 +64,7 @@ export default function Browser() {
               {songData.searchSong.map((song) => (
                 <div className="h-52">
                   <SongCardLarge
-                    cover={song.imageLink}
+                    imageLink={song.imageLink}
                     name={song.title}
                     artistName={song.artist.name}
                   />

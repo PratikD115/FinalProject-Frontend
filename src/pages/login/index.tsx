@@ -48,7 +48,7 @@ const LoginForm: React.FC = () => {
       <div className="container mx-auto h-[80%]  w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">
-            <Image src={img} alt="" className="h-full w-full" />
+            <Image src={img} alt="kl" className="h-full w-full" />
           </div>
           <div className="md:w-1/2 p-6">
             <h3 className="text-2xl font-bold mb-4 flex justify-center">

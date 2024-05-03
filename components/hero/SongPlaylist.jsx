@@ -49,8 +49,8 @@ export default function SongPlaylist({ title, playlistData }) {
             <div className="box card hero" key={index}>
               <SongCardLarge
                 handleClick={() => handleSongClick(playlist, index)}
-                cover={item.imageLink}
-                name={item.title}
+                imageLink={item.imageLink}
+                songName={item.title}
                 artistName={item.artist.name}
                 songId={item.id}
                 songUrl={item.streamingLink}

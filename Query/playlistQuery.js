@@ -30,20 +30,21 @@ export const englishTop20Playlist = gql`
       }
     }
   }
-`;export const punjabiTop20Playlist = gql`
-query ($page: Int!, $limit: Int!) {
-  getAllActiveSongs(page: $page, limit: $limit) {
-    id
-    title
-    imageLink
-    streamingLink
-    artist {
+`;
+export const punjabiTop20Playlist = gql`
+  query ($page: Int!, $limit: Int!) {
+    getAllActiveSongs(page: $page, limit: $limit) {
       id
-      name
+      title
       imageLink
+      streamingLink
+      artist {
+        id
+        name
+        imageLink
+      }
     }
   }
-}
 `;
 
 export const mostLikedSong = gql`
@@ -56,6 +57,7 @@ export const mostLikedSong = gql`
         name
       }
       imageLink
+      streamingLink
     }
   }
 `;
@@ -65,11 +67,13 @@ export const recommandedSongs = gql`
     getAllActiveSongs {
       id
       title
+      imageLink
+      streamingLink
       artist {
         id
         name
+        imageLink
       }
-      imageLink
     }
   }
 `;

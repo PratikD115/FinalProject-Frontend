@@ -25,11 +25,16 @@ interface Song {
   id: string;
   title: string;
   imageLink: string;
+  songUrl: string;
+  songId: string;
+  artistName: string;
+  streamingLink: string;
 }
 
 export default function ArtistProfile() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [playlist, setPlaylist] = useState([]);
   const { user } = useSelector((state: any) => state.user);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -56,14 +61,24 @@ export default function ArtistProfile() {
     if (data) {
       const { getArtistById } = data;
       setArtistInfo(getArtistById);
+      setPlaylist(getArtistById.songs);
     }
   }, [router.query.artistId, data]);
 
   function handlePlayNow() {
     dispatch(
       playlistActions.setPlaylistAndIndex({
-        playlist: artistInfo.songs,
+        playlist: playlist,
         index: 0,
+      })
+    );
+  }
+
+  function handleSongClick(playlist: any, index: number) {
+    dispatch(
+      playlistActions.setPlaylistAndIndex({
+        playlist,
+        index,
       })
     );
   }
@@ -75,7 +90,7 @@ export default function ArtistProfile() {
         artistId: router.query.artistId,
       },
     });
-    toast.success(`Now, you are following , ${artistInfo.name}`)
+    toast.success(`Now, you are following , ${artistInfo.name}`);
   }
 
   function handleViewMore() {
@@ -141,14 +156,19 @@ export default function ArtistProfile() {
             {artistInfo.name} Songs
           </div>
           <div className="mt-5">
-            {artistInfo.songs?.map((song) => (
-              <SongCardSmall
-                key={song.id}
-                image={song.imageLink}
-                name={song.title}
-                artistName={artistInfo.name}
-                i={song.id}
-              />
+            {artistInfo.songs?.map((song, index) => (
+              <div className="" key={index}>
+                <SongCardSmall
+                  handleClick={() => {
+                    handleSongClick(playlist, index);
+                  }}
+                  imageLink={song.imageLink}
+                  songName={song.title}
+                  artistName={artistInfo.name}
+                  songId={song.id}
+                  songUrl={song.streamingLink}
+                />
+              </div>
             ))}
           </div>
           <div className="flex justify-center ">

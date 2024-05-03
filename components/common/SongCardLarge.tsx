@@ -17,13 +17,15 @@ import {
 } from "../../Query/playlistQuery";
 import { SendToMobileRounded } from "@mui/icons-material";
 import toast from "react-hot-toast";
-import ReactLoading from 'react-loading';
-
+import ReactLoading from "react-loading";
+import ShareIcon from "@mui/icons-material/Share";
+import DownloadIcon from "@mui/icons-material/Download";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 interface SongCardLargeProps {
   handleClick: () => void;
-  cover: string;
-  name: string;
+  imageLink: string;
+  songName: string;
   artistName: string;
   songId: string;
   songUrl: string;
@@ -31,8 +33,8 @@ interface SongCardLargeProps {
 
 export default function SongCardLarge({
   handleClick,
-  cover,
-  name,
+  imageLink,
+  songName,
   artistName,
   songId,
   songUrl,
@@ -47,7 +49,7 @@ export default function SongCardLarge({
   const [downloadSong] = useMutation(songDownload);
   const [createPlaylist] = useMutation(createNewPlaylist);
   const [songToPlaylist] = useMutation(addSongToPlaylist);
-  const [error , setError] = useState<null | Error>(null)
+  const [error, setError] = useState<null | Error>(null);
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -83,13 +85,16 @@ export default function SongCardLarge({
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: "audio/mpeg" });
   };
+  
   const fileName = user?.Id;
 
   async function handleDotsClose(options: string) {
     if (isLogin) {
       if (options === "add to playlist") {
         setUserPlaylist(true);
-      } else if (options === "download") {
+      } else if (options === "share") {
+        
+      }else if (options === "download") {
         try {
           setDownloading(true);
           const { data } = await downloadSong({
@@ -117,13 +122,13 @@ export default function SongCardLarge({
       }
       setAnchorEl(null);
     } else {
-      toast.error("Please login to use functionality")
+      toast.error("Please login to use functionality");
       setAnchorEl(null);
     }
   }
 
   const [addFavorite, { loading }] = useMutation(addToFavourite, {
-    onError: (err : Error) => {
+    onError: (err: Error) => {
       setError(err);
     },
   });
@@ -132,7 +137,8 @@ export default function SongCardLarge({
     if (isLogin) {
       setOpenDialog(true);
     } else {
-      toast.error("Please login to use functionality")    }
+      toast.error("Please login to use functionality");
+    }
   };
 
   const handleCloseDialog = (agreed: boolean) => {
@@ -149,23 +155,23 @@ export default function SongCardLarge({
     }
   };
 
-  const handleClose = () => {
-    toast.error("Please login to use functionality")
-  };
+  // const handleClose = () => {
+  //   toast.error("Please login to use functionality");
+  // };
 
   return (
     <>
       <div className="img relative h-40">
         <Image
           onClick={handleClick}
-          src={cover}
+          src={imageLink}
           alt="cover"
           height={288}
           width={288}
           className="w-full h-full object-cover rounded-md"
         />
 
-        <div className="overlay absolute bottom-0 right-0 text-white">
+        <div className="overlay absolute bottom-0 right-0 text-white ">
           <div className="flex p-3">
             {/* add to favourite */}
             <AiOutlineHeart
@@ -185,20 +191,38 @@ export default function SongCardLarge({
               onClose={handleDotsClose}
             >
               <MenuItem onClick={() => handleDotsClose("add to playlist")}>
+                <PlaylistAddIcon fontSize="small" className="mr-2" />
                 Add to Playlist
               </MenuItem>
+              <MenuItem onClick={() => handleDotsClose("share")}>
+                <ShareIcon fontSize="small" className="mr-2" />
+                Share
+              </MenuItem>
               <MenuItem onClick={() => handleDotsClose("download")}>
-            {downloading ?<ReactLoading type="bars" color="#2ecc71" height={25} width={25} className="ml-9"/> :<div>Download</div>}
+                {downloading ? (
+                  <ReactLoading
+                    type="bars"
+                    color="#2ecc71"
+                    height={25}
+                    width={25}
+                    className="ml-9"
+                  />
+                ) : (
+                  <div>
+                    {" "}
+                    <DownloadIcon fontSize="small" className="mr-2" />
+                    Download
+                  </div>
+                )}
               </MenuItem>
             </Menu>
             {/* if user click on the playlist button then open the new box */}
             {userPlaylist && <UserPlaylist onClose={closeUserPlaylist} />}
           </div>
         </div>
-        
       </div>
       <div className="text mt-1 font-[lato]">
-        <h3 className="text-sm text-gray-300 font-medium">{name}</h3>
+        <h3 className="text-sm text-gray-300 font-medium">{songName}</h3>
         <span className=" text-sm text-gray-400">{artistName}</span>
       </div>
     </>

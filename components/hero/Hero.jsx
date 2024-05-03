@@ -51,6 +51,7 @@ export default function Hero() {
               <div key={i} className=" box relative h-[92vh] sm:mt-0 w-full">
                 <Image
                   src={item.cover}
+                  
                   height={1000}
                   width={1000}
                   alt="cover"

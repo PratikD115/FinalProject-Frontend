@@ -1,10 +1,16 @@
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SongCardSmall from "./common/SongCardSmall";
+import { playlistActions } from "../store/playlistSlice";
 
 export default function Playlist() {
   const { playlist } = useSelector((state) => state.playlist);
   const { index } = useSelector((state) => state.playlist);
+  const dispatch = useDispatch();
+
+  const handleSongClick = (index) => {
+    dispatch(playlistActions.nextSong(index));
+  };
 
   return (
     <>
@@ -14,6 +20,7 @@ export default function Playlist() {
             <div className="image  justify-center my-auto flex ">
               <Image
                 src={playlist[index]?.imageLink}
+                alt="song"
                 height={255}
                 width={255}
                 className="border-2 rounded-md border-gray-500"
@@ -43,10 +50,12 @@ export default function Playlist() {
           {playlist?.map((song, index) => (
             <div>
               <SongCardSmall
-                image={song.imageLink}
-                name={song.title}
+                handleClick={() => handleSongClick(index)}
+                imageLink={song.imageLink}
+                songName={song.title}
                 artistName={song.artist.name}
-                i={index}
+                songId={song.id}
+                songUrl={song.streamingLink}
               />
             </div>
           ))}

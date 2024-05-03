@@ -112,7 +112,7 @@ export default function Profile() {
                   <div className="box card hero" key={index}>
                     <SongCardLarge
                       handleClick={() => handleSongClick(playlist, index)}
-                      cover={item.imageLink}
+                      imageLink={item.imageLink}
                       name={item.title}
                       artistName={item.artist.name}
                       songId={item.id}
@@ -126,14 +126,7 @@ export default function Profile() {
               <Title title={"Followed Artist :"} />
               <div className="grid grid-cols-3 md:grid-cols-5 sm:grid-cols-1 gap-5">
                 {userProfile?.follow?.map((item, i) => (
-                  
-                
-                      <ArtistCard
-                  image={item.imageLink}
-                  name={item.name}
-                />
-                    
-               
+                  <ArtistCard image={item.imageLink} name={item.name} />
                 ))}
               </div>
             </div>
