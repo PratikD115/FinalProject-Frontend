@@ -7,8 +7,9 @@ import { useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
-import { userActions } from "../../../store/userSlice";
 import toast from "react-hot-toast";
+import { userActions } from "../../../store/userSlice";
+userActions;
 
 const LoginForm: React.FC = () => {
   const router = useRouter();

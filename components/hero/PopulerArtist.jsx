@@ -19,7 +19,7 @@ export default function PopulerArtist() {
   });
 
   function handleClick(id) {
-    router.push(`/artist/${id}`)
+    router.push(`/artist/${id}`);
   }
 
   if (loading) return <p>Loading...</p>;
@@ -52,14 +52,13 @@ export default function PopulerArtist() {
     <section className="treading hero">
       <Title title="Popular Artist" />
       <Slider {...settings}>
-        {data.getAllActiveArtist.map((item, i) => (
-          <div className="box card hero m-5" key={i}>
+        {data.getAllActiveArtist.map((item, index) => (
+          <div className="box card hero m-5" key={index}>
             <div className="mr-5">
               <ArtistCard
-                onClick={()=>handleClick(item.id)}
-                image={item.imageLink}
-                name={item.name}
-                tag={item.tag}
+                onClick={() => handleClick(item.id)}
+                artistImage={item.imageLink}
+                artistName={item.name}
               />
             </div>
           </div>

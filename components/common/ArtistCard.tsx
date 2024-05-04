@@ -4,23 +4,27 @@ import { BsPlayCircle, BsThreeDots } from "react-icons/bs";
 
 interface ArtistCardProps {
   onClick?: () => void;
-  image: string;
-  name: string;
+  artistImage: string;
+  artistName: string;
 }
 
-export default function ArtistCard({ onClick, image, name }: ArtistCardProps) {
+export default function ArtistCard({
+  onClick,
+  artistImage,
+  artistName,
+}: ArtistCardProps) {
   return (
     <>
-      <div className="img relative h-44 rounded-full border-2 border-gray-500 cursor-pointer">
+      <div className="relative h-44 rounded-full border-2 border-gray-500 cursor-pointer">
+        
         <Image
-          src={image}
+          src={artistImage ? artistImage : "/../../public/images/image.png"}
           alt="cover"
           onClick={onClick}
           height={300}
           width={300}
           className="w-full h-full object-cover bg-white rounded-full shadow-custom"
         />
-
         {/* <div className="overlay absolute bottom-0 right-0 text-white">
           <div className="flex p-3">
             <AiOutlineHeart size={22} className="mx-3" />
@@ -28,7 +32,7 @@ export default function ArtistCard({ onClick, image, name }: ArtistCardProps) {
           </div>
         </div> */}
         <h3 className="text-md flex justify-center text-gray-500 font-semibold">
-          {name}
+          {artistName}
         </h3>
       </div>
     </>

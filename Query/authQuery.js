@@ -43,7 +43,12 @@ export const User = gql`
       email
       role
       profile
-      
+      favourite {
+        id
+      }
+      follow {
+        id
+      }
     }
   }
 `;

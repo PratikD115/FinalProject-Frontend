@@ -7,18 +7,22 @@ import {
   createNewPlaylist,
   songDownload,
 } from "../../Query/playlistQuery";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import AlertDialog from "../pop-ups/dialogBox";
+import ConfirmCard from "../pop-ups/dialogBox";
 import { Menu, MenuItem } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import DownloadIcon from "@mui/icons-material/Download";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import ReactLoading from "react-loading";
 import UserPlaylist from "../pop-ups/userPlaylistBox";
-import { addToFavourite } from "../../Query/userQuery";
+import { addToFavourite, removeToFavourite } from "../../Query/userQuery";
 import Image from "next/image";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { favouriteActions } from "../../store/favoriteSlice";
+import { red } from "@mui/material/colors";
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -27,6 +31,7 @@ interface SongCardSmallProps {
   artistName: string;
   songId: string;
   songUrl: string;
+  liked: boolean;
 }
 
 const SongCardSmall: React.FC<SongCardSmallProps> = ({
@@ -36,6 +41,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   artistName,
   songId,
   songUrl,
+  liked,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const { isLogin } = useSelector((state: any) => state.user);
@@ -48,6 +54,9 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const [createPlaylist] = useMutation(createNewPlaylist);
   const [songToPlaylist] = useMutation(addSongToPlaylist);
   const [error, setError] = useState<null | Error>(null);
+  const [openAddConfirm, setOpenAddConfirm] = useState(false);
+  const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
+  const dispatch = useDispatch();
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -124,24 +133,54 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       setAnchorEl(null);
     }
   }
-  const [addFavorite, { loading }] = useMutation(addToFavourite, {
+  const [addFavorite] = useMutation(addToFavourite, {
     onError: (err: Error) => {
       setError(err);
     },
   });
 
-  const handleOpenDialog = () => {
+  const [removeFavorite] = useMutation(removeToFavourite, {
+    onError: (err: Error) => {
+      setError(err);
+    },
+  });
+  const handleOpenAddConfirm = () => {
     if (isLogin) {
-      setOpenDialog(true);
+      setOpenAddConfirm(true);
     } else {
       toast.error("Please login to use functionality");
     }
   };
 
-  const handleCloseDialog = (agreed: boolean) => {
-    setOpenDialog(false);
+  const handleOpenRemoveConfirm = () => {
+    if (isLogin) {
+      setOpenRemoveCofirm(true);
+    } else {
+      toast.error("Please login to use functionality");
+    }
+  };
+
+  const handleCloseAddConfirm = (agreed: boolean) => {
+    setOpenAddConfirm(false);
     if (agreed) {
+      console.log("user remove from list");
+      dispatch(favouriteActions.setSongtoData(songId));
       addFavorite({
+        variables: {
+          userId: user?.id,
+          songId: songId,
+        },
+      });
+    } else {
+      console.log("User disagreed.");
+    }
+  };
+  const handleCloseRemoveConfirm = (agreed: boolean) => {
+    setOpenRemoveCofirm(false);
+    if (agreed) {
+      console.log("user want to remove form favourite");
+      dispatch(favouriteActions.removeSongToData(songId));
+      removeFavorite({
         variables: {
           userId: user?.id,
           songId: songId,
@@ -169,13 +208,33 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
         </div>
         <div className="overlay absolute bottom-0 right-0 text-secondary">
           <div className="flex p-3">
-            <AiOutlineHeart
-              size={20}
-              onClick={handleOpenDialog}
-              className="mx-3 text-white"
-            />
+            {liked ? (
+              <FavoriteIcon
+                onClick={handleOpenRemoveConfirm}
+                sx={{ color: red[400] }}
+                fontSize="small"
+                className="mx-3"
+              />
+            ) : (
+              <FavoriteBorderIcon
+                onClick={handleOpenAddConfirm}
+                fontSize="small"
+                className="mx-3"
+              />
+            )}
             {/* open the confirmation box */}
-            <AlertDialog open={openDialog} onClose={handleCloseDialog} />
+            <ConfirmCard
+              open={openAddConfirm}
+              onClose={handleCloseAddConfirm}
+              desc={"Add Song to Favourtie ? "}
+              button={"Add"}
+            />
+            <ConfirmCard
+              open={openRemoveConfirm}
+              onClose={handleCloseRemoveConfirm}
+              desc={"Add Song to Favourtie ? "}
+              button={"Add"}
+            />
 
             <BsThreeDots
               onClick={handleDotsClick}

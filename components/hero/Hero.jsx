@@ -47,11 +47,10 @@ export default function Hero() {
       <div className="w-full h-auto md:h-[92vh] md:flex md:justify-between">
         <div className="w-full h-full md:w-1/2">
           <Slider {...settings}>
-            {hero1.map((item, i) => (
-              <div key={i} className=" box relative h-[92vh] sm:mt-0 w-full">
+            {hero1.map((item, index) => (
+              <div key={index} className=" box relative h-[92vh] sm:mt-0 w-full">
                 <Image
-                  src={item.cover}
-                  
+                  src={item.cover}                  
                   height={1000}
                   width={1000}
                   alt="cover"
@@ -72,8 +71,8 @@ export default function Hero() {
           </Slider>
         </div>
         <div className="w-full md:w-1/2 grid grid-cols-2 h-full sm:grid-cols-1">
-          {hero2.map((item, i) => (
-            <div key={i} className="box relative">
+          {hero2.map((item, index) => (
+            <div key={index} className="box relative">
               <Image
                 height={250}
                 width={344}

@@ -4,9 +4,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
-export default function AlertDialog({ open, onClose }) {
+export default function confirmCard({ open, onClose, desc, button }) {
   const handleClose = (agreed) => {
-    onClose(agreed); 
+    onClose(agreed);
   };
   return (
     <Dialog
@@ -16,9 +16,7 @@ export default function AlertDialog({ open, onClose }) {
       aria-describedby="alert-dialog-description"
       className="font-[lato] "
     >
-      <DialogContent className="bg-gray-100">
-        Add Song to Your Favorite Playlist ?
-      </DialogContent>
+      <DialogContent className="bg-gray-100">{desc}</DialogContent>
       <DialogActions className="bg-gray-100">
         <Button className="text-red-500" onClick={() => handleClose(false)}>
           CLOSE
@@ -28,7 +26,7 @@ export default function AlertDialog({ open, onClose }) {
           onClick={() => handleClose(true)}
           autoFocus
         >
-          ADD
+          {button}
         </Button>
       </DialogActions>
     </Dialog>

@@ -161,7 +161,7 @@ export default function Player() {
       />
       <Slider
         value={elapsed}
-        max={duration}
+        max={duration | ""}
         onChange={handleSliderChange} // Triggered when the slider is moved
         size="small"
         className="w-[95vw] mx-6 text-green-500 py-2 mt-1  mr-5"

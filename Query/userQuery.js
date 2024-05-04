@@ -9,6 +9,17 @@ export const addToFavourite = gql`
   }
 `;
 
+export const removeToFavourite = gql`
+  mutation ($userId: String!, $songId: String!) {
+    remvoeToFavourite(
+      removeSongToFavourite: { userId: $userId, songId: $songId }
+    ) {
+      id
+      name
+    }
+  }
+`;
+
 export const getAllPlaylist = gql`
   query ($userId: String!) {
     getUserById(userId: $userId) {
@@ -50,6 +61,7 @@ export const userInfo = gql`
       email
       password
       role
+      profile
       favourite {
         id
         title
@@ -68,7 +80,6 @@ export const userInfo = gql`
         name
         imageLink
       }
-      profile
     }
   }
 `;
@@ -90,4 +101,3 @@ export const addArtist = gql`
     }
   }
 `;
-

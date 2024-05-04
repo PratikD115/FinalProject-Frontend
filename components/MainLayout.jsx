@@ -6,6 +6,7 @@ import { useDebugValue, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userActions } from "../store/userSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { favouriteActions } from "../store/favoriteSlice";
 
 export default function MainLayout() {
   const [payload, setPayload] = useState(null);
@@ -25,10 +26,16 @@ export default function MainLayout() {
 
   useEffect(() => {
     if (data) {
-      const user = data.getUserById;
+      const { getUserById } = data;
+      console.log(getUserById);
+
+      const { favourite, follow, ...user } = getUserById;
+      const artistData = follow.map((item) => item.id);
+      const songData = favourite.map((item) => item.id);
+     
+
       dispatch(userActions.login({ user, authCookie }));
-    } else {
-      console.log("no data");
+      dispatch(favouriteActions.setArtistAndSong({artistData, songData}))
     }
   }, [data]);
 
@@ -38,7 +45,6 @@ export default function MainLayout() {
 
       const decoded = jwt.decode(token);
       setPayload(decoded);
-     
     }
   }
 

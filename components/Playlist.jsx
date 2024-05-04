@@ -2,11 +2,13 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import SongCardSmall from "./common/SongCardSmall";
 import { playlistActions } from "../store/playlistSlice";
+import { useDebugValue } from "react";
 
 export default function Playlist() {
   const { playlist } = useSelector((state) => state.playlist);
   const { index } = useSelector((state) => state.playlist);
   const dispatch = useDispatch();
+  const { songData } = useSelector((state) => state.favourite);
 
   const handleSongClick = (index) => {
     dispatch(playlistActions.nextSong(index));
@@ -48,7 +50,7 @@ export default function Playlist() {
         <div className="w-[70%]  text-white px-5">
           <div className="text-3xl text-gray-400 my-7 mx-4 ">Playlist </div>
           {playlist?.map((song, index) => (
-            <div>
+            <div key={index}>
               <SongCardSmall
                 handleClick={() => handleSongClick(index)}
                 imageLink={song.imageLink}
@@ -56,6 +58,7 @@ export default function Playlist() {
                 artistName={song.artist.name}
                 songId={song.id}
                 songUrl={song.streamingLink}
+                liked={songData.includes(song.id)}
               />
             </div>
           ))}

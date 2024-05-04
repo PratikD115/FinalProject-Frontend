@@ -20,7 +20,7 @@ const userSlice = createSlice({
       
     },
     logout(state) {
-      console.log('in the logout actions')
+      
       state.user = null;
       state.isLogin = false;
       state.role = null;

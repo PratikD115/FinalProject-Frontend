@@ -4,7 +4,7 @@ import SongCardLarge from "../common/SongCardLarge";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SongPlaylist({ title, playlistData }) {
   // const { loading, error, data } = useQuery(query, {
@@ -13,13 +13,14 @@ export default function SongPlaylist({ title, playlistData }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
+  const { songData } = useSelector((state) => state.favourite);
 
   useEffect(() => {
     if (playlistData) {
       const { getAllActiveSongs } = playlistData;
       setPlaylist(getAllActiveSongs);
     }
-  },[playlistData]);
+  }, [playlistData]);
 
   function handleViewMore() {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index: 0 }));
@@ -30,7 +31,6 @@ export default function SongPlaylist({ title, playlistData }) {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index }));
   }
 
-  
   return (
     <>
       <section className="treading hero mt-4 cursor-pointer">
@@ -54,6 +54,7 @@ export default function SongPlaylist({ title, playlistData }) {
                 artistName={item.artist.name}
                 songId={item.id}
                 songUrl={item.streamingLink}
+                liked={songData.includes(item.id)}
               />
             </div>
           ))}

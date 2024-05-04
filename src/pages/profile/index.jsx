@@ -7,7 +7,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { playlistActions } from "../../../store/playlistSlice";
 
 export default function Profile() {
   const { user } = useSelector((state) => state.user);
@@ -16,7 +17,9 @@ export default function Profile() {
       userId: user?.id,
     },
   });
+  const dispatch = useDispatch();
   const [userProfile, setUserProfile] = useState();
+  const [playlist, setPlaylist] = useState([]);
   const [image, setImage] = useState(null);
   const [uploadImage] = useMutation(uploadImageQuery, {
     context: {
@@ -29,6 +32,8 @@ export default function Profile() {
   const handleImageChange = (event) => {
     setImage(event.target.files[0]);
   };
+  const { songData } = useSelector((state) => state.favourite);
+
 
   const handleUpload = async () => {
     const fileJSON = {
@@ -60,9 +65,20 @@ export default function Profile() {
 
   useEffect(() => {
     if (data) {
-      setUserProfile(data.getUserById);
+      const { getUserById } = data;
+      setUserProfile(getUserById);
+      setPlaylist(getUserById.favourite);
     }
   });
+
+  const handleSongClick = (playlist, index) => {
+    dispatch(
+      playlistActions.setPlaylistAndIndex({
+        playlist,
+        index,
+      })
+    );
+  };
 
   return (
     <div className="min-h-screen  bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ... font-[lato] text-white">
@@ -72,8 +88,9 @@ export default function Profile() {
             <div className="card hero box w-52 m-auto mt-8  mx-auto ">
               <div className=" flex justify-center mx-auto">
                 <ArtistCard
-                  image={userProfile?.profile}
-                  name={userProfile?.name}
+                  onClick={() => handleClick(item.id)}
+                  artistImage={userProfile?.profile}
+                  artistName={userProfile?.name}
                 />
               </div>
             </div>
@@ -92,13 +109,16 @@ export default function Profile() {
               <Title className="text-sm" title={"Your Playlists"} />
               <div className="">
                 {userProfile?.playlist.map((playlist, index) => (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className="w-full my-1 bg-gray-500 hover:bg-gray-400"
-                  >
-                    {playlist.playlistName}
-                  </Button>
+                  <div key={index}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      style={{ backgroundColor: "#44454a", color: "white" }}
+                      className="w-full my-1 "
+                    >
+                      {playlist.playlistName}
+                    </Button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -113,10 +133,11 @@ export default function Profile() {
                     <SongCardLarge
                       handleClick={() => handleSongClick(playlist, index)}
                       imageLink={item.imageLink}
-                      name={item.title}
+                      songName={item.title}
                       artistName={item.artist.name}
                       songId={item.id}
                       songUrl={item.streamingLink}
+                      liked={songData.includes(item.id)}
                     />
                   </div>
                 ))}
@@ -125,8 +146,13 @@ export default function Profile() {
             <div className="mt-5">
               <Title title={"Followed Artist :"} />
               <div className="grid grid-cols-3 md:grid-cols-5 sm:grid-cols-1 gap-5">
-                {userProfile?.follow?.map((item, i) => (
-                  <ArtistCard image={item.imageLink} name={item.name} />
+                {userProfile?.follow?.map((item, index) => (
+                  <div key={index}>
+                    <ArtistCard
+                      artistImage={item.imageLink}
+                      artistName={item.name}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
