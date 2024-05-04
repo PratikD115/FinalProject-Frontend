@@ -4,12 +4,13 @@ import { useQuery } from "@apollo/client";
 import SongCardSmall from "../common/SongCardSmall";
 import { recommandedSongs } from "../../Query/playlistQuery";
 import { playlistActions } from "../../store/playlistSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Recommand() {
   const { loading, error, data } = useQuery(recommandedSongs);
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
+  const { songData } = useSelector((state) => state.favourite);
   useEffect(() => {
     if (data) {
       const { getAllActiveSongs } = data;
@@ -44,6 +45,7 @@ export default function Recommand() {
                 artistName={item.artist.name}
                 songId={item.id}
                 songUrl={item.streamingLink}
+                liked={songData.includes(item.id)}
               />
             </div>
           ))}

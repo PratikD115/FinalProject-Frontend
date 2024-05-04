@@ -22,7 +22,8 @@ import Image from "next/image";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { favouriteActions } from "../../store/favoriteSlice";
-import { red } from "@mui/material/colors";
+import { red} from "@mui/material/colors";
+
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -163,7 +164,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const handleCloseAddConfirm = (agreed: boolean) => {
     setOpenAddConfirm(false);
     if (agreed) {
-      console.log("user remove from list");
       dispatch(favouriteActions.setSongtoData(songId));
       addFavorite({
         variables: {
@@ -178,7 +178,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const handleCloseRemoveConfirm = (agreed: boolean) => {
     setOpenRemoveCofirm(false);
     if (agreed) {
-      console.log("user want to remove form favourite");
       dispatch(favouriteActions.removeSongToData(songId));
       removeFavorite({
         variables: {
@@ -219,21 +218,22 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
               <FavoriteBorderIcon
                 onClick={handleOpenAddConfirm}
                 fontSize="small"
-                className="mx-3"
+               
+                className="mx-3 text-white"
               />
             )}
             {/* open the confirmation box */}
             <ConfirmCard
               open={openAddConfirm}
               onClose={handleCloseAddConfirm}
-              desc={"Add Song to Favourtie ? "}
+              desc={"Add Song to Favourite ? "}
               button={"Add"}
             />
             <ConfirmCard
               open={openRemoveConfirm}
               onClose={handleCloseRemoveConfirm}
-              desc={"Add Song to Favourtie ? "}
-              button={"Add"}
+              desc={"remove song to Favourite ? "}
+              button={"Remove"}
             />
 
             <BsThreeDots

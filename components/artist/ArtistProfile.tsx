@@ -38,6 +38,8 @@ export default function ArtistProfile() {
   const { user } = useSelector((state: any) => state.user);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+  const { songData } = useSelector((state: any) => state.favourite);
+
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
       id: router.query.artistId as string,
@@ -167,6 +169,7 @@ export default function ArtistProfile() {
                   artistName={artistInfo.name}
                   songId={song.id}
                   songUrl={song.streamingLink}
+                  liked={songData.includes(song.id)}
                 />
               </div>
             ))}

@@ -3,12 +3,15 @@ import { gql, useQuery } from "@apollo/client";
 import SongCardSmall from "./SongCardSmall";
 import { mostLikedSong } from "../../Query/playlistQuery";
 import Title from "./Title";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../store/playlistSlice";
 export default function Sidebar() {
   const { loading, error, data } = useQuery(mostLikedSong);
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
+  const { songData } = useSelector((state : any) => state.favourite);
+
+
 
   useEffect(() => {
     if (data) {
@@ -43,6 +46,8 @@ export default function Sidebar() {
               artistName={item.artist.name}
               songId={item.id}
               songUrl={item.streamingLink}
+              liked={songData.includes(item.id)}
+
             />
           </div>
         ))}
