@@ -22,8 +22,8 @@ import Image from "next/image";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { favouriteActions } from "../../store/favoriteSlice";
-import { red} from "@mui/material/colors";
-
+import { red } from "@mui/material/colors";
+import Share from "../pop-ups/ShareSong";
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -58,6 +58,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const [openAddConfirm, setOpenAddConfirm] = useState(false);
   const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
   const dispatch = useDispatch();
+  const [shareOpen, setShareOpen] = useState(false);
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -102,6 +103,8 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       if (options === "add to playlist") {
         setUserPlaylist(true);
       } else if (options === "share") {
+        console.log("user want to share song");
+        setShareOpen(true);
       } else if (options === "download") {
         try {
           setDownloading(true);
@@ -205,7 +208,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
             className="w-full h-full object-cover rounded-md"
           />
         </div>
-        <div className="overlay absolute bottom-0 right-0 text-secondary">
+        <div className="absolute bottom-0 right-0 text-secondary">
           <div className="flex p-3">
             {liked ? (
               <FavoriteIcon
@@ -218,7 +221,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
               <FavoriteBorderIcon
                 onClick={handleOpenAddConfirm}
                 fontSize="small"
-               
                 className="mx-3 text-white"
               />
             )}
@@ -254,6 +256,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
                 <ShareIcon fontSize="small" className="mr-2" />
                 Share
               </MenuItem>
+
               <MenuItem onClick={() => handleDotsClose("download")}>
                 {downloading ? (
                   <ReactLoading
@@ -272,9 +275,13 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
                 )}
               </MenuItem>
             </Menu>
+
             {userPlaylist && <UserPlaylist onClose={closeUserPlaylist} />}
           </div>
         </div>
+        {shareOpen && (
+          <Share shareOpen={shareOpen} onClose={() => setShareOpen(false)} />
+        )}
         <div className="text mt-2">
           <h3 className="text-base text-gray-400 font-semibold">{songName}</h3>
           <span className="text-gray-500 font-semibold text-sm ">

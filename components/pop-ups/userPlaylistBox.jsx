@@ -45,10 +45,8 @@ export default function UserPlaylist({ onClose }) {
   const handlePlaylistClick = (index, prePlaylist) => {
     setSelectedButtonIndex(index);
     setSelectedPlaylist(prePlaylist);
-    console.log(prePlaylist);
   };
 
-  // if user want to create new playlist 
   const handleCreateNew = () => {
     setIsCreateNew((prev) => !prev);
   };

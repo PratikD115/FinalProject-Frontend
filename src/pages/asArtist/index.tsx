@@ -5,6 +5,8 @@ import singer from "../../../public/images/singer.jpg";
 import { TextField, Button, Divider } from "@mui/material";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export default function ArtistHome() {
   const [openForm, setOpenForm] = useState(false);
@@ -18,23 +20,45 @@ export default function ArtistHome() {
   const selectLanguageRef = useRef<HTMLSelectElement>(null);
   const selectGenresRef = useRef<HTMLSelectElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
+  const { user } = useSelector((state: any) => state.user);
 
-  const handleSubmit = (event : React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Access input values using refs
+
+    if (!selectGenresRef.current?.value) {
+      toast.error("which type of song are you prefered");
+      return;
+    }
+    if (!selectLanguageRef.current?.value) {
+      toast.error("Please let us know your prefered song langauge");
+      return;
+    }
+    if (!dateRef.current?.value) {
+      toast.error("Please enter your birth data");
+      return;
+    }
+    if (!messageRef.current?.value) {
+      toast.error("Please tell me about your self");
+      return;
+    }
     console.log("Name:", nameRef.current?.value);
     console.log("Email:", emailRef.current?.value);
-    console.log("Message:", messageRef.current?.value);
+    console.log("Genres", selectGenresRef.current?.value);
+    console.log("langauge", selectLanguageRef.current?.value);
+    console.log("DataOfBirth", dateRef.current?.value);
+    console.log('about ', messageRef.current?.value)
 
     // Optionally, you can clear the input fields after submission
-     if (nameRef.current) nameRef.current.value = "";
-  if (emailRef.current) emailRef.current.value = "";
+
     if (messageRef.current) messageRef.current.value = "";
-  
+    if (dateRef.current) dateRef.current.value = "";
+    if (selectGenresRef.current) selectGenresRef.current.value = "";
+    if (selectLanguageRef.current) selectLanguageRef.current.value = "";
   };
 
   function handleDashboard() {
-    console.log('change the page.')
+    console.log("change the page.");
     router.push("asArtist/home");
   }
   return (
@@ -62,7 +86,6 @@ export default function ArtistHome() {
             >
               Dashboard
             </button>
-            
           </div>
         </div>
         <div className="w-[35%] flex justify-end mr-10">
@@ -75,14 +98,13 @@ export default function ArtistHome() {
           />
         </div>
       </div>
-      <Divider className=" bg-white my-5 mx-5"/>
+      <Divider className=" bg-white my-5 mx-5" />
       {openForm && (
         <div className="text-white h-screen px-10">
           <form onSubmit={handleSubmit} className=" p-6 rounded-lg">
             <Title title={"Artist Info"} />
             <div className="grid grid-cols-2 gap-4">
               <div>
-                {" "}
                 <label htmlFor="name" className="block text-gray-200 text-sm">
                   Please enter the Name
                 </label>
@@ -91,6 +113,8 @@ export default function ArtistHome() {
                   id="name"
                   placeholder="Enter your name"
                   ref={nameRef}
+                  value={user.name}
+                  disabled
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900 text-white rounded-md"
                 />
               </div>
@@ -103,53 +127,58 @@ export default function ArtistHome() {
                   id="email"
                   placeholder="Enter your email"
                   ref={emailRef}
+                  value={user.email}
+                  disabled
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
                 />
               </div>
-             
-              
-               <div>
-                 <label htmlFor="selectField" className="block text-gray-200 text-sm">
-   Select Your Song Genres
-  </label>
-  <select
-    id="selectField"
-    ref={selectGenresRef}
-    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-  >
-    <option value="option1">lofi</option>
-    <option value="option2">pop</option>
-    <option value="option3">hip hop</option>
-  </select>
-              </div>
-               <div>
-                 <label htmlFor="selectField" className="block text-gray-200 text-sm">
-                  please your prefered song language
-                  
-  </label>
-  <select
-    id="selectField"
-    ref={selectLanguageRef}
-    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-  >
-    <option value="hindi">Hindi</option>
-    <option value="english">English</option>
-    <option value="punjabi">Punjabi</option>
-  </select>
+
+              <div>
+                <label
+                  htmlFor="selectField"
+                  className="block text-gray-200 text-sm"
+                >
+                  Select Your Song Genres
+                </label>
+                <select
+                  id="selectField"
+                  ref={selectGenresRef}
+                  className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
+                >
+                  <option value="lofi">lofi</option>
+                  <option value="pop">pop</option>
+                  <option value="hip hop">hip hop</option>
+                </select>
               </div>
               <div>
-  <label htmlFor="date" className="block text-gray-200 text-sm">
-    Please Select the DateOfBirth
-  </label>
-  <input
-    type="date"
-    id="date"
-    ref={dateRef}
-    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900 text-white rounded-md"
-  />
-</div>
-              
-              
+                <label
+                  htmlFor="selectField"
+                  className="block text-gray-200 text-sm"
+                >
+                  please your prefered song language
+                </label>
+                <select
+                  id="selectField"
+                  ref={selectLanguageRef}
+                  className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
+                >
+                  <option value="hindi">Hindi</option>
+                  <option value="english">English</option>
+                  <option value="punjabi">Punjabi</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="date" className="block text-gray-200 text-sm">
+                  Please Select the DateOfBirth
+                </label>
+                <input
+                  type="date"
+                  id="date"
+                  ref={dateRef}
+                  className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900 text-white rounded-md"
+                />
+              </div>
+
               <div className="col-span-2">
                 <label
                   htmlFor="message"
