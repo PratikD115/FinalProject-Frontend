@@ -22,6 +22,7 @@ export const SIGNUP = gql`
     }
   }
 `;
+
 export const LOGIN = gql`
   mutation ($email: String!, $password: String!) {
     login(loginUserDto: { inputEmail: $email, inputPassword: $password }) {

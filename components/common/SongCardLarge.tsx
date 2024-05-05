@@ -163,7 +163,7 @@ export default function SongCardLarge({
     setOpenAddConfirm(false);
     if (agreed) {
       console.log("user remove from list");
-      dispatch(favouriteActions.setSongtoData(songId));
+      dispatch(favouriteActions.setSongToData(songId));
       addFavorite({
         variables: {
           userId: user?.id,
@@ -223,13 +223,13 @@ export default function SongCardLarge({
             <ConfirmCard
               open={openAddConfirm}
               onClose={handleCloseAddConfirm}
-              desc={"Add Song to Favourite ?"}
+              desc={"Add Song to Favourite Playlist ?"}
               button={"Add"}
             />
             <ConfirmCard
               open={openRemoveConfirm}
               onClose={handleCloseRemoveConfirm}
-              desc={"Remove song to Favourite ?"}
+              desc={"Remove song to Favourite Playlist ?"}
               button={"Remove"}
             />
 

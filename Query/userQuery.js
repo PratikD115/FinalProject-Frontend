@@ -11,7 +11,7 @@ export const addToFavourite = gql`
 
 export const removeToFavourite = gql`
   mutation ($userId: String!, $songId: String!) {
-    remvoeToFavourite(
+    removeToFavourite(
       removeSongToFavourite: { userId: $userId, songId: $songId }
     ) {
       id
@@ -96,6 +96,22 @@ export const addArtist = gql`
         id
         name
         language
+      }
+      profile
+    }
+  }
+`;
+
+export const removeArtist = gql`
+  mutation ($userId: String!, $artistId: String!) {
+    removeArtistToUser(userId: $userId, artistId: $artistId) {
+      id
+      name
+      email
+      role
+      follow {
+        id
+        name
       }
       profile
     }

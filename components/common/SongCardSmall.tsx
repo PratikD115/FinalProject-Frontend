@@ -164,7 +164,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const handleCloseAddConfirm = (agreed: boolean) => {
     setOpenAddConfirm(false);
     if (agreed) {
-      dispatch(favouriteActions.setSongtoData(songId));
+      dispatch(favouriteActions.setSongToData(songId));
       addFavorite({
         variables: {
           userId: user?.id,

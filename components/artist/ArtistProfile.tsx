@@ -9,8 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { ARTIST } from "../../Query/artistQuery";
 import { playlistActions } from "../../store/playlistSlice";
 import SongCardSmall from "../common/SongCardSmall";
-import { addArtist } from "../../Query/userQuery";
+import { addArtist, removeArtist } from "../../Query/userQuery";
 import toast from "react-hot-toast";
+import { favouriteActions } from "../../store/favoriteSlice";
+
 
 interface ArtistInfo {
   id: string;
@@ -39,6 +41,9 @@ export default function ArtistProfile() {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const { songData } = useSelector((state: any) => state.favourite);
+  const { artistData } = useSelector((state: any) => state.favourite);
+  const [addArtistToFollow] = useMutation(addArtist);
+  const [removeArtistToFollow] = useMutation(removeArtist);
 
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
@@ -48,7 +53,6 @@ export default function ArtistProfile() {
     },
   });
 
-  const [addArtistToFollow] = useMutation(addArtist);
 
   const [artistInfo, setArtistInfo] = useState<ArtistInfo>({
     id: "",
@@ -86,14 +90,36 @@ export default function ArtistProfile() {
   }
 
   async function handleFollow() {
+   
+try{
+    dispatch(favouriteActions.setArtistToData(artistInfo.id));
     const { data } = await addArtistToFollow({
       variables: {
         userId: user.id,
         artistId: router.query.artistId,
       },
     });
-    toast.success(`Now, you are following , ${artistInfo.name}`);
+  toast.success(`Now, you are following , ${artistInfo.name}`);
+} catch (error : any) {
+  toast.error(error)
+    }
   }
+  async function handleUnfollow() {
+  try {
+         dispatch(favouriteActions.removeArtistToData(artistInfo.id));
+
+    const { data } = await removeArtistToFollow({
+      variables: {
+        userId: user.id,
+        artistId: router.query.artistId,
+      },
+    });
+    toast.success(`Now, you are unfollow , ${artistInfo.name}`);
+  } catch (error : any) {
+    toast.error(error)
+    }
+  }
+
 
   function handleViewMore() {
     setLimit(20);
@@ -144,7 +170,15 @@ export default function ArtistProfile() {
           >
             Play Now
           </Button>
-          <Button
+          {artistData.includes(artistInfo.id) ?
+            <Button
+            variant="outlined"
+            onClick={handleUnfollow}
+            startIcon={<AddIcon />}
+            className="rounded-full mr-5"
+          >
+            following
+          </Button>:<Button
             variant="outlined"
             onClick={handleFollow}
             startIcon={<AddIcon />}
@@ -152,6 +186,7 @@ export default function ArtistProfile() {
           >
             follow
           </Button>
+          }
         </div>
         <div>
           <div className="text-gray-400 text-2xl mt-10 ml-3">

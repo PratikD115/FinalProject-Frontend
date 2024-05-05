@@ -6,12 +6,14 @@ interface ArtistCardProps {
   onClick?: () => void;
   artistImage: string;
   artistName: string;
+ 
 }
 
 export default function ArtistCard({
   onClick,
   artistImage,
   artistName,
+  
 }: ArtistCardProps) {
   return (
     <>
