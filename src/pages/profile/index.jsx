@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../../store/playlistSlice";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const { user } = useSelector((state) => state.user);
@@ -25,37 +26,21 @@ export default function Profile() {
     context: {
       headers: {
         "Content-Type": "multipart/form-data",
+        "apollo-require-preflight": true,
       },
     },
   });
-
   const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+    const image = event.target.files[0];
+    console.log(image);
+    uploadImage({
+      variables: {
+        image: image,
+        userId: user?.id,
+      },
+    });
   };
   const { songData } = useSelector((state) => state.favourite);
-
-
-  const handleUpload = async () => {
-    const fileJSON = {
-      name: image.name,
-      type: image.type,
-      size: image.size,
-      lastModified: image.lastModified,
-      // Add more properties if needed
-    };
-    console.log(fileJSON);
-    try {
-      const response = await uploadImage({
-        variables: {
-          image: fileJSON,
-          userId: user?.id,
-        },
-      });
-      console.log(response.data.uploadImage);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (refetch) {
@@ -98,12 +83,6 @@ export default function Profile() {
             <br />
             <div className="px-3 flex justify-end w-auto">
               <input type="file" onChange={handleImageChange} />
-
-              <EditIcon
-                onClick={handleUpload}
-                fontSize="small"
-                className="text-gray-500 hover:text-gray-200"
-              />
             </div>
             <div className="mt-10">
               <Title className="text-sm" title={"Your Playlists"} />
