@@ -4,13 +4,13 @@ import SongCardSmall from "./common/SongCardSmall";
 import { playlistActions } from "../store/playlistSlice";
 import { useDebugValue } from "react";
 
-export default function Playlist() {
-  const { playlist } = useSelector((state) => state.playlist);
-  const { index } = useSelector((state) => state.playlist);
+const Playlist = () => {
+  const { playlist } = useSelector((state : any) => state.playlist);
+  const { index } = useSelector((state : any) => state.playlist);
   const dispatch = useDispatch();
-  const { songData } = useSelector((state) => state.favourite);
+  const { songData } = useSelector((state : any) => state.favourite);
 
-  const handleSongClick = (index) => {
+  const handleSongClick = (index : number) => {
     dispatch(playlistActions.nextSong(index));
   };
 
@@ -49,7 +49,7 @@ export default function Playlist() {
         </div>
         <div className="w-[70%]  text-white px-5">
           <div className="text-3xl text-gray-400 my-7 mx-4 ">Playlist </div>
-          {playlist?.map((song, index) => (
+          {playlist?.map((song : any, index: number) => (
             <div key={index}>
               <SongCardSmall
                 handleClick={() => handleSongClick(index)}
@@ -66,4 +66,4 @@ export default function Playlist() {
       </div>
     </>
   );
-}
+};

@@ -11,17 +11,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../../store/playlistSlice";
 import toast from "react-hot-toast";
 
-export default function Profile() {
-  const { user } = useSelector((state) => state.user);
+const Profile: React.FC = () => {
+  const { user } = useSelector((state: any) => state.user);
   const { loading, error, data, refetch } = useQuery(userInfo, {
     variables: {
       userId: user?.id,
     },
   });
   const dispatch = useDispatch();
-  const [userProfile, setUserProfile] = useState();
-  const [playlist, setPlaylist] = useState([]);
-  const [image, setImage] = useState(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [playlist, setPlaylist] = useState<any>([]);
+  const [image, setImage] = useState<File | null>(null);
   const [uploadImage] = useMutation(uploadImageQuery, {
     context: {
       headers: {
@@ -30,7 +30,7 @@ export default function Profile() {
       },
     },
   });
-  const handleImageChange = (event) => {
+  const handleImageChange = (event: any) => {
     const image = event.target.files[0];
     console.log(image);
     uploadImage({
@@ -40,7 +40,7 @@ export default function Profile() {
       },
     });
   };
-  const { songData } = useSelector((state) => state.favourite);
+  const { songData } = useSelector((state: any) => state.favourite);
 
   useEffect(() => {
     if (refetch) {
@@ -56,7 +56,7 @@ export default function Profile() {
     }
   });
 
-  const handleSongClick = (playlist, index) => {
+  const handleSongClick = (playlist: any, index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -73,7 +73,6 @@ export default function Profile() {
             <div className="card hero box w-52 m-auto mt-8  mx-auto ">
               <div className=" flex justify-center mx-auto">
                 <ArtistCard
-                  onClick={() => handleClick(item.id)}
                   artistImage={userProfile?.profile}
                   artistName={userProfile?.name}
                 />
@@ -85,9 +84,9 @@ export default function Profile() {
               <input type="file" onChange={handleImageChange} />
             </div>
             <div className="mt-10">
-              <Title className="text-sm" title={"Your Playlists"} />
+              <Title title={"Your Playlists"} />
               <div className="">
-                {userProfile?.playlist.map((playlist, index) => (
+                {userProfile?.playlist.map((playlist: any, index: number) => (
                   <div key={index}>
                     <Button
                       variant="contained"
@@ -107,7 +106,7 @@ export default function Profile() {
             <div className="mt-5">
               <Title title={"Your Favourite :"} />
               <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
-                {userProfile?.favourite?.map((item, index) => (
+                {userProfile?.favourite?.map((item : any, index : number ) => (
                   <div className="box card hero" key={index}>
                     <SongCardLarge
                       handleClick={() => handleSongClick(playlist, index)}
@@ -125,7 +124,7 @@ export default function Profile() {
             <div className="mt-5">
               <Title title={"Followed Artist :"} />
               <div className="grid grid-cols-3 md:grid-cols-5 sm:grid-cols-1 gap-5">
-                {userProfile?.follow?.map((item, index) => (
+                {userProfile?.follow?.map((item: any, index: number) => (
                   <div key={index}>
                     <ArtistCard
                       artistImage={item.imageLink}
@@ -140,4 +139,6 @@ export default function Profile() {
       </Layout>
     </div>
   );
-}
+};
+
+export default Profile;

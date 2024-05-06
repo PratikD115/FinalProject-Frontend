@@ -1,9 +1,10 @@
 import Layout from "../../../components/layout/Layout";
-
-export default function ContactUs() {
+const AboutUs: React.FC = () => {
   return (
     <Layout>
-      <div>in the contact page</div>
+      <div>in the about page</div>
     </Layout>
   );
-}
+};
+
+export default AboutUs;

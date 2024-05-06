@@ -1,11 +1,13 @@
-import { Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { useEffect, useRef } from "react";
 
-export default function Share({ shareOpen, onClose }) {
+const Share: React.FC<{ shareOpen: boolean; onClose: any }> = ({
+  shareOpen,
+  onClose,
+}) => {
   const handleWhatsAppClick = () => {
     // Replace the URL with your sharing URL
     window.open(
@@ -55,4 +57,6 @@ export default function Share({ shareOpen, onClose }) {
       </MenuItem>
     </Menu>
   );
-}
+};
+
+export default Share;

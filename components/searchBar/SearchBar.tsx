@@ -1,12 +1,22 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
-export default function SearchBar({ onSearch }) {
-  const [searchQuery, setSearchQuery] = useState("");
+import { useState, MouseEvent, ChangeEvent } from "react";
 
-  function handleClick(e) {
-      e.preventDefault();
-      onSearch(searchQuery);
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  function handleClick(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    onSearch(searchQuery);
   }
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setSearchQuery(e.target.value);
+  }
+
   return (
     <div className="">
       <div className="relative max-w-sm mx-auto mt-2 focus:outline-none">
@@ -16,7 +26,7 @@ export default function SearchBar({ onSearch }) {
             type="text"
             placeholder="Search artist and song here... "
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
           />
           <button
             onClick={handleClick}
@@ -28,4 +38,6 @@ export default function SearchBar({ onSearch }) {
       </div>
     </div>
   );
-}
+};
+
+export default SearchBar;

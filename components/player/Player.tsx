@@ -11,7 +11,7 @@ import FastForwardIcon from "@mui/icons-material/FastForward";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../store/playlistSlice";
 import { useRouter } from "next/router";
@@ -20,9 +20,9 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 export default function Player() {
-  const { playlist } = useSelector((state) => state.playlist);
-  const { index } = useSelector((state) => state.playlist);
-  const audioPlayer = useRef();
+  const { playlist } = useSelector((state : any) => state.playlist);
+  const { index } = useSelector((state : any) => state.playlist);
+  const audioPlayer :any = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(true);
   const [mute, setMute] = useState(false);
@@ -32,12 +32,20 @@ export default function Player() {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  interface SliderProps {
+    value: number;
+    max: number;
+    onChange: (event: Event) => void; // Define the type for onChange
+    size: string;
+    className: string;
+  }
+
   useEffect(() => {
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
     if (isPlaying) {
-      audioPlayer.current.play();
+      audioPlayer.current?.play();
 
       const interval = setInterval(() => {
         const _duration = Math.floor(audioPlayer.current?.duration);
@@ -53,13 +61,13 @@ export default function Player() {
     }
   }, [volume, isPlaying, index]);
 
-  const handleSliderChange = (event, newValue) => {
+  const handleSliderChange = (event : Event, newValue :number) => {
     setElapsed(newValue);
     if (newValue) {
       audioPlayer.current.currentTime = newValue;
     }
   };
-  function formatTime(time) {
+  function formatTime(time : number) {
     if (time && !isNaN(time)) {
       const minutes =
         Math.floor(time / 60) < 10
@@ -86,7 +94,7 @@ export default function Player() {
     if (index >= playlist.length - 1) {
       dispatch(playlistActions.nextSong(0));
       audioPlayer.current.src = playlist[index]?.streamingLink;
-      audioPlayer.current.play();
+      audioPlayer.current?.play();
     } else {
       // setIndex((prev) => prev + 1);
       dispatch(playlistActions.nextSong(index + 1));
@@ -94,7 +102,7 @@ export default function Player() {
       if (!isPlaying) {
         togglePlay();
       }
-      audioPlayer.current.play();
+      audioPlayer.current?.play();
     }
   }
 
@@ -161,8 +169,8 @@ export default function Player() {
       />
       <Slider
         value={elapsed}
-        max={duration | ""}
-        onChange={handleSliderChange} // Triggered when the slider is moved
+        max={duration }
+        onChange={()=>handleSliderChange} // Triggered when the slider is moved
         size="small"
         className="w-[95vw] mx-6 text-green-500 py-2 mt-1  mr-5"
       />
@@ -236,7 +244,7 @@ export default function Player() {
                 min={0}
                 max={100}
                 value={volume}
-                onChange={(e, v) => setVolume(v)}
+                onChange={(e, v : any) => setVolume(v)}
                 aria-label="Small"
                 size="small"
                 className="w-20 text-green-500"

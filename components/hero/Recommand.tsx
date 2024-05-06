@@ -5,12 +5,11 @@ import SongCardSmall from "../common/SongCardSmall";
 import { recommandedSongs } from "../../Query/playlistQuery";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
-
-export default function Recommand() {
+const Recommand : React.FC = () =>  {
   const { loading, error, data } = useQuery(recommandedSongs);
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
-  const { songData } = useSelector((state) => state.favourite);
+  const { songData } = useSelector((state : any) => state.favourite);
   useEffect(() => {
     if (data) {
       const { getAllActiveSongs } = data;
@@ -21,7 +20,7 @@ export default function Recommand() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const handleSongClick = (playlist, index) => {
+  const handleSongClick = (playlist : any, index : number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -36,7 +35,7 @@ export default function Recommand() {
       <section className="treading hero mt-7 pb-32">
         <Title title="Recommand for you" />
         <div className="grid grid-cols-2 gap-5">
-          {playlist.map((item, index) => (
+          {playlist.map((item : any, index:number) => (
             <div className="" key={index}>
               <SongCardSmall
                 handleClick={() => handleSongClick(playlist, index)}
@@ -54,3 +53,5 @@ export default function Recommand() {
     </>
   );
 }
+
+export default Recommand;

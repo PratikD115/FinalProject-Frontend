@@ -11,7 +11,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const App = ({ Component, pageProps }) => {
+const App: React.FC<{Component : any, pageProps: any}> = ({ Component , pageProps}) => {
   const router = useRouter();
   let display = true;
   const routePath = router.pathname;

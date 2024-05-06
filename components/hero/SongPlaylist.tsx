@@ -6,14 +6,14 @@ import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function SongPlaylist({ title, playlistData }) {
+const SongPlaylist : React.FC<{title : string , playlistData : any}>= ({ title, playlistData}) => {
   // const { loading, error, data } = useQuery(query, {
   //   variables: { page: 1, limit: 10 },
   // });
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
-  const { songData } = useSelector((state) => state.favourite);
+  const { songData } = useSelector((state: any) => state.favourite);
 
   useEffect(() => {
     if (playlistData) {
@@ -27,7 +27,7 @@ export default function SongPlaylist({ title, playlistData }) {
     router.push("/queue");
   }
 
-  function handleSongClick(playlist, index) {
+  function handleSongClick(playlist : any, index : number) {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index }));
   }
 
@@ -45,7 +45,7 @@ export default function SongPlaylist({ title, playlistData }) {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
-          {playlist?.map((item, index) => (
+          {playlist?.map((item : any, index : number) => (
             <div className="box card hero" key={index}>
               <SongCardLarge
                 handleClick={() => handleSongClick(playlist, index)}
@@ -62,4 +62,7 @@ export default function SongPlaylist({ title, playlistData }) {
       </section>
     </>
   );
-}
+};
+
+
+export default SongPlaylist;

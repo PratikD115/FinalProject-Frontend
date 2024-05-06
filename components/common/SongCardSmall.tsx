@@ -23,7 +23,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { favouriteActions } from "../../store/favoriteSlice";
 import { red } from "@mui/material/colors";
-import Share from "../pop-ups/ShareSong";
+import Share from '../pop-ups/ShareSong';
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -164,7 +164,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
     }
   };
 
-  const handleCloseAddConfirm = (agreed: boolean) => {
+  const handleCloseAddConfirm  = (agreed: boolean) : void  => {
     setOpenAddConfirm(false);
     if (agreed) {
       dispatch(favouriteActions.setSongToData(songId));
@@ -227,13 +227,13 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
             {/* open the confirmation box */}
             <ConfirmCard
               open={openAddConfirm}
-              onClose={handleCloseAddConfirm}
+              onClose={()=>handleCloseAddConfirm(true)}
               desc={"Add Song to Favourite ? "}
               button={"Add"}
             />
             <ConfirmCard
               open={openRemoveConfirm}
-              onClose={handleCloseRemoveConfirm}
+              onClose={()=> handleCloseRemoveConfirm(true)}
               desc={"remove song to Favourite ? "}
               button={"Remove"}
             />

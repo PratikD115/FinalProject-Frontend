@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Image from "next/image";
 
-function SampleNextArrow(props) {
+function SampleNextArrow(props: any) {
   const { onClick } = props;
   return (
     <div
@@ -20,7 +20,7 @@ function SampleNextArrow(props) {
   );
 }
 
-function SamplePrevArrow(props) {
+function SamplePrevArrow(props: any) {
   const { onClick } = props;
   return (
     <div
@@ -32,7 +32,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-export default function Hero() {
+const Hero: React.FC = () => {
   const settings = {
     dots: false,
     infinite: true,
@@ -48,9 +48,12 @@ export default function Hero() {
         <div className="w-full h-full md:w-1/2">
           <Slider {...settings}>
             {hero1.map((item, index) => (
-              <div key={index} className=" box relative h-[92vh] sm:mt-0 w-full">
+              <div
+                key={index}
+                className=" box relative h-[92vh] sm:mt-0 w-full"
+              >
                 <Image
-                  src={item.cover}                  
+                  src={item.cover}
                   height={1000}
                   width={1000}
                   alt="cover"
@@ -103,4 +106,5 @@ export default function Hero() {
       </div>
     </section>
   );
-}
+};
+export default Hero;

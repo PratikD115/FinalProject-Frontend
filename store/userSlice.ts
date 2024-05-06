@@ -1,31 +1,40 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice, PayloadAction, Unsubscribe } from "@reduxjs/toolkit";
 
-const initialState = {
+interface User {
+  role: string;
+}
+
+interface UserState {
+  user: User | null;
+  isLogin: boolean;
+  role: string | null;
+  assignedToken: string | null;
+  profile: any | null;
+}
+
+const initialState: UserState = {
   user: null,
   isLogin: false,
   role: null,
   assignedToken: null,
-  profile: null
+  profile: null,
 };
 
 const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
-    login(state, action) {
+    login(state, action: PayloadAction<{ user: User; authCookie: any }>) {
       state.user = action.payload.user;
       state.isLogin = true;
       state.role = action.payload.user.role;
-      state.assignedToken = action.payload.token;
-      
+      state.assignedToken = action.payload.authCookie;
     },
     logout(state) {
-      
       state.user = null;
       state.isLogin = false;
       state.role = null;
       state.assignedToken = null;
-     
     },
   },
 });

@@ -8,12 +8,12 @@ import { userActions } from "../store/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { favouriteActions } from "../store/favoriteSlice";
 
-export default function MainLayout() {
-  const [payload, setPayload] = useState(null);
+const  MainLayout =()=> {
+  const [payload, setPayload] = useState<any>(null);
   const authCookie = Cookies.get("authToken");
 
   const dispatch = useDispatch();
-  const { loading, error, data, refetch } = useQuery(User, {
+  const { loading, error, data, refetch } = useQuery(User , {
     variables: {
       userId: payload?.userId,
     },
@@ -30,8 +30,8 @@ export default function MainLayout() {
       console.log(getUserById);
 
       const { favourite, follow, ...user } = getUserById;
-      const artistData = follow.map((item) => item.id);
-      const songData = favourite.map((item) => item.id);
+      const artistData = follow.map((item : any) => item.id);
+      const songData = favourite.map((item : any) => item.id);
      
 
       dispatch(userActions.login({ user, authCookie }));
@@ -58,3 +58,6 @@ export default function MainLayout() {
     </>
   );
 }
+
+
+export default MainLayout;

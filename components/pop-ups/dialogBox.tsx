@@ -3,9 +3,10 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import { bool } from "sharp";
 
-export default function confirmCard({ open, onClose, desc, button }) {
-  const handleClose = (agreed) => {
+const confirmCard  : React.FC<{open : boolean, desc : string , button: string, onClose : any }> = ({ open , onClose , desc , button   }) =>  {
+  const handleClose = (agreed : boolean ) => {
     onClose(agreed);
   };
   return (
@@ -32,3 +33,4 @@ export default function confirmCard({ open, onClose, desc, button }) {
     </Dialog>
   );
 }
+ export default confirmCard;

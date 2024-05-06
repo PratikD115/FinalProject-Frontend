@@ -109,7 +109,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/pages/_app.js", "src/pages/queue/index.tsx", "src/pages/profile/index.jsx", "page/Browser.jsx"  ],
+, "src/pages/_app.tsx", "src/pages/queue/index.tsx", "src/pages/profile/index.tsx", "page/Browser.tsx", "src/pages/_document.tsx"  ],
   "exclude": [
     "node_modules"
   ]
