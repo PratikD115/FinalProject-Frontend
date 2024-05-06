@@ -20,13 +20,13 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 export default function Player() {
-  const { playlist } = useSelector((state : any) => state.playlist);
-  const { index } = useSelector((state : any) => state.playlist);
-  const audioPlayer :any = useRef<HTMLAudioElement>(null);
+  const { playlist } = useSelector((state: any) => state.playlist);
+  const { index } = useSelector((state: any) => state.playlist);
+  const audioPlayer: any = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(true);
   const [mute, setMute] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsed, setElapsed] = useState<number>(0);
   const [duration, setDuration] = useState(0);
   const currentSong = playlist?.[index];
   const dispatch = useDispatch();
@@ -61,13 +61,14 @@ export default function Player() {
     }
   }, [volume, isPlaying, index]);
 
-  const handleSliderChange = (event : Event, newValue :number) => {
+  const handleSliderChange = (event: any, newValue: any) => {
+    console.log("in the function");
     setElapsed(newValue);
     if (newValue) {
       audioPlayer.current.currentTime = newValue;
     }
   };
-  function formatTime(time : number) {
+  function formatTime(time: number) {
     if (time && !isNaN(time)) {
       const minutes =
         Math.floor(time / 60) < 10
@@ -153,14 +154,13 @@ export default function Player() {
   function handleviewMore() {
     if (currentSong) {
       router.push("/queue");
-    }
-    else {
-      toast.error('please select the playlist')
+    } else {
+      toast.error("please select the playlist");
     }
   }
 
   return (
-    <div className="bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
+    <div className="z-10 bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
       <audio
         src={currentSong?.streamingLink}
         autoPlay
@@ -169,8 +169,8 @@ export default function Player() {
       />
       <Slider
         value={elapsed}
-        max={duration }
-        onChange={()=>handleSliderChange} // Triggered when the slider is moved
+        max={duration | 0}
+        onChange={handleSliderChange}
         size="small"
         className="w-[95vw] mx-6 text-green-500 py-2 mt-1  mr-5"
       />
@@ -244,7 +244,7 @@ export default function Player() {
                 min={0}
                 max={100}
                 value={volume}
-                onChange={(e, v : any) => setVolume(v)}
+                onChange={(e, v: any) => setVolume(v)}
                 aria-label="Small"
                 size="small"
                 className="w-20 text-green-500"

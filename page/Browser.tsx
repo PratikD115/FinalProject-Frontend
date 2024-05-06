@@ -124,3 +124,5 @@ const Browser: React.FC = () => {
     </>
   );
 };
+
+export default Browser;

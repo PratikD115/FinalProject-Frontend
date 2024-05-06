@@ -2,18 +2,18 @@ import * as jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 import { useQuery } from "@apollo/client";
 import { User } from "../Query/authQuery";
-import { useDebugValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userActions } from "../store/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { favouriteActions } from "../store/favoriteSlice";
 
-const  MainLayout =()=> {
+const MainLayout = () => {
   const [payload, setPayload] = useState<any>(null);
   const authCookie = Cookies.get("authToken");
 
   const dispatch = useDispatch();
-  const { loading, error, data, refetch } = useQuery(User , {
+  const { loading, error, data, refetch } = useQuery(User, {
     variables: {
       userId: payload?.userId,
     },
@@ -30,12 +30,21 @@ const  MainLayout =()=> {
       console.log(getUserById);
 
       const { favourite, follow, ...user } = getUserById;
-      const artistData = follow.map((item : any) => item.id);
-      const songData = favourite.map((item : any) => item.id);
-     
+      const artistData = follow.map((item: any) => item.id);
+      const songData = favourite.map((item: any) => item.id);
 
-      dispatch(userActions.login({ user, authCookie }));
-      dispatch(favouriteActions.setArtistAndSong({artistData, songData}))
+      console.log(user);
+      console.log(user.subscribe.expireDate);
+      console.log(user.artistId.id);
+      dispatch(
+        userActions.login({
+          user,
+          token: authCookie,
+          expireDate: user?.subscribe.expireDate,
+          artistId: user?.artistId.id,
+        })
+      );
+      dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
     }
   }, [data]);
 
@@ -57,7 +66,6 @@ const  MainLayout =()=> {
       <Toaster position="bottom-left" reverseOrder={true} />
     </>
   );
-}
-
+};
 
 export default MainLayout;

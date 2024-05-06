@@ -21,6 +21,7 @@ export default function ArtistHome() {
   const selectGenresRef = useRef<HTMLSelectElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
   const { user } = useSelector((state: any) => state.user);
+  const { profile } = useSelector((state: any) => state.user);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -47,7 +48,7 @@ export default function ArtistHome() {
     console.log("Genres", selectGenresRef.current?.value);
     console.log("langauge", selectLanguageRef.current?.value);
     console.log("DataOfBirth", dateRef.current?.value);
-    console.log('about ', messageRef.current?.value)
+    console.log("about ", messageRef.current?.value);
 
     // Optionally, you can clear the input fields after submission
 

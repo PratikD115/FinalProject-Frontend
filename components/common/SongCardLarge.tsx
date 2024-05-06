@@ -23,6 +23,10 @@ import DownloadIcon from "@mui/icons-material/Download";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { red } from "@mui/material/colors";
 import { favouriteActions } from "../../store/favoriteSlice";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 interface SongCardLargeProps {
   handleClick: () => void;
@@ -55,6 +59,8 @@ export default function SongCardLarge({
   const [createPlaylist] = useMutation(createNewPlaylist);
   const [songToPlaylist] = useMutation(addSongToPlaylist);
   const [error, setError] = useState<null | Error>(null);
+  const [showBox, setShowBox] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleDotsClick = (event: React.MouseEvent) => {
@@ -99,6 +105,7 @@ export default function SongCardLarge({
       if (options === "add to playlist") {
         setUserPlaylist(true);
       } else if (options === "share") {
+        setShowBox(true);
       } else if (options === "download") {
         try {
           setDownloading(true);
@@ -190,8 +197,42 @@ export default function SongCardLarge({
     }
   };
 
+  const handleWhatsAppClick = () => {
+    // Replace the URL with your sharing URL
+    window.open(
+      "whatsapp://send?text=Check%20out%20this%20link:%20https://example.com",
+      "_blank"
+    );
+  };
+
+  const handleFacebookClick = () => {
+    // Replace the URL with your sharing URL
+    window.open(
+      "https://www.facebook.com/sharer/sharer.php?u=https://example.com",
+      "_blank"
+    );
+  };
+
+  const handleLinkedInClick = () => {
+    // Replace the URL with your sharing URL
+    window.open(
+      "https://www.linkedin.com/shareArticle?url=https://example.com",
+      "_blank"
+    );
+  };
+
+  const handleInstagramClick = () => {
+    // Replace the URL with your Instagram profile URL
+    window.open("https://www.instagram.com/", "_blank");
+  };
+
+  const handleCloseButtonClick = () => {
+    setShowBox(false);
+  };
+
   return (
     <>
+     
       <div className="img relative h-40">
         <Image
           onClick={handleClick}
@@ -269,6 +310,32 @@ export default function SongCardLarge({
             </Menu>
             {/* if user click on the playlist button then open the new box */}
             {userPlaylist && <UserPlaylist onClose={closeUserPlaylist} />}
+            {showBox && (
+              <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-200 p-6 rounded shadow-md z-10">
+                <div className="flex justify-between mt-4 ">
+                  <div className="mr-10" onClick={handleWhatsAppClick}>
+                    <WhatsAppIcon sx={{ color: "#4caf50", fontSize: 50 }} />
+                  </div>
+                  <div className="mr-10" onClick={handleInstagramClick}>
+                    <InstagramIcon sx={{ color: "#c13584", fontSize: 50 }} />
+                  </div>
+                  <div className="mr-10" onClick={handleFacebookClick}>
+                    <FacebookIcon sx={{ color: "#1877f2", fontSize: 50 }} />
+                  </div>
+                  <div className="" onClick={handleLinkedInClick}>
+                    <LinkedInIcon sx={{ color: "#0077B5", fontSize: 50 }} />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    className="mt-5 bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded "
+                    onClick={handleCloseButtonClick}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

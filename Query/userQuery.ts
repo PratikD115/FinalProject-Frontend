@@ -31,28 +31,6 @@ export const getAllPlaylist = gql`
   }
 `;
 
-export const uploadImageQuery = gql`
-  mutation ($userId: String!, $image: Upload!) {
-    uploadImage(image: $image, userId: $userId) {
-      id
-      name
-      email
-      password
-      role
-      favourite {
-        id
-        title
-        genres
-      }
-      playlist {
-        id
-        playlistName
-      }
-      profile
-    }
-  }
-`;
-
 export const userInfo = gql`
   query ($userId: String!) {
     getUserById(userId: $userId) {
@@ -77,6 +55,7 @@ export const userInfo = gql`
         playlistName
       }
       follow {
+        id
         name
         imageLink
       }
@@ -114,6 +93,16 @@ export const removeArtist = gql`
         name
       }
       profile
+    }
+  }
+`;
+
+export const uploadImage = gql`
+  mutation ($imageLink: String!, $userId: String!) {
+    storeImageLink(imageLink: $imageLink, userId: $userId) {
+      id
+      name
+      email
     }
   }
 `;

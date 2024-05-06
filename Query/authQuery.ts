@@ -50,6 +50,12 @@ export const User = gql`
       follow {
         id
       }
+      subscribe {
+        expireDate
+      }
+      artistId {
+        id
+      }
     }
   }
 `;
