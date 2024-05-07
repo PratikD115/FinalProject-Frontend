@@ -27,6 +27,8 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { subscribe } from "diagnostics_channel";
+import { isSubscriptionValid } from "../../utils/subscriptions";
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -61,6 +63,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
   const dispatch = useDispatch();
   const [showBox, setShowBox] = useState(false);
+  const { subscribe } = useSelector((state: any) => state.user);
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -107,29 +110,34 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       } else if (options === "share") {
         setShowBox(true);
       } else if (options === "download") {
-        try {
-          setDownloading(true);
-          const { data } = await downloadSong({
-            variables: {
-              url: songUrl,
-            },
-          });
+        if (subscribe &&  isSubscriptionValid(subscribe)) {
+          try {
+            setDownloading(true);
+            const { data } = await downloadSong({
+              variables: {
+                url: songUrl,
+              },
+            });
 
-          const blob = base64ToBlob(data.downloadSong);
-          const url = window.URL.createObjectURL(blob);
+            const blob = base64ToBlob(data.downloadSong);
+            const url = window.URL.createObjectURL(blob);
 
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
 
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-          setDownloading(false);
-        } catch (error) {
-          console.error("Error downloading file:", error);
-          setDownloading(false);
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setDownloading(false);
+          } catch (error) {
+            console.error("Error downloading file:", error);
+            setDownloading(false);
+          }
+        }
+        else{
+          toast.error('Join as a premium user to use asArtist')
         }
       }
       setAnchorEl(null);
@@ -228,7 +236,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   };
   return (
     <>
-     
       <div
         onClick={handleClick}
         className="box card relative flex hover:bg-gray-600  p-1 rounded-md transition ease-in-out cursor-pointer "
@@ -302,7 +309,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
                   />
                 ) : (
                   <div>
-                    {" "}
                     <DownloadIcon fontSize="small" className="mr-2" />
                     Download
                   </div>

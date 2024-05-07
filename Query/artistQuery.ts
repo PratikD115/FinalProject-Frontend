@@ -64,3 +64,19 @@ export const GET_DATA = gql`
     }
   }
 `;
+
+export const ArtistSong = gql`
+  query ($id: String!) {
+    getArtistById(id: $id) {
+      songs(page: 1, limit: 100) {
+        title
+        genres
+        id
+        imageLink
+        streamingLink
+        language
+        mood
+      }
+    }
+  }
+`;

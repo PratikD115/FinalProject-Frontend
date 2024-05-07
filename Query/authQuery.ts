@@ -32,6 +32,8 @@ export const LOGIN = gql`
       role
       email
       profile
+      endDate
+      asArtist
     }
   }
 `;
@@ -50,11 +52,11 @@ export const User = gql`
       follow {
         id
       }
-      subscribe {
-        expireDate
-      }
       artistId {
         id
+      }
+      subscribe {
+        expireDate
       }
     }
   }

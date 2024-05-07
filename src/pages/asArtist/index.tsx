@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { isSubscriptionValid } from "../../../utils/subscriptions";
+import { measureMemory } from "vm";
 
 export default function ArtistHome() {
   const [openForm, setOpenForm] = useState(false);
@@ -22,6 +24,8 @@ export default function ArtistHome() {
   const dateRef = useRef<HTMLInputElement>(null);
   const { user } = useSelector((state: any) => state.user);
   const { profile } = useSelector((state: any) => state.user);
+  const { asArtist } = useSelector((state: any) => state.user);
+  const { subscribe } = useSelector((state: any) => state.user);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -43,6 +47,7 @@ export default function ArtistHome() {
       toast.error("Please tell me about your self");
       return;
     }
+
     console.log("Name:", nameRef.current?.value);
     console.log("Email:", emailRef.current?.value);
     console.log("Genres", selectGenresRef.current?.value);
@@ -59,13 +64,23 @@ export default function ArtistHome() {
   };
 
   function handleDashboard() {
-    console.log("change the page.");
-    router.push("asArtist/home");
+    console.log(subscribe);
+    if (subscribe && isSubscriptionValid(subscribe)) {
+      if (asArtist) {
+        router.push("asArtist/home");
+      } else {
+        toast.error("please enter the all the details as artist ");
+        setOpenForm(true);
+      }
+    } else {
+      toast.error("Join as a premium user to use asArtist");
+      router.push("/subscription");
+    }
   }
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Header />
-      <div className="flex justify-end items-center  text-white pt-[10vh]">
+      <div className="flex justify-end items-center  text-white pt-[8vh]">
         <div className="w-[60%] text-center">
           <h1 className="text-4xl font-bold">
             Discover the perfect stage for your melodies
@@ -75,12 +90,6 @@ export default function ArtistHome() {
             showcase for songs and podcasts.
           </p>
           <div className="mt-4 ">
-            <button
-              onClick={handleJoinUs}
-              className="mr-2 py-3 px-6 bg-green-500 text-white rounded-lg text-lg font-semibold hover:bg-green-600"
-            >
-              Join Us
-            </button>
             <button
               onClick={handleDashboard}
               className="py-3 px-6 bg-green-500 text-white rounded-lg text-lg font-semibold hover:bg-green-600"
@@ -114,7 +123,7 @@ export default function ArtistHome() {
                   id="name"
                   placeholder="Enter your name"
                   ref={nameRef}
-                  value={user.name}
+                  value={user?.name}
                   disabled
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900 text-white rounded-md"
                 />
@@ -188,6 +197,7 @@ export default function ArtistHome() {
                   Write about yourself
                 </label>
                 <textarea
+                
                   id="message"
                   placeholder="Enter your message"
                   rows={4}

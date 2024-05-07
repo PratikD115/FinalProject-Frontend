@@ -11,8 +11,8 @@ interface UserState {
   role: string | null;
   assignedToken: string | null;
   profile: any | null;
-  expireDate: null | string;
-  artistId: string | null;
+  subscribe: null | string;
+  asArtist: null | string;
 }
 
 const initialState: UserState = {
@@ -21,8 +21,8 @@ const initialState: UserState = {
   role: null,
   assignedToken: null,
   profile: null,
-  expireDate: null,
-  artistId: null,
+  subscribe: null,
+  asArtist: null,
 };
 
 const userSlice = createSlice({
@@ -34,17 +34,17 @@ const userSlice = createSlice({
       action: PayloadAction<{
         user: User;
         token: any;
-        expireDate: string;
-        artistId: string;
+        subscribe: string;
+        asArtist: string;
       }>
     ) {
-      console.log(action.payload.expireDate, action.payload.artistId);
       state.user = action.payload.user;
       state.isLogin = true;
       state.role = action.payload.user.role;
       state.assignedToken = action.payload.token;
       state.profile = action.payload.user.profile;
-      state.expireDate = action.payload.expireDate;
+      state.subscribe = action.payload.subscribe;
+      state.asArtist = action.payload.asArtist;
     },
     logout(state) {
       state.user = null;
@@ -52,16 +52,11 @@ const userSlice = createSlice({
       state.role = null;
       state.assignedToken = null;
       state.profile = null;
-      state.expireDate = null;
+      state.subscribe = null;
+      state.asArtist = null;
     },
     updateProfile(state, action: PayloadAction<{ imageLink: string }>) {
       state.profile = action.payload.imageLink;
-    },
-    subscribe(state, action: PayloadAction<{ expireDate: string }>) {
-      state.expireDate = action.payload.expireDate;
-    },
-    unsubscribe(state) {
-      state.expireDate = null;
     },
   },
 });

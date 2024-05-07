@@ -3,32 +3,38 @@ import Link from "next/link";
 import img from "../../../public/images/login.jpg";
 import { useMutation } from "@apollo/client";
 import { useRef } from "react";
-import {  useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { SIGNUP } from "../../../Query/authQuery";
-
+import HeaderHome from "../../../components/header/HeaderHome";
 
 export default function LoginForm() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter()
+  const router = useRouter();
 
   const [signUp, { loading, error, data }] = useMutation(SIGNUP);
-  
-  async function handleSingUp(event : React.FormEvent) {
+
+  async function handleSingUp(event: React.FormEvent) {
     event.preventDefault();
     const enteredName = nameInputRef.current?.value;
     const enteredEmail = emailInputRef.current?.value;
     const enteredPassword = passwordInputRef.current?.value;
     const { data } = await signUp({
-      variables: { email: enteredEmail, name: enteredName, password: enteredPassword, role : "artist" },
+      variables: {
+        email: enteredEmail,
+        name: enteredName,
+        password: enteredPassword,
+        role: "artist",
+      },
     });
-    console.log(data);  
-    router.push("/login")
+    console.log(data);
+    router.push("/login");
   }
 
   return (
-    <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
+    <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ">
+      <HeaderHome />
       <div className="container mx-auto h-[80%]  w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">
@@ -93,7 +99,6 @@ export default function LoginForm() {
               <div className="mb-6">
                 <button
                   type="submit"
-                  
                   className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   SignUp

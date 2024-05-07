@@ -9,6 +9,7 @@ import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { userActions } from "../../../store/userSlice";
+import HeaderHome from "../../../components/header/HeaderHome";
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
@@ -23,18 +24,27 @@ const LoginForm: React.FC = () => {
     const enteredPassword = passwordInputRef.current?.value;
 
     try {
+      console.log("jsut entered");
       const { data } = await login({
         variables: {
           email: enteredEmail,
           password: enteredPassword,
         },
       });
-
+      console.log(data);
       if (data) {
         const { token, ...user } = data.login;
+        console.log("user");
         console.log(user);
         setAuthTokenInCookie(token);
-        dispatch(userActions.login({ user, token }));
+        dispatch(
+          userActions.login({
+            user,
+            token,
+            subscribe: user.endDate,
+            asArtist: user.asArtist,
+          })
+        );
         toast.success("Login SuccessFully !");
         router.push("/");
       }
@@ -45,6 +55,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <section className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
+      <HeaderHome />
       <div className="container mx-auto h-[80%]  w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">

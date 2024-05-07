@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../../public/images/logo.png";
 import Link from "next/link";
@@ -14,6 +14,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import StarIcon from "@mui/icons-material/Star";
 import toast from "react-hot-toast";
+import { isSubscriptionOperation } from "@apollo/client/utilities";
+import { isSubscriptionValid } from "../../utils/subscriptions";
 
 export default function Header() {
   const { isLogin } = useSelector((state: any) => state.user);
@@ -23,8 +25,9 @@ export default function Header() {
 
   const [isMenu, setIsMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>(null);
+  const { subscribe } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-  const [hovered, setHovered] = useState(false);
+
   const { profile } = useSelector((state: any) => state.user);
   const handleAsArtistClick = () => {
     router.push("/asArtist");
@@ -51,10 +54,10 @@ export default function Header() {
   };
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-screen h-[10vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
+      className={`fixed top-0 left-0 z-50 w-screen h-[8vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
     >
       {/* desktop and tablet */}
-      <div className="hidden md:flex justify-between px-7 p-2">
+      <div className="hidden md:flex justify-between px-7 p-2 mt-2">
         {/* logo */}
 
         <div className="logo flex">
@@ -100,13 +103,15 @@ export default function Header() {
         </div>
 
         <div className="profile flex items-center ">
-          <div
-            className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center "
-            onClick={handlePremium}
-          >
-            <StarIcon fontSize="small" className="text-yellow-500" />
-            Premium
-          </div>
+          {Boolean(subscribe) || isSubscriptionValid(subscribe) || (
+            <div
+              className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center "
+              onClick={handlePremium}
+            >
+              <StarIcon fontSize="small" className="text-yellow-500" />
+              Premium
+            </div>
+          )}
           {isLogin && (
             <div className="img w-10 h-10 rounded-full mr-10">
               <Button

@@ -66,8 +66,7 @@ const Profile: React.FC = () => {
       toast.error("No file selected");
       return;
     }
-    console.log(image);
-    console.log(user?.id);
+ 
     const upload_preset = "musicPlayer";
     const cloud_name = "ddiy656zq";
     try {

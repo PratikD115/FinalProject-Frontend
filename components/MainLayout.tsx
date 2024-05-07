@@ -13,7 +13,8 @@ const MainLayout = () => {
   const authCookie = Cookies.get("authToken");
 
   const dispatch = useDispatch();
-  const { loading, error, data, refetch } = useQuery(User, {
+
+  const { data, refetch } = useQuery(User, {
     variables: {
       userId: payload?.userId,
     },
@@ -27,21 +28,18 @@ const MainLayout = () => {
   useEffect(() => {
     if (data) {
       const { getUserById } = data;
-      console.log(getUserById);
 
       const { favourite, follow, ...user } = getUserById;
       const artistData = follow.map((item: any) => item.id);
       const songData = favourite.map((item: any) => item.id);
 
       console.log(user);
-      console.log(user.subscribe.expireDate);
-      console.log(user.artistId.id);
       dispatch(
         userActions.login({
           user,
           token: authCookie,
-          expireDate: user?.subscribe.expireDate,
-          artistId: user?.artistId.id,
+          subscribe: user.subscribe?.expireDate,
+          asArtist: user.artistId?.id,
         })
       );
       dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
@@ -51,7 +49,6 @@ const MainLayout = () => {
   function reload() {
     if (authCookie) {
       const token = authCookie.split(" ")[1];
-
       const decoded = jwt.decode(token);
       setPayload(decoded);
     }

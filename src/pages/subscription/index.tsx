@@ -48,7 +48,7 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
-                  <span>Downlaod songs</span>
+                  <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
@@ -83,7 +83,7 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
-                  <span>Downlaod songs</span>
+                  <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
@@ -118,7 +118,7 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
-                  <span>Downlaod songs</span>
+                  <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />

@@ -128,7 +128,7 @@ export default function SongCardLarge({
           window.URL.revokeObjectURL(url);
           setDownloading(false);
         } catch (error) {
-          console.error("Error downloading file:", error);
+          console.error("Error downloadinnng file:", error);
           setDownloading(false);
         }
       }
@@ -243,7 +243,7 @@ export default function SongCardLarge({
           className="w-full h-full object-cover rounded-md"
         />
 
-        <div className=" absolute bottom-0 right-0 text-white ">
+        <div className=" absolute bottom-0 right-0 text-white">
           <div className="flex p-3">
             {/* add to favourite */}
             {liked ? (
@@ -297,11 +297,10 @@ export default function SongCardLarge({
                     color="#2ecc71"
                     height={25}
                     width={25}
-                    className="ml-9"
+                    className="ml-12"
                   />
                 ) : (
                   <div>
-                    {" "}
                     <DownloadIcon fontSize="small" className="mr-2" />
                     Download
                   </div>
