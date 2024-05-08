@@ -3,6 +3,9 @@ import { createSlice, PayloadAction, Unsubscribe } from "@reduxjs/toolkit";
 interface User {
   role: string;
   profile: string;
+  id: string;
+  name: string;
+  email : string
 }
 
 interface UserState {
@@ -10,9 +13,9 @@ interface UserState {
   isLogin: boolean;
   role: string | null;
   assignedToken: string | null;
-  profile: any | null;
-  subscribe: null | string;
-  asArtist: null | string;
+  profile: string | null;
+  subscribe: string | null;
+  asArtist: string | null;
 }
 
 const initialState: UserState = {
@@ -33,7 +36,7 @@ const userSlice = createSlice({
       state,
       action: PayloadAction<{
         user: User;
-        token: any;
+        token: string;
         subscribe: string;
         asArtist: string;
       }>
@@ -57,6 +60,10 @@ const userSlice = createSlice({
     },
     updateProfile(state, action: PayloadAction<{ imageLink: string }>) {
       state.profile = action.payload.imageLink;
+    },
+    asArtist(state, action: PayloadAction<{ artistId: string }>) {
+      console.log(action.payload.artistId);
+      state.asArtist = action.payload.artistId;
     },
   },
 });

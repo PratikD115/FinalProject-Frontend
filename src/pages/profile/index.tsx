@@ -13,10 +13,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { userActions } from "../../../store/userSlice";
 import { useRouter } from "next/router";
+import { RootState } from "../../../store";
 
 const Profile: React.FC = () => {
-  const { user } = useSelector((state: any) => state.user);
-  const { profile } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
+  const { profile } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const { loading, error, data, refetch } = useQuery(userInfo, {
@@ -32,7 +33,26 @@ const Profile: React.FC = () => {
   const handleImageChange = (event: any) => {
     setImage(event.target.files[0]);
   };
-  const { songData } = useSelector((state: any) => state.favourite);
+  const { songData } = useSelector((state: RootState) => state.favourite);
+
+  interface ArtistInfo {
+    id: string;
+    name: string;
+    dateOfBirth: string;
+    biography: string;
+    imageLink: string;
+    songs: SongInfo[];
+  }
+
+  interface SongInfo {
+    id: string;
+    title: string;
+    imageLink: string;
+    songUrl: string;
+    songId: string;
+    artist: ArtistInfo;
+    streamingLink: string;
+  }
 
   useEffect(() => {
     if (refetch) {
@@ -66,7 +86,7 @@ const Profile: React.FC = () => {
       toast.error("No file selected");
       return;
     }
- 
+
     const upload_preset = "musicPlayer";
     const cloud_name = "ddiy656zq";
     try {
@@ -107,7 +127,7 @@ const Profile: React.FC = () => {
             <div className="card hero box w-52 m-auto mt-8  mx-auto ">
               <div className=" flex justify-center mx-auto">
                 <ArtistCard
-                  artistImage={profile}
+                  artistImage={profile || ""}
                   artistName={userProfile?.name}
                 />
               </div>
@@ -141,19 +161,21 @@ const Profile: React.FC = () => {
             <div className="mt-5">
               <Title title={"Your Favourite :"} />
               <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
-                {userProfile?.favourite?.map((item: any, index: number) => (
-                  <div className="box card hero" key={index}>
-                    <SongCardLarge
-                      handleClick={() => handleSongClick(playlist, index)}
-                      imageLink={item.imageLink}
-                      songName={item.title}
-                      artistName={item.artist.name}
-                      songId={item.id}
-                      songUrl={item.streamingLink}
-                      liked={songData.includes(item.id)}
-                    />
-                  </div>
-                ))}
+                {userProfile?.favourite?.map(
+                  (item: SongInfo, index: number) => (
+                    <div className="box card hero" key={index}>
+                      <SongCardLarge
+                        handleClick={() => handleSongClick(playlist, index)}
+                        imageLink={item.imageLink}
+                        songName={item.title}
+                        artistName={item.artist.name}
+                        songId={item.id}
+                        songUrl={item.streamingLink}
+                        liked={songData.includes(item.id)}
+                      />
+                    </div>
+                  )
+                )}
               </div>
             </div>
             <div className="mt-5">

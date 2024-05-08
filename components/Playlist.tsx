@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import SongCardSmall from "./common/SongCardSmall";
 import { playlistActions } from "../store/playlistSlice";
 import { useDebugValue } from "react";
+import { RootState } from "../store";
 
 const Playlist = () => {
-  const { playlist } = useSelector((state : any) => state.playlist);
-  const { index } = useSelector((state : any) => state.playlist);
+  const { playlist } = useSelector((state: RootState) => state.playlist);
+  const { index } = useSelector((state: RootState) => state.playlist);
   const dispatch = useDispatch();
-  const { songData } = useSelector((state : any) => state.favourite);
+  const { songData } = useSelector((state: RootState) => state.favourite);
 
-  const handleSongClick = (index : number) => {
+  const handleSongClick = (index: number) => {
     dispatch(playlistActions.nextSong(index));
   };
 
@@ -49,7 +50,7 @@ const Playlist = () => {
         </div>
         <div className="w-[70%]  text-white px-5">
           <div className="text-3xl text-gray-400 my-7 mx-4 ">Playlist </div>
-          {playlist?.map((song : any, index: number) => (
+          {playlist?.map((song: any, index: number) => (
             <div key={index}>
               <SongCardSmall
                 handleClick={() => handleSongClick(index)}

@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
   favourite: favouriteReducer,
 });
 
+export type RootState = ReturnType<typeof store.getState>;
 const store = configureStore({
   reducer: rootReducer,
 });

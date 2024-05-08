@@ -16,19 +16,20 @@ import StarIcon from "@mui/icons-material/Star";
 import toast from "react-hot-toast";
 import { isSubscriptionOperation } from "@apollo/client/utilities";
 import { isSubscriptionValid } from "../../utils/subscriptions";
+import { RootState } from "../../store";
 
 export default function Header() {
-  const { isLogin } = useSelector((state: any) => state.user);
-  const { user } = useSelector((state: any) => state.user);
+  const { isLogin } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const router = useRouter();
 
   const [isMenu, setIsMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>(null);
-  const { subscribe } = useSelector((state: any) => state.user);
+  const { subscribe } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  const { profile } = useSelector((state: any) => state.user);
+  const { profile } = useSelector((state: RootState) => state.user);
   const handleAsArtistClick = () => {
     router.push("/asArtist");
   };
@@ -103,7 +104,7 @@ export default function Header() {
         </div>
 
         <div className="profile flex items-center ">
-          {Boolean(subscribe) || isSubscriptionValid(subscribe) || (
+          {Boolean(subscribe) || (
             <div
               className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center "
               onClick={handlePremium}
@@ -120,7 +121,7 @@ export default function Header() {
                 onClick={handleClick}
               >
                 <Image
-                  src={profile}
+                  src={profile || ""}
                   alt="profile"
                   width={40}
                   height={40}

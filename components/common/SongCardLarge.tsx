@@ -27,6 +27,9 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { subscribe } from "diagnostics_channel";
+import { isSubscriptionValid } from "../../utils/subscriptions";
+import { RootState } from "../../store";
 
 interface SongCardLargeProps {
   handleClick: () => void;
@@ -35,7 +38,7 @@ interface SongCardLargeProps {
   artistName: string;
   songId: string;
   songUrl: string;
-  liked: true;
+  liked: boolean;
 }
 
 export default function SongCardLarge({
@@ -49,8 +52,8 @@ export default function SongCardLarge({
 }: SongCardLargeProps) {
   const [openAddConfirm, setOpenAddConfirm] = useState(false);
   const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
-  const { isLogin } = useSelector((state: any) => state.user);
-  const { user } = useSelector((state: any) => state.user);
+  const { isLogin } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const [userPlaylist, setUserPlaylist] = useState(false);
@@ -60,6 +63,7 @@ export default function SongCardLarge({
   const [songToPlaylist] = useMutation(addSongToPlaylist);
   const [error, setError] = useState<null | Error>(null);
   const [showBox, setShowBox] = useState(false);
+  const { subscribe } = useSelector((state: RootState) => state.user);
 
   const dispatch = useDispatch();
 
@@ -98,7 +102,7 @@ export default function SongCardLarge({
     return new Blob([byteArray], { type: "audio/mpeg" });
   };
 
-  const fileName = user?.Id;
+  const fileName = user?.id;
 
   async function handleDotsClose(options: string) {
     if (isLogin) {
@@ -107,29 +111,35 @@ export default function SongCardLarge({
       } else if (options === "share") {
         setShowBox(true);
       } else if (options === "download") {
-        try {
-          setDownloading(true);
-          const { data } = await downloadSong({
-            variables: {
-              url: songUrl,
-            },
-          });
+        if (subscribe && isSubscriptionValid(subscribe)) {
+          try {
+            setDownloading(true);
+            const { data } = await downloadSong({
+              variables: {
+                url: songUrl,
+              },
+            });
 
-          const blob = base64ToBlob(data.downloadSong);
-          const url = window.URL.createObjectURL(blob);
+            const blob = base64ToBlob(data.downloadSong);
+            const url = window.URL.createObjectURL(blob);
 
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
+            const link = document.createElement("a");
+            link.href = url;
+            if (fileName) {
+              link.download = fileName;
+            }
+            document.body.appendChild(link);
+            link.click();
 
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-          setDownloading(false);
-        } catch (error) {
-          console.error("Error downloadinnng file:", error);
-          setDownloading(false);
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setDownloading(false);
+          } catch (error) {
+            console.error("Error downloadinnng file:", error);
+            setDownloading(false);
+          }
+        } else {
+          toast.error("Join as a premium to download song");
         }
       }
       setAnchorEl(null);
@@ -232,7 +242,6 @@ export default function SongCardLarge({
 
   return (
     <>
-     
       <div className="img relative h-40">
         <Image
           onClick={handleClick}

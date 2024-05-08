@@ -3,13 +3,33 @@ import Title from "../common/Title";
 import { useQuery } from "@apollo/client";
 import SongCardSmall from "../common/SongCardSmall";
 import { recommandedSongs } from "../../Query/playlistQuery";
-import { playlistActions } from "../../store/playlistSlice";
+import { PlaylistItem, playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { Song } from "../artist/ArtistProfile";
 const Recommand : React.FC = () =>  {
+  interface ArtistInfo {
+    id: string;
+    name: string;
+    dateOfBirth: string;
+    biography: string;
+    imageLink: string;
+    songs: Song[];
+  }
+
+  interface SongInfo {
+    id: string;
+    title: string;
+    imageLink: string;
+    songUrl: string;
+    songId: string;
+    artist: ArtistInfo;
+    streamingLink: string;
+  }
   const { loading, error, data } = useQuery(recommandedSongs);
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
-  const { songData } = useSelector((state : any) => state.favourite);
+  const { songData } = useSelector((state : RootState) => state.favourite);
   useEffect(() => {
     if (data) {
       const { getAllActiveSongs } = data;
@@ -35,7 +55,7 @@ const Recommand : React.FC = () =>  {
       <section className="treading hero mt-7 pb-32">
         <Title title="Recommand for you" />
         <div className="grid grid-cols-2 gap-5">
-          {playlist.map((item : any, index:number) => (
+          {playlist.map((item : SongInfo , index:number) => (
             <div className="" key={index}>
               <SongCardSmall
                 handleClick={() => handleSongClick(playlist, index)}

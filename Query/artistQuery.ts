@@ -76,7 +76,37 @@ export const ArtistSong = gql`
         streamingLink
         language
         mood
+        artist {
+          name
+        }
       }
+    }
+  }
+`;
+
+export const userToArtist = gql`
+  mutation (
+    $name: String!
+    $userId: String!
+    $dateOfBirth: String!
+    $genres: [Genres!]!
+    $language: language!
+    $biography: String!
+    $imageLink: String!
+  ) {
+    createUserToArtist(
+      createUserToArtist: {
+        name: $name
+        userId: $userId
+        dateOfBirth: $dateOfBirth
+        genres: $genres
+        language: $language
+        biography: $biography
+        imageLink: $imageLink
+      }
+    ) {
+      id
+      name
     }
   }
 `;

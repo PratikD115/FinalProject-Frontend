@@ -12,9 +12,10 @@ import SongCardSmall from "../common/SongCardSmall";
 import { addArtist, removeArtist } from "../../Query/userQuery";
 import toast from "react-hot-toast";
 import { favouriteActions } from "../../store/favoriteSlice";
+import { RootState } from "../../store";
+import Error from "next/error";
 
-
-interface ArtistInfo {
+export interface ArtistInfo {
   id: string;
   name: string;
   dateOfBirth: string;
@@ -23,13 +24,13 @@ interface ArtistInfo {
   songs: Song[];
 }
 
-interface Song {
+export interface Song {
   id: string;
   title: string;
   imageLink: string;
   songUrl: string;
   songId: string;
-  artistName: string;
+  artist: ArtistInfo;
   streamingLink: string;
 }
 
@@ -37,11 +38,11 @@ export default function ArtistProfile() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [playlist, setPlaylist] = useState([]);
-  const { user } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
-  const { songData } = useSelector((state: any) => state.favourite);
-  const { artistData } = useSelector((state: any) => state.favourite);
+  const { songData } = useSelector((state: RootState) => state.favourite);
+  const { artistData } = useSelector((state: RootState) => state.favourite);
   const [addArtistToFollow] = useMutation(addArtist);
   const [removeArtistToFollow] = useMutation(removeArtist);
 
@@ -52,7 +53,6 @@ export default function ArtistProfile() {
       limit,
     },
   });
-
 
   const [artistInfo, setArtistInfo] = useState<ArtistInfo>({
     id: "",
@@ -90,36 +90,34 @@ export default function ArtistProfile() {
   }
 
   async function handleFollow() {
-   
-try{
-    dispatch(favouriteActions.setArtistToData(artistInfo.id));
-    const { data } = await addArtistToFollow({
-      variables: {
-        userId: user.id,
-        artistId: router.query.artistId,
-      },
-    });
-  toast.success(`Now, you are following , ${artistInfo.name}`);
-} catch (error : any) {
-  toast.error(error)
+    try {
+      dispatch(favouriteActions.setArtistToData(artistInfo.id));
+      const { data } = await addArtistToFollow({
+        variables: {
+          userId: user?.id,
+          artistId: router.query.artistId,
+        },
+      });
+      toast.success(`Now, you are following , ${artistInfo.name}`);
+    } catch (error :any) {
+      toast.error(error);
     }
   }
   async function handleUnfollow() {
-  try {
-         dispatch(favouriteActions.removeArtistToData(artistInfo.id));
+    try {
+      dispatch(favouriteActions.removeArtistToData(artistInfo.id));
 
-    const { data } = await removeArtistToFollow({
-      variables: {
-        userId: user.id,
-        artistId: router.query.artistId,
-      },
-    });
-    toast.success(`Now, you are unfollow , ${artistInfo.name}`);
-  } catch (error : any) {
-    toast.error(error)
+      const { data } = await removeArtistToFollow({
+        variables: {
+          userId: user?.id,
+          artistId: router.query.artistId,
+        },
+      });
+      toast.success(`Now, you are unfollow , ${artistInfo.name}`);
+    } catch (error: any) {
+      toast.error(error);
     }
   }
-
 
   function handleViewMore() {
     setLimit(20);
@@ -170,30 +168,32 @@ try{
           >
             Play Now
           </Button>
-          {artistData.includes(artistInfo.id) ?
+          {artistData.includes(artistInfo.id) ? (
             <Button
-            variant="outlined"
-            onClick={handleUnfollow}
-            startIcon={<AddIcon />}
-            className="rounded-full mr-5"
-          >
-            following
-          </Button>:<Button
-            variant="outlined"
-            onClick={handleFollow}
-            startIcon={<AddIcon />}
-            className="rounded-full mr-5"
-          >
-            follow
-          </Button>
-          }
+              variant="outlined"
+              onClick={handleUnfollow}
+              startIcon={<AddIcon />}
+              className="rounded-full mr-5"
+            >
+              following
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              onClick={handleFollow}
+              startIcon={<AddIcon />}
+              className="rounded-full mr-5"
+            >
+              follow
+            </Button>
+          )}
         </div>
         <div>
           <div className="text-gray-400 text-2xl mt-10 ml-3">
             {artistInfo.name} Songs
           </div>
           <div className="mt-5">
-            {artistInfo.songs?.map((song, index) => (
+            {artistInfo.songs?.map((song: Song, index: number) => (
               <div className="" key={index}>
                 <SongCardSmall
                   handleClick={() => {

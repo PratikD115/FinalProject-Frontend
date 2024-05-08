@@ -5,15 +5,36 @@ import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const SongPlaylist : React.FC<{title : string , playlistData : any}>= ({ title, playlistData}) => {
+
+  interface ArtistInfo {
+    id: string;
+    name: string;
+    dateOfBirth: string;
+    biography: string;
+    imageLink: string;
+    songs: SongInfo[];
+    
+  }
+
+  interface SongInfo {
+    id: string;
+    title: string;
+    imageLink: string;
+    songUrl: string;
+    songId: string;
+    artist: ArtistInfo;
+    streamingLink: string;
+  }
   // const { loading, error, data } = useQuery(query, {
   //   variables: { page: 1, limit: 10 },
   // });
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
-  const { songData } = useSelector((state: any) => state.favourite);
+  const { songData } = useSelector((state: RootState) => state.favourite);
 
   useEffect(() => {
     if (playlistData) {
@@ -45,7 +66,7 @@ const SongPlaylist : React.FC<{title : string , playlistData : any}>= ({ title, 
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
-          {playlist?.map((item : any, index : number) => (
+          {playlist?.map((item : SongInfo, index : number) => (
             <div className="box card hero" key={index}>
               <SongCardLarge
                 handleClick={() => handleSongClick(playlist, index)}

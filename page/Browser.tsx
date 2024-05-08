@@ -8,6 +8,26 @@ import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { playlistActions } from "../store/playlistSlice";
+import { RootState } from "../store";
+
+interface ArtistInfo {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  biography: string;
+  imageLink: string;
+  songs: SongInfo[];
+}
+
+interface SongInfo {
+  id: string;
+  title: string;
+  imageLink: string;
+  songUrl: string;
+  songId: string;
+  artist: ArtistInfo;
+  streamingLink: string;
+}
 
 const Browser: React.FC = () => {
   const [clicked, setClicked] = useState(false);
@@ -15,7 +35,7 @@ const Browser: React.FC = () => {
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { songData } = useSelector((state: any) => state.favourite);
+  const { songData } = useSelector((state: RootState) => state.favourite);
 
   // send request for songs
   const {
@@ -84,7 +104,7 @@ const Browser: React.FC = () => {
               <Title title={"Searched Song :"} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
-              {searchedSong.searchSong.map((song: any, index: number) => (
+              {searchedSong.searchSong.map((song: SongInfo, index: number) => (
                 <div className="h-52" key={index}>
                   <SongCardLarge
                     handleClick={() => handleSongClick(playlist, index)}

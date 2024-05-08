@@ -6,11 +6,12 @@ import { useSelector } from "react-redux";
 import { paymentQuery } from "../../../Query/planQuery";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import { RootState } from "../../../store";
 
 const Subscription : React.FC = () => {
   const [payment] = useMutation(paymentQuery);
-  const { user } = useSelector((state : any ) => state.user);
-  const { isLogin } = useSelector((state : any) => state.user);
+  const { user } = useSelector((state : RootState ) => state.user);
+  const { isLogin } = useSelector((state : RootState) => state.user);
   const router = useRouter();
   const handlePayment = async (price: number ) => {
     if (isLogin) {

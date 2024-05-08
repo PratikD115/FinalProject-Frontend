@@ -26,14 +26,14 @@ const MainLayout = () => {
   }, [payload]);
 
   useEffect(() => {
-    if (data) {
+    if (data && authCookie) {
       const { getUserById } = data;
 
-      const { favourite, follow, ...user } = getUserById;
+      const { favourite, follow, ...user }= getUserById;
       const artistData = follow.map((item: any) => item.id);
       const songData = favourite.map((item: any) => item.id);
 
-      console.log(user);
+     
       dispatch(
         userActions.login({
           user,

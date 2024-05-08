@@ -18,11 +18,12 @@ import { useRouter } from "next/router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { RootState } from "../../store";
 
 export default function Player() {
-  const { playlist } = useSelector((state: any) => state.playlist);
-  const { index } = useSelector((state: any) => state.playlist);
-  const audioPlayer: any = useRef<HTMLAudioElement>(null);
+  const { playlist } = useSelector((state: RootState) => state.playlist);
+  const { index } = useSelector((state: RootState) => state.playlist);
+  const audioPlayer :any = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(true);
   const [mute, setMute] = useState(false);

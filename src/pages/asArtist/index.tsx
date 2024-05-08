@@ -2,19 +2,21 @@ import { useRouter } from "next/router";
 import Title from "../../../components/common/Title";
 import Header from "../../../components/header/Header";
 import singer from "../../../public/images/singer.jpg";
-import { TextField, Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { isSubscriptionValid } from "../../../utils/subscriptions";
-import { measureMemory } from "vm";
+import { gql, useMutation } from "@apollo/client";
+import { userToArtist } from "../../../Query/artistQuery";
+import { Genres, Language } from "../../../Query/enum";
+import { userActions } from "../../../store/userSlice";
+import { RootState } from "../../../store";
 
 export default function ArtistHome() {
   const [openForm, setOpenForm] = useState(false);
-  function handleJoinUs() {
-    setOpenForm((prev) => !prev);
-  }
+  const [addUserToArtist] = useMutation(userToArtist);
   const router = useRouter();
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -22,12 +24,13 @@ export default function ArtistHome() {
   const selectLanguageRef = useRef<HTMLSelectElement>(null);
   const selectGenresRef = useRef<HTMLSelectElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
-  const { user } = useSelector((state: any) => state.user);
-  const { profile } = useSelector((state: any) => state.user);
-  const { asArtist } = useSelector((state: any) => state.user);
-  const { subscribe } = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const { profile } = useSelector((state: RootState) => state.user);
+  const { asArtist } = useSelector((state: RootState) => state.user);
+  const { subscribe } = useSelector((state: RootState) => state.user);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Access input values using refs
 
@@ -47,20 +50,40 @@ export default function ArtistHome() {
       toast.error("Please tell me about your self");
       return;
     }
+    try {
+      let genresArray = [];
+      genresArray.push(selectGenresRef.current.value);
 
-    console.log("Name:", nameRef.current?.value);
-    console.log("Email:", emailRef.current?.value);
-    console.log("Genres", selectGenresRef.current?.value);
-    console.log("langauge", selectLanguageRef.current?.value);
-    console.log("DataOfBirth", dateRef.current?.value);
-    console.log("about ", messageRef.current?.value);
+      const { data } = await addUserToArtist({
+        variables: {
+          name: user?.name,
+          userId: user?.id,
+          dateOfBirth: dateRef.current.value.toString(),
+          genres: genresArray,
+          language: selectLanguageRef.current.value,
+          biography: messageRef.current.value,
+          imageLink: profile,
+        },
+      });
 
-    // Optionally, you can clear the input fields after submission
+      if (messageRef.current) messageRef.current.value = "";
+      if (dateRef.current) dateRef.current.value = "";
+      if (selectGenresRef.current) selectGenresRef.current.value = "";
+      if (selectLanguageRef.current) selectLanguageRef.current.value = "";
+      if (data) {
+        toast.success("artist Profile create suceessfully");
+        console.log(data);
+        console.log(data.createUserToArtist.id);
+        console.log(typeof data.createUserToArtist.id);
+        dispatch(
+          userActions.asArtist({ artistId: data.createUserToArtist.id })
+        );
 
-    if (messageRef.current) messageRef.current.value = "";
-    if (dateRef.current) dateRef.current.value = "";
-    if (selectGenresRef.current) selectGenresRef.current.value = "";
-    if (selectLanguageRef.current) selectLanguageRef.current.value = "";
+        router.push("/asArtist/home");
+      }
+    } catch {
+      toast.error("failed to create artist profile ");
+    }
   };
 
   function handleDashboard() {
@@ -74,6 +97,7 @@ export default function ArtistHome() {
       }
     } else {
       toast.error("Join as a premium user to use asArtist");
+
       router.push("/subscription");
     }
   }
@@ -137,7 +161,7 @@ export default function ArtistHome() {
                   id="email"
                   placeholder="Enter your email"
                   ref={emailRef}
-                  value={user.email}
+                  value={user?.email}
                   disabled
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
                 />
@@ -155,9 +179,9 @@ export default function ArtistHome() {
                   ref={selectGenresRef}
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
                 >
-                  <option value="lofi">lofi</option>
-                  <option value="pop">pop</option>
-                  <option value="hip hop">hip hop</option>
+                  {Genres.map((item, index) => (
+                    <option value={`${item}`}>{item}</option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -172,9 +196,9 @@ export default function ArtistHome() {
                   ref={selectLanguageRef}
                   className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
                 >
-                  <option value="hindi">Hindi</option>
-                  <option value="english">English</option>
-                  <option value="punjabi">Punjabi</option>
+                  {Language.map((item, index) => (
+                    <option value={`${item}`}>{item}</option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -197,7 +221,6 @@ export default function ArtistHome() {
                   Write about yourself
                 </label>
                 <textarea
-                
                   id="message"
                   placeholder="Enter your message"
                   rows={4}

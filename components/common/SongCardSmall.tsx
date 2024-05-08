@@ -29,6 +29,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { subscribe } from "diagnostics_channel";
 import { isSubscriptionValid } from "../../utils/subscriptions";
+import { RootState } from "../../store";
 
 interface SongCardSmallProps {
   handleClick: () => void;
@@ -49,8 +50,8 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   songUrl,
   liked,
 }) => {
-  const { isLogin } = useSelector((state: any) => state.user);
-  const { user } = useSelector((state: any) => state.user);
+  const { isLogin } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const [userPlaylist, setUserPlaylist] = useState(false);
@@ -63,7 +64,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
   const dispatch = useDispatch();
   const [showBox, setShowBox] = useState(false);
-  const { subscribe } = useSelector((state: any) => state.user);
+  const { subscribe } = useSelector((state: RootState) => state.user);
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -101,7 +102,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
     return new Blob([byteArray], { type: "audio/mpeg" });
   };
 
-  const fileName = user?.Id;
+  const fileName = user?.id;
 
   async function handleDotsClose(options: string) {
     if (isLogin) {
@@ -110,7 +111,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       } else if (options === "share") {
         setShowBox(true);
       } else if (options === "download") {
-        if (subscribe &&  isSubscriptionValid(subscribe)) {
+        if (subscribe && isSubscriptionValid(subscribe)) {
           try {
             setDownloading(true);
             const { data } = await downloadSong({
@@ -124,7 +125,9 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
 
             const link = document.createElement("a");
             link.href = url;
-            link.download = fileName;
+            if (fileName) {
+              link.download = fileName;
+            }
             document.body.appendChild(link);
             link.click();
 
@@ -135,9 +138,8 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
             console.error("Error downloading file:", error);
             setDownloading(false);
           }
-        }
-        else{
-          toast.error('Join as a premium user to use asArtist')
+        } else {
+          toast.error("Join as a premium to download song");
         }
       }
       setAnchorEl(null);
@@ -238,7 +240,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
     <>
       <div
         onClick={handleClick}
-        className="box card relative flex hover:bg-gray-600  p-1 rounded-md transition ease-in-out cursor-pointer "
+        className="box card relative flex hover:bg-gray-600  p-1 rounded-md  cursor-pointer"
       >
         <div className="img relative h-16 w-16 ml-2 mr-7">
           <Image

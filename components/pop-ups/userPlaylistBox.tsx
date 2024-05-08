@@ -10,17 +10,18 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
   const [inputValue, setInputValue] = useState(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
 
   const [playlists, setPlaylists] = useState([]);
-  const { user } = useSelector((state: any) => state.user);
-  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
+  const { user } = useSelector((state: RootState) => state.user);
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>();
   const [isCreateNew, setIsCreateNew] = useState(false);
   const { loading, error, data, refetch } = useQuery(getAllPlaylist, {
-    variables: { userId: user.id },
+    variables: { userId: user?.id },
   });
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
   }, [refetch]);
 
   // if user click on the playlist
-  const handlePlaylistClick = (index: any, prePlaylist: any) => {
+  const handlePlaylistClick = (index: number, prePlaylist: any) => {
     setSelectedButtonIndex(index);
     setSelectedPlaylist(prePlaylist);
   };
