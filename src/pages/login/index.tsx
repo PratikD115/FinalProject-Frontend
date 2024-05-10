@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [login] = useMutation(LOGIN);
 
-  async function handleLogIn(event: React.FormEvent) {
+  const handleLogIn = async (event: React.FormEvent) => {
     event.preventDefault();
     const enteredEmail = emailInputRef.current?.value;
     const enteredPassword = passwordInputRef.current?.value;
@@ -51,12 +51,12 @@ const LoginForm: React.FC = () => {
     } catch (error: any) {
       toast.error(error.message);
     }
-  }
+  };
 
   return (
     <section className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <HeaderHome />
-      <div className="container mx-auto h-[80%]  w-[56%]">
+      <div className="container mx-auto h-[80%] w-[56%]">
         <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg md:flex md:justify-center ">
           <div className="md:w-1/2 ">
             <Image src={img} alt="kl" className="h-full w-full" />

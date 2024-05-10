@@ -20,10 +20,10 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { RootState } from "../../store";
 
-export default function Player() {
+const Player = () => {
   const { playlist } = useSelector((state: RootState) => state.playlist);
   const { index } = useSelector((state: RootState) => state.playlist);
-  const audioPlayer :any = useRef<HTMLAudioElement>(null);
+  const audioPlayer: any = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(30);
   const [isPlaying, setIsPlaying] = useState(true);
   const [mute, setMute] = useState(false);
@@ -69,7 +69,7 @@ export default function Player() {
       audioPlayer.current.currentTime = newValue;
     }
   };
-  function formatTime(time: number) {
+  const formatTime = (time: number) => {
     if (time && !isNaN(time)) {
       const minutes =
         Math.floor(time / 60) < 10
@@ -82,17 +82,17 @@ export default function Player() {
       return `${minutes}:${seconds}`;
     }
     return "00:00";
-  }
+  };
 
-  function toggleForward() {
+  const toggleForward = () => {
     audioPlayer.current.currentTime += 10;
-  }
+  };
 
-  function toggleBackward() {
+  const toggleBackward = () => {
     audioPlayer.current.currentTime -= 10;
-  }
+  };
 
-  function toggleSkipForward() {
+  const toggleSkipForward = () => {
     if (index >= playlist.length - 1) {
       dispatch(playlistActions.nextSong(0));
       audioPlayer.current.src = playlist[index]?.streamingLink;
@@ -106,9 +106,9 @@ export default function Player() {
       }
       audioPlayer.current?.play();
     }
-  }
+  };
 
-  function toggleSkipBackward() {
+  const toggleSkipBackward = () => {
     if (index > 0) {
       dispatch(playlistActions.nextSong(index - 1));
       audioPlayer.current.src = playlist[index].streamingLink;
@@ -117,9 +117,9 @@ export default function Player() {
       }
       audioPlayer.current.play();
     }
-  }
+  };
 
-  function VolumeBtns() {
+  const VolumeBtns = () => {
     return mute ? (
       <VolumeOffIcon
         className="text-gray-400 hover:text-gray-200 mr-2"
@@ -141,7 +141,7 @@ export default function Player() {
         onClick={() => setMute(!mute)}
       />
     );
-  }
+  };
 
   const togglePlay = () => {
     setIsPlaying((prev) => !prev);
@@ -152,13 +152,13 @@ export default function Player() {
     }
   };
 
-  function handleviewMore() {
+  const handleviewMore = () => {
     if (currentSong) {
       router.push("/queue");
     } else {
       toast.error("please select the playlist");
     }
-  }
+  };
 
   return (
     <div className="z-10 bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
@@ -201,34 +201,34 @@ export default function Player() {
           </div>
           <div className="flex items-center">
             <SkipPreviousIcon
-              className="text-gray-400 hover:text-gray-200 mr-5"
+              className="text-gray-400 hover:text-gray-200 mr-5 cursor-pointer"
               onClick={toggleSkipBackward}
             />
             <FastRewindIcon
-              className="text-gray-400 hover:text-gray-200"
+              className="text-gray-400 hover:text-gray-200 cursor-pointer"
               onClick={toggleBackward}
             />
             {isPlaying ? (
               <PauseIcon
                 onClick={togglePlay}
                 fontSize="large"
-                className="text-primary hover:text-green-500 mx-5"
+                className="text-primary hover:text-green-500 mx-5 cursor-pointer"
               />
             ) : (
               <PlayArrowIcon
                 onClick={togglePlay}
                 fontSize="large"
-                className="text-primary  hover:text-green-500 mx-5"
+                className="text-primary  hover:text-green-500 mx-5 cursor-pointer"
               />
             )}
 
             <FastForwardIcon
-              className="text-gray-400 hover:text-gray-200"
+              className="text-gray-400 hover:text-gray-200 cursor-pointer"
               onClick={toggleForward}
             />
 
             <SkipNextIcon
-              className="text-gray-400 hover:text-gray-200 ml-5"
+              className="text-gray-400 hover:text-gray-200 ml-5 cursor-pointer"
               onClick={toggleSkipForward}
             />
           </div>
@@ -239,7 +239,7 @@ export default function Player() {
               </p>
             </div>
 
-            <div className="flex items-center justify-start w-48 pl-10 pt-2">
+            <div className="flex items-center justify-start w-48 pl-10 pt-2 cursor-pointer">
               <VolumeBtns />
               <Slider
                 min={0}
@@ -256,4 +256,6 @@ export default function Player() {
       </div>
     </div>
   );
-}
+};
+
+export default Player;

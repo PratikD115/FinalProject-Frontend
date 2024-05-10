@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../store/playlistSlice";
 import { RootState } from "../../store";
 import { Song } from "../artist/ArtistProfile";
-export default function Sidebar() {
+
+const Sidebar: React.FC = () => {
   const { loading, error, data } = useQuery(mostLikedSong);
   const [playlist, setPlaylist] = useState([]);
   const dispatch = useDispatch();
@@ -38,14 +39,14 @@ export default function Sidebar() {
     }
   }, [data]);
 
-  function handleSongClick(playlist: any, index: number) {
+  const handleSongClick = (playlist: any, index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
         index,
       })
     );
-  }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -72,4 +73,6 @@ export default function Sidebar() {
       </section>
     </>
   );
-}
+};
+
+export default Sidebar;

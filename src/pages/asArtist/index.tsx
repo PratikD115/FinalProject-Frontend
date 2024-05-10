@@ -14,7 +14,7 @@ import { Genres, Language } from "../../../Query/enum";
 import { userActions } from "../../../store/userSlice";
 import { RootState } from "../../../store";
 
-export default function ArtistHome() {
+const ArtistHome = () => {
   const [openForm, setOpenForm] = useState(false);
   const [addUserToArtist] = useMutation(userToArtist);
   const router = useRouter();
@@ -86,13 +86,13 @@ export default function ArtistHome() {
     }
   };
 
-  function handleDashboard() {
+  const handleDashboard = () => {
     console.log(subscribe);
     if (subscribe && isSubscriptionValid(subscribe)) {
       if (asArtist) {
         router.push("asArtist/home");
       } else {
-        toast.error("please enter the all the details as artist ");
+        toast("Please enter the all the details as artist ");
         setOpenForm(true);
       }
     } else {
@@ -100,7 +100,7 @@ export default function ArtistHome() {
 
       router.push("/subscription");
     }
-  }
+  };
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Header />
@@ -240,4 +240,6 @@ export default function ArtistHome() {
       )}
     </div>
   );
-}
+};
+
+export default ArtistHome;

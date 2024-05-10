@@ -18,7 +18,7 @@ import { isSubscriptionOperation } from "@apollo/client/utilities";
 import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
 
-export default function Header() {
+const Header = () => {
   const { isLogin } = useSelector((state: RootState) => state.user);
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -33,11 +33,12 @@ export default function Header() {
   const handleAsArtistClick = () => {
     router.push("/asArtist");
   };
-  function handleLogoutClick() {
+  const handleLogoutClick = () => {
     handleClose();
     Cookies.remove("authToken");
     dispatch(userActions.logout());
-  }
+    router.push("/");
+  };
 
   const handleClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
@@ -74,9 +75,6 @@ export default function Header() {
           </Link>
           <div className="menu font-[lato]">
             <ul className="flex">
-              {/* <li className="mx-5 py-2">
-              <Link href="/">Discover</Link>
-            </li> */}
               <li
                 className={`mx-5 py-2 ${
                   router.pathname === "/browser" ? "active" : ""
@@ -84,7 +82,15 @@ export default function Header() {
               >
                 <Link href="/browser">Browser</Link>
               </li>
-
+              {subscribe && (
+                <li
+                  className={`mx-5 py-2 ${
+                    router.pathname === "/playlist" ? "active" : ""
+                  }`}
+                >
+                  <Link href="/playlist">Playlists</Link>
+                </li>
+              )}
               <li
                 className={`mx-5 py-2 ${
                   router.pathname === "/about" ? "active" : ""
@@ -106,7 +112,7 @@ export default function Header() {
         <div className="profile flex items-center ">
           {Boolean(subscribe) || (
             <div
-              className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center "
+              className="border-2 bg-slate-800 border-yellow-500 rounded-full px-5 py-1 flex items-center cursor-pointer "
               onClick={handlePremium}
             >
               <StarIcon fontSize="small" className="text-yellow-500" />
@@ -169,6 +175,7 @@ export default function Header() {
               </Menu>
             </div>
           )}
+
           {!isLogin && (
             <Link
               href="/login"
@@ -215,4 +222,5 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+export default Header;

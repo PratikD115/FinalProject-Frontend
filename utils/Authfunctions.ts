@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export function setAuthTokenInCookie(token : string) {
+export const setAuthTokenInCookie = (token: string) => {
   const authToken = `Bearer ${token}`;
   console.log(authToken);
   Cookies.set("authToken", authToken, {
@@ -8,4 +8,4 @@ export function setAuthTokenInCookie(token : string) {
     secure: true,
     sameSite: "none",
   });
-}
+};

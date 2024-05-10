@@ -60,8 +60,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   const [createPlaylist] = useMutation(createNewPlaylist);
   const [songToPlaylist] = useMutation(addSongToPlaylist);
   const [error, setError] = useState<null | Error>(null);
-  const [openAddConfirm, setOpenAddConfirm] = useState(false);
-  const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
+
   const dispatch = useDispatch();
   const [showBox, setShowBox] = useState(false);
   const { subscribe } = useSelector((state: RootState) => state.user);
@@ -70,7 +69,11 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  async function closeUserPlaylist(result: boolean, name: string, id: string) {
+  const closeUserPlaylist = async (
+    result: boolean,
+    name: string,
+    id: string
+  ) => {
     if (result) {
       if (id) {
         const { data } = await songToPlaylist({
@@ -90,7 +93,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       }
     }
     setUserPlaylist(false);
-  }
+  };
 
   const base64ToBlob = (base64String: string) => {
     const byteCharacters = atob(base64String);
@@ -104,7 +107,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
 
   const fileName = user?.id;
 
-  async function handleDotsClose(options: string) {
+  const handleDotsClose = async (options: string) => {
     if (isLogin) {
       if (options === "add to playlist") {
         setUserPlaylist(true);
@@ -147,7 +150,7 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       toast.error("Please login to use functionality");
       setAnchorEl(null);
     }
-  }
+  };
   const [addFavorite] = useMutation(addToFavourite, {
     onError: (err: Error) => {
       setError(err);
@@ -159,49 +162,25 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
       setError(err);
     },
   });
-  const handleOpenAddConfirm = () => {
-    if (isLogin) {
-      setOpenAddConfirm(true);
-    } else {
-      toast.error("Please login to use functionality");
-    }
-  };
 
-  const handleOpenRemoveConfirm = () => {
-    if (isLogin) {
-      setOpenRemoveCofirm(true);
-    } else {
-      toast.error("Please login to use functionality");
-    }
+  const handleAddLike = () => {
+    console.log("user remove from list");
+    dispatch(favouriteActions.setSongToData(songId));
+    addFavorite({
+      variables: {
+        userId: user?.id,
+        songId: songId,
+      },
+    });
   };
-
-  const handleCloseAddConfirm = (agreed: boolean): void => {
-    setOpenAddConfirm(false);
-    if (agreed) {
-      dispatch(favouriteActions.setSongToData(songId));
-      addFavorite({
-        variables: {
-          userId: user?.id,
-          songId: songId,
-        },
-      });
-    } else {
-      console.log("User disagreed.");
-    }
-  };
-  const handleCloseRemoveConfirm = (agreed: boolean) => {
-    setOpenRemoveCofirm(false);
-    if (agreed) {
-      dispatch(favouriteActions.removeSongToData(songId));
-      removeFavorite({
-        variables: {
-          userId: user?.id,
-          songId: songId,
-        },
-      });
-    } else {
-      console.log("User disagreed.");
-    }
+  const handleRemoveLike = () => {
+    dispatch(favouriteActions.removeSongToData(songId));
+    removeFavorite({
+      variables: {
+        userId: user?.id,
+        songId: songId,
+      },
+    });
   };
 
   const handleWhatsAppClick = () => {
@@ -238,12 +217,10 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   };
   return (
     <>
-      <div
-        onClick={handleClick}
-        className="box card relative flex hover:bg-gray-600  p-1 rounded-md  cursor-pointer"
-      >
-        <div className="img relative h-16 w-16 ml-2 mr-7">
+      <div className="box card relative flex hover:bg-gray-600  p-1 rounded-md ">
+        <div className="img relative h-16 w-16 ml-2 mr-7  cursor-pointer">
           <Image
+            onClick={handleClick}
             src={imageLink}
             alt="cover"
             height={64}
@@ -252,34 +229,22 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
           />
         </div>
         <div className="absolute bottom-0 right-0 text-secondary">
-          <div className="flex p-3">
+          <div className="flex p-3 ">
             {liked ? (
               <FavoriteIcon
-                onClick={handleOpenRemoveConfirm}
+                onClick={handleRemoveLike}
                 sx={{ color: red[400] }}
                 fontSize="small"
                 className="mx-3"
               />
             ) : (
               <FavoriteBorderIcon
-                onClick={handleOpenAddConfirm}
+                onClick={handleAddLike}
                 fontSize="small"
                 className="mx-3 text-white"
               />
             )}
-            {/* open the confirmation box */}
-            <ConfirmCard
-              open={openAddConfirm}
-              onClose={() => handleCloseAddConfirm(true)}
-              desc={"Add Song to Favourite ? "}
-              button={"Add"}
-            />
-            <ConfirmCard
-              open={openRemoveConfirm}
-              onClose={() => handleCloseRemoveConfirm(true)}
-              desc={"remove song to Favourite ? "}
-              button={"Remove"}
-            />
+            
 
             <BsThreeDots
               onClick={handleDotsClick}

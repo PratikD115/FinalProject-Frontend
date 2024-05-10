@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Image from "next/image";
 
-function SampleNextArrow(props: any) {
+const SampleNextArrow = (props: any) => {
   const { onClick } = props;
   return (
     <div
@@ -18,9 +18,9 @@ function SampleNextArrow(props: any) {
       <MdKeyboardArrowLeft size={50} />
     </div>
   );
-}
+};
 
-function SamplePrevArrow(props: any) {
+const SamplePrevArrow = (props: any) => {
   const { onClick } = props;
   return (
     <div
@@ -30,7 +30,7 @@ function SamplePrevArrow(props: any) {
       <MdKeyboardArrowRight size={50} />
     </div>
   );
-}
+};
 
 const Hero: React.FC = () => {
   const settings = {
@@ -63,12 +63,6 @@ const Hero: React.FC = () => {
                   <h3 className="text-xl font-semibold">{item.name}</h3>
                   <span className="text-gray-400">{item.tag}</span>
                 </div>
-                <div className="overlay absolute bottom-0 right-0 text-white">
-                  <div className="flex p-3">
-                    <AiOutlineHeart size={22} className="mx-3" />
-                    <BsThreeDots size={22} />
-                  </div>
-                </div>
               </div>
             ))}
           </Slider>
@@ -87,19 +81,19 @@ const Hero: React.FC = () => {
                 <h3 className="text-xl font-semibold">{item.name}</h3>
                 <span className="text-gray-400">{item.tag}</span>
               </div>
-              <div className="overlay icon absolute top-1/2 left-[40%] text-white ">
+              {/* <div className="overlay icon absolute top-1/2 left-[40%] text-white ">
                 <BsPlayCircle size={45} className="show" />
                 <AiFillPlayCircle
                   size={50}
                   className="hide absolute -top-1 -left-1"
                 />
-              </div>
-              <div className="overlay absolute bottom-0 right-0 text-white">
+              </div> */}
+              {/* <div className="overlay absolute bottom-0 right-0 text-white">
                 <div className="flex p-3">
                   <AiOutlineHeart size={22} className="mx-3" />
                   <BsThreeDots size={22} />
                 </div>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

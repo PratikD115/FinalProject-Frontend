@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { SIGNUP } from "../../../Query/authQuery";
 import HeaderHome from "../../../components/header/HeaderHome";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -15,7 +15,7 @@ export default function LoginForm() {
 
   const [signUp, { loading, error, data }] = useMutation(SIGNUP);
 
-  async function handleSingUp(event: React.FormEvent) {
+  const handleSingUp = async (event: React.FormEvent) => {
     event.preventDefault();
     const enteredName = nameInputRef.current?.value;
     const enteredEmail = emailInputRef.current?.value;
@@ -30,7 +30,7 @@ export default function LoginForm() {
     });
     console.log(data);
     router.push("/login");
-  }
+  };
 
   return (
     <section className="flex justify-center items-center h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ">
@@ -116,4 +116,6 @@ export default function LoginForm() {
       </div>
     </section>
   );
-}
+};
+
+export default LoginForm;

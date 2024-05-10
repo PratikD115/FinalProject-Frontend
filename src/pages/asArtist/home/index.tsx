@@ -1,5 +1,5 @@
 import HeaderHome from "../../../../components/header/HeaderHome";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ArtistSong } from "../../../../Query/artistQuery";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,9 +10,12 @@ import toast from "react-hot-toast";
 import { userActions } from "../../../../store/userSlice";
 import { Genres, Language, Mood } from "../../../../Query/enum";
 import { RootState } from "../../../../store";
+import { createSongLink } from "../../../../Query/songQuery";
+import { cloudinaryUpload } from "../../../../utils/imageUpload";
+
 const drawerWidth = 300;
 
-export default function PermanentDrawer() {
+const PermanentDrawer = () => {
   const [openMenu, setOpenMenu] = useState<number>(0);
   const [songData, setSongData] = useState([]);
   const { asArtist } = useSelector((state: RootState) => state.user);
@@ -26,6 +29,7 @@ export default function PermanentDrawer() {
   const { user } = useSelector((state: RootState) => state.user);
   const [image, setImage] = useState<File | null>(null);
   const [audio, setAudio] = useState<File | null>(null);
+  const [createSong] = useMutation(createSongLink);
 
   const dispatch = useDispatch();
 
@@ -66,6 +70,8 @@ export default function PermanentDrawer() {
   };
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    let imageLink: string = "";
+    let audioLink: string = "";
     // Access input values using refs
 
     if (!songNameRef.current?.value) {
@@ -84,27 +90,39 @@ export default function PermanentDrawer() {
       toast.error("Please mood");
       return;
     }
+    if (!image) {
+      toast.error("please select the image");
+    } else {
+      imageLink = await cloudinaryUpload(image, "song-Image");
+    }
+    if (!audio) {
+      toast.error("please select the audio");
+    } else {
+      audioLink = await cloudinaryUpload(audio, "song-audio");
+    }
 
     console.log(songNameRef.current?.value);
     console.log(selectGenresRef.current?.value);
     console.log(selectLanguageRef.current?.value);
     console.log(selectMoodRef.current?.value);
 
-    try {
-      let genresArray = [];
-      genresArray.push(selectGenresRef.current.value);
+    let genresArray = [];
+    genresArray.push(selectGenresRef.current.value);
 
-      // const { data } = await addUserToArtist({
-      //   variables: {
-      //     name: user?.name,
-      //     userId: user?.id,
-      //     dateOfBirth: dateRef.current.value.toString(),
-      //     genres: genresArray,
-      //     language: selectLanguageRef.current.value,
-      //     biography: messageRef.current.value,
-      //     imageLink: profile,
-      //   },
-      // });
+    let moodArray = [];
+    moodArray.push(selectMoodRef.current.value);
+    try {
+      const { data } = await createSong({
+        variables: {
+          title: songNameRef.current.value,
+          artist: asArtist,
+          genres: genresArray,
+          language: selectLanguageRef.current.value,
+          mood: moodArray,
+          streamingLink: audioLink,
+          imageLink: imageLink,
+        },
+      });
 
       if (songNameRef.current) songNameRef.current.value = "";
       if (selectGenresRef.current) selectGenresRef.current.value = "";
@@ -113,14 +131,6 @@ export default function PermanentDrawer() {
 
       if (data) {
         toast.success("artist Profile create suceessfully");
-        console.log(data);
-        console.log(data.createUserToArtist.id);
-        console.log(typeof data.createUserToArtist.id);
-        dispatch(
-          userActions.asArtist({ artistId: data.createUserToArtist.id })
-        );
-
-        router.push("/asArtist/home");
       }
     } catch {
       toast.error("failed to create artist profile ");
@@ -282,4 +292,7 @@ export default function PermanentDrawer() {
       </div>
     </div>
   );
-}
+};
+
+
+export default PermanentDrawer;

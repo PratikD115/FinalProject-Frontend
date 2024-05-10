@@ -1,29 +1,21 @@
-import {  useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import logo from "../../public/images/logo.png";
 import Link from "next/link";
 import { AiOutlineMenu } from "react-icons/ai";
 import { useRouter } from "next/router";
 
-
-
-export default function Header() {
-
+const HeaderHome = () => {
   const router = useRouter();
 
   const [isMenu, setIsMenu] = useState(false);
 
-
-
-  
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-screen h-[8vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"} bg-slate-950`}
     >
       {/* desktop and tablet */}
       <div className="hidden md:flex justify-between px-7 p-2 ">
-      
-
         <div className="logo flex">
           <Link href="/">
             <h2
@@ -35,7 +27,6 @@ export default function Header() {
               Musical Moment
             </h2>
           </Link>
-         
         </div>
       </div>
 
@@ -73,4 +64,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default HeaderHome;

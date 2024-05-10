@@ -7,14 +7,9 @@ interface ArtistCardProps {
   artistName: string;
 }
 
-export default function ArtistCard({
-  onClick,
-  artistImage,
-  artistName,
-}: ArtistCardProps) {
+const ArtistCard = ({ onClick, artistImage, artistName }: ArtistCardProps) => {
   const router = useRouter();
 
-  
   return (
     <>
       <div className="relative h-44 rounded-full border-2 border-gray-500 cursor-pointer">
@@ -40,4 +35,6 @@ export default function ArtistCard({
       </div>
     </>
   );
-}
+};
+
+export default ArtistCard;

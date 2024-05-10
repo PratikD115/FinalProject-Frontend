@@ -14,6 +14,7 @@ import axios from "axios";
 import { userActions } from "../../../store/userSlice";
 import { useRouter } from "next/router";
 import { RootState } from "../../../store";
+import { cloudinaryUpload } from "../../../utils/imageUpload";
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -80,43 +81,23 @@ const Profile: React.FC = () => {
     console.log(artistId);
     router.push(`/artist/${artistId}`);
   };
+
   const handleUpload = async () => {
-    let imageLink;
     if (!image) {
       toast.error("No file selected");
       return;
     }
 
-    const upload_preset = "musicPlayer";
-    const cloud_name = "ddiy656zq";
-    try {
-      const uploadData = new FormData();
-      uploadData.append("file", image);
-      uploadData.append("upload_preset", upload_preset);
-      uploadData.append("cloud_name", cloud_name);
-      uploadData.append("folder", "user-image");
-
-      const loadingToastId = toast.loading("uploading photo", { duration: 0 });
-
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        uploadData
-      );
-      imageLink = data.url;
-
-      await uploadImageLink({
-        variables: {
-          imageLink: data.url,
-          userId: user?.id,
-        },
-      });
-
-      toast.dismiss(loadingToastId);
-      toast.success("photo uploaded successfully");
-    } catch {
-      toast.error("error uploading photo");
+    const imageLink = await cloudinaryUpload(image, "user-Image");
+    const { data } =await uploadImageLink({
+      variables: {
+        userId: user?.id,
+        imageLink
+      },
+    });
+    if (data) {
+      dispatch(userActions.updateProfile({ imageLink }));
     }
-    dispatch(userActions.updateProfile({ imageLink }));
   };
 
   return (

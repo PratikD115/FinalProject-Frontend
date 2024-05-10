@@ -102,3 +102,20 @@ export const addSongToPlaylist = gql`
     }
   }
 `;
+
+export const userPlaylist = gql`
+query( $userId : String!){
+  getUserById(userId: $userId ) {
+       playlist{
+            playlistName
+            songs{
+                 title
+                 streamingLink
+                 imageLink
+                 id
+            }
+       }
+       
+  }
+}
+`;

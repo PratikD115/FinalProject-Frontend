@@ -5,7 +5,7 @@ interface User {
   profile: string;
   id: string;
   name: string;
-  email : string
+  email: string;
 }
 
 interface UserState {

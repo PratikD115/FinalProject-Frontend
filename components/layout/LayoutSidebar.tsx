@@ -5,9 +5,7 @@ interface LayoutSidebarProps {
   children: React.ReactNode;
 }
 
-export default function LayoutSidebar({
-  children,
-}: LayoutSidebarProps): JSX.Element {
+const LayoutSidebar = ({ children }: LayoutSidebarProps): JSX.Element => {
   const [sidebarWidth, setSidebarWidth] = useState<number | undefined>(
     undefined
   );
@@ -54,4 +52,5 @@ export default function LayoutSidebar({
       </main>
     </>
   );
-}
+};
+export default LayoutSidebar;

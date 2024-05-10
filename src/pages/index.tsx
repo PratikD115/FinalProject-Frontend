@@ -1,3 +1,4 @@
+import { ScaleLoader } from "react-spinners";
 import Layout from "../../components/layout/Layout";
 import Home from "../../page/Home";
 
@@ -12,3 +13,4 @@ const Music: React.FC = () => {
 };
 
 export default Music;
+

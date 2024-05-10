@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { favouriteActions } from "../../store/favoriteSlice";
 import { RootState } from "../../store";
 import Error from "next/error";
+import { ScaleLoader } from "react-spinners";
 
 export interface ArtistInfo {
   id: string;
@@ -48,7 +49,7 @@ export default function ArtistProfile() {
 
   const { loading, error, data } = useQuery(ARTIST, {
     variables: {
-      id: router.query.artistId as string,
+      id: router.query.artistId,
       page,
       limit,
     },
@@ -89,20 +90,16 @@ export default function ArtistProfile() {
     );
   }
 
-  async function handleFollow() {
-    try {
-      dispatch(favouriteActions.setArtistToData(artistInfo.id));
-      const { data } = await addArtistToFollow({
-        variables: {
-          userId: user?.id,
-          artistId: router.query.artistId,
-        },
-      });
-      toast.success(`Now, you are following , ${artistInfo.name}`);
-    } catch (error :any) {
-      toast.error(error);
-    }
-  }
+  const handleFollow = async () => {
+    dispatch(favouriteActions.setArtistToData(artistInfo?.id));
+    await addArtistToFollow({
+      variables: {
+        userId: user?.id,
+        artistId: router.query.artistId,
+      },
+    });
+    toast.success(`Now, you are following , ${artistInfo.name}`);
+  };
   async function handleUnfollow() {
     try {
       dispatch(favouriteActions.removeArtistToData(artistInfo.id));
@@ -123,8 +120,22 @@ export default function ArtistProfile() {
     setLimit(20);
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading)
+    return (
+      <div className=" h-screen flex justify-center items-center">
+        {" "}
+        <ScaleLoader
+          color="rgba(40, 189, 41, 1)"
+          height={15}
+          loading={true}
+          margin={3}
+          radius={3}
+          speedMultiplier={2}
+          width={4}
+        />
+      </div>
+    );
+  if (error) {return toast.error("something is wrong")}
 
   return (
     <div className="flex pb-52">
@@ -168,7 +179,7 @@ export default function ArtistProfile() {
           >
             Play Now
           </Button>
-          {artistData.includes(artistInfo.id) ? (
+          {artistData?.includes(artistInfo.id) ? (
             <Button
               variant="outlined"
               onClick={handleUnfollow}

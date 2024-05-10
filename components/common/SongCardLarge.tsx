@@ -41,7 +41,7 @@ interface SongCardLargeProps {
   liked: boolean;
 }
 
-export default function SongCardLarge({
+const SongCardLarge = ({
   handleClick,
   imageLink,
   songName,
@@ -49,9 +49,7 @@ export default function SongCardLarge({
   songId,
   songUrl,
   liked,
-}: SongCardLargeProps) {
-  const [openAddConfirm, setOpenAddConfirm] = useState(false);
-  const [openRemoveConfirm, setOpenRemoveCofirm] = useState(false);
+}: SongCardLargeProps) => {
   const { isLogin } = useSelector((state: RootState) => state.user);
   const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
@@ -64,14 +62,17 @@ export default function SongCardLarge({
   const [error, setError] = useState<null | Error>(null);
   const [showBox, setShowBox] = useState(false);
   const { subscribe } = useSelector((state: RootState) => state.user);
-
   const dispatch = useDispatch();
 
   const handleDotsClick = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget);
   };
 
-  async function closeUserPlaylist(result: boolean, name: string, id: string) {
+  const closeUserPlaylist = async (
+    result: boolean,
+    name: string,
+    id: string
+  ) => {
     if (result) {
       if (id) {
         const { data } = await songToPlaylist({
@@ -91,7 +92,7 @@ export default function SongCardLarge({
       }
     }
     setUserPlaylist(false);
-  }
+  };
   const base64ToBlob = (base64String: string) => {
     const byteCharacters = atob(base64String);
     const byteNumbers = new Array(byteCharacters.length);
@@ -104,7 +105,7 @@ export default function SongCardLarge({
 
   const fileName = user?.id;
 
-  async function handleDotsClose(options: string) {
+  const handleDotsClose = async (options: string) => {
     if (isLogin) {
       if (options === "add to playlist") {
         setUserPlaylist(true);
@@ -147,7 +148,7 @@ export default function SongCardLarge({
       toast.error("Please login to use functionality");
       setAnchorEl(null);
     }
-  }
+  };
 
   const [addFavorite] = useMutation(addToFavourite, {
     onError: (err: Error) => {
@@ -160,51 +161,24 @@ export default function SongCardLarge({
       setError(err);
     },
   });
-  const handleOpenAddConfirm = () => {
-    if (isLogin) {
-      setOpenAddConfirm(true);
-    } else {
-      toast.error("Please login to use functionality");
-    }
-  };
 
-  const handleOpenRemoveConfirm = () => {
-    if (isLogin) {
-      setOpenRemoveCofirm(true);
-    } else {
-      toast.error("Please login to use functionality");
-    }
+  const handleAddLike = () => {
+    dispatch(favouriteActions.setSongToData(songId));
+    addFavorite({
+      variables: {
+        userId: user?.id,
+        songId: songId,
+      },
+    });
   };
-
-  const handleCloseAddConfirm = (agreed: boolean) => {
-    setOpenAddConfirm(false);
-    if (agreed) {
-      console.log("user remove from list");
-      dispatch(favouriteActions.setSongToData(songId));
-      addFavorite({
-        variables: {
-          userId: user?.id,
-          songId: songId,
-        },
-      });
-    } else {
-      console.log("User disagreed.");
-    }
-  };
-  const handleCloseRemoveConfirm = (agreed: boolean) => {
-    setOpenRemoveCofirm(false);
-    if (agreed) {
-      console.log("user want to remove form favourite");
-      dispatch(favouriteActions.removeSongToData(songId));
-      removeFavorite({
-        variables: {
-          userId: user?.id,
-          songId: songId,
-        },
-      });
-    } else {
-      console.log("User disagreed.");
-    }
+  const handleRemoveLike = () => {
+    dispatch(favouriteActions.removeSongToData(songId));
+    removeFavorite({
+      variables: {
+        userId: user?.id,
+        songId: songId,
+      },
+    });
   };
 
   const handleWhatsAppClick = () => {
@@ -257,31 +231,18 @@ export default function SongCardLarge({
             {/* add to favourite */}
             {liked ? (
               <FavoriteIcon
-                onClick={handleOpenRemoveConfirm}
+                onClick={handleRemoveLike}
                 sx={{ color: red[400] }}
                 fontSize="small"
                 className="mx-3"
               />
             ) : (
               <FavoriteBorderIcon
-                onClick={handleOpenAddConfirm}
+                onClick={handleAddLike}
                 fontSize="small"
                 className="mx-3"
               />
             )}
-            {/* open the confirmation box */}
-            <ConfirmCard
-              open={openAddConfirm}
-              onClose={handleCloseAddConfirm}
-              desc={"Add Song to Favourite Playlist ?"}
-              button={"Add"}
-            />
-            <ConfirmCard
-              open={openRemoveConfirm}
-              onClose={handleCloseRemoveConfirm}
-              desc={"Remove song to Favourite Playlist ?"}
-              button={"Remove"}
-            />
 
             {/* three dot option */}
             <BsThreeDots onClick={handleDotsClick} size={22} />
@@ -353,4 +314,6 @@ export default function SongCardLarge({
       </div>
     </>
   );
-}
+};
+
+export default SongCardLarge;

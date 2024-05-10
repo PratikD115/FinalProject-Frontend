@@ -8,12 +8,12 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { RootState } from "../../../store";
 
-const Subscription : React.FC = () => {
+const Subscription: React.FC = () => {
   const [payment] = useMutation(paymentQuery);
-  const { user } = useSelector((state : RootState ) => state.user);
-  const { isLogin } = useSelector((state : RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
+  const { isLogin } = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  const handlePayment = async (price: number ) => {
+  const handlePayment = async (price: number) => {
     if (isLogin) {
       const { data } = await payment({
         variables: {
@@ -22,7 +22,8 @@ const Subscription : React.FC = () => {
         },
       });
       if (data) {
-        window.open(data.createSubscription, "_blank");
+        // window.open(data.createSubscription);
+        router.push(`${data.createSubscription}`);
       }
     } else {
       toast.error("Please login for Add Subscription");
@@ -35,8 +36,8 @@ const Subscription : React.FC = () => {
         <div className=" flex justify-center items-center">
           <div className="flex   justify-center items-center mt-32">
             <div className="border-2 w-80 mr-5 h-[425px] rounded-3xl p-4 flex flex-col items-center bg-gray-900">
-              <h3 className="mb-4 text-2xl font-semibold">Basic</h3>
-              <div className="flex justify-center items-baseline my-8">
+              <h3 className="mb-4 text-3xl mt-2 font-semibold">1 Month</h3>
+              <div className="flex justify-center items-baseline my-6">
                 <span className="mr-2 text-5xl font-extrabold">€3</span>
                 {/* <span class="text-gray-500 dark:text-gray-400">/month</span> */}
               </div>
@@ -49,6 +50,11 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
+                  <span>Join as artist</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <CheckIcon color="success" />
+
                   <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
@@ -56,11 +62,7 @@ const Subscription : React.FC = () => {
 
                   <span>Create your playlist</span>
                 </li>
-                <li className="flex items-center space-x-3">
-                  <CheckIcon color="success" />
-
-                  <span>Follow your favorite artist</span>
-                </li>
+                
               </ul>
               <button
                 type="button"
@@ -71,8 +73,8 @@ const Subscription : React.FC = () => {
               </button>
             </div>
             <div className="border-2 w-80 mr-5 h-[425px] rounded-3xl p-4 flex flex-col items-center bg-gray-900">
-              <h3 className="mb-4 text-2xl font-semibold">Standard</h3>
-              <div className="flex justify-center items-baseline my-8">
+              <h3 className="mb-4 text-3xl font-semibold mt-2">3 Month</h3>
+              <div className="flex justify-center items-baseline my-6">
                 <span className="mr-2 text-5xl font-extrabold">€8</span>
               </div>
               <ul role="list" className="mb-8 space-y-4 text-left">
@@ -84,6 +86,11 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
+                  <span>Join as artist</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <CheckIcon color="success" />
+
                   <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
@@ -91,11 +98,7 @@ const Subscription : React.FC = () => {
 
                   <span>Create your playlist</span>
                 </li>
-                <li className="flex items-center space-x-3">
-                  <CheckIcon color="success" />
-
-                  <span>Follow your favorite artist</span>
-                </li>
+               
               </ul>
               <button
                 type="button"
@@ -106,8 +109,8 @@ const Subscription : React.FC = () => {
               </button>
             </div>
             <div className="border-2 w-80 mr-5 h-[425px] rounded-3xl p-4 flex flex-col items-center bg-gray-900">
-              <h3 className="mb-4 text-2xl font-semibold">Premium</h3>
-              <div className="flex justify-center items-baseline my-8">
+              <h3 className="mb-4 text-3xl font-semibold mt-2">12 Month</h3>
+              <div className="flex justify-center items-baseline my-6">
                 <span className="mr-2 text-5xl font-extrabold">€29</span>
               </div>
               <ul role="list" className="mb-8 space-y-4 text-left">
@@ -119,6 +122,11 @@ const Subscription : React.FC = () => {
                 <li className="flex items-center space-x-3">
                   <CheckIcon color="success" />
 
+                  <span>Join as artist</span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <CheckIcon color="success" />
+
                   <span>Download songs</span>
                 </li>
                 <li className="flex items-center space-x-3">
@@ -126,11 +134,7 @@ const Subscription : React.FC = () => {
 
                   <span>Create your playlist</span>
                 </li>
-                <li className="flex items-center space-x-3">
-                  <CheckIcon color="success" />
-
-                  <span>Follow your favorite artist</span>
-                </li>
+              
               </ul>
               <button
                 type="button"
@@ -145,6 +149,6 @@ const Subscription : React.FC = () => {
       </Layout>
     </div>
   );
-}
+};
 
 export default Subscription;
