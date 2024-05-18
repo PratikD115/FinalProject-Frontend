@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { playlistActions } from "../store/playlistSlice";
 import { RootState } from "../store";
+import debounce from "debounce";
 
 interface ArtistInfo {
   id: string;
@@ -33,28 +34,21 @@ const Browser: React.FC = () => {
   const [clicked, setClicked] = useState(false);
   const [query, setQuery] = useState("");
   const [playlist, setPlaylist] = useState([]);
+  const [songResult, setSongResult] = useState([]);
+  const [artistResult, setArtistResult] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const { songData } = useSelector((state: RootState) => state.favourite);
 
   // send request for songs
-  const {
-    loading: songLoading,
-    error: songError,
-    data: searchedSong,
-  } = useQuery(searchSong, {
+  const { data: searchedSong } = useQuery(searchSong, {
     variables: {
       search: query,
     },
     skip: !clicked,
   });
 
-  // send request for artist
-  const {
-    loading: artistLoading,
-    error: artistError,
-    data: artistData,
-  } = useQuery(searchArtist, {
+  const { data: searchedArtist } = useQuery(searchArtist, {
     variables: {
       search: query,
     },
@@ -62,8 +56,12 @@ const Browser: React.FC = () => {
   });
 
   const handleSearch = (query: string) => {
-    setQuery(query);
-    setClicked(true);
+    if (query) {
+      setQuery(query);
+      setClicked(true);
+    } else {
+      setClicked(false);
+    }
   };
 
   const handleArtistClick = (id: string) => {
@@ -71,14 +69,18 @@ const Browser: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(searchedSong);
     if (searchedSong) {
-      setPlaylist(searchedSong.searchSong);
+      // console.log("songresult");
+      // console.log(searchedSong.searchSong);
+      setSongResult(searchedSong.searchSong);
     }
-  }, [searchedSong]);
+
+    if (searchedArtist) {
+      setArtistResult(searchedArtist.searchArtist);
+    }
+  }, [searchedSong, searchedArtist]);
 
   const handleSongClick = (playlist: any, index: number) => {
-    console.log(playlist[index]);
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -88,8 +90,8 @@ const Browser: React.FC = () => {
   };
   return (
     <>
-      <SearchBar onSearch={handleSearch} />
-      {!searchedSong && !artistData && (
+      <SearchBar onSearch={debounce(handleSearch, 1000)} />
+      {!searchedSong && !searchedArtist && (
         <>
           <div className="text-gray-500 mt-10 text-xl">
             Search your favorite song and artist...
@@ -104,7 +106,7 @@ const Browser: React.FC = () => {
               <Title title={"Searched Song :"} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
-              {searchedSong.searchSong.map((song: SongInfo, index: number) => (
+              {songResult.map((song: SongInfo, index: number) => (
                 <div className="h-52" key={index}>
                   <SongCardLarge
                     handleClick={() => handleSongClick(playlist, index)}
@@ -122,13 +124,13 @@ const Browser: React.FC = () => {
         )}
       </div>
       <div className="mt-10">
-        {artistData && (
+        {searchedArtist && (
           <div className="">
             <div className="mb-10">
               <Title title={"Searched Artist :"} />
             </div>
             <div className="grid grid-cols-3 md:grid-cols-4 sm:grid-cols-1 gap-5">
-              {artistData.searchArtist.map((artist: any, index: number) => (
+              {artistResult.map((artist: any, index: number) => (
                 <div className="mr-5" key={index}>
                   <ArtistCard
                     onClick={() => handleArtistClick(artist.id)}

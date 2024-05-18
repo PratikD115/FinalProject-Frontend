@@ -8,13 +8,10 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    onSearch(searchQuery);
-  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    onSearch(e.target.value);
   };
 
   return (
@@ -28,12 +25,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             value={searchQuery}
             onChange={handleChange}
           />
-          <button
-            onClick={handleClick}
+          <div
+           
             className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-700 bg-gray-800 border-r border-y border-gray-300 rounded-r-md hover:bg-gray-400 focus:outline-none "
           >
             <SearchIcon />
-          </button>
+          </div>
         </form>
       </div>
     </div>
