@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { searchArtist, searchSong } from "../Query/searchQuery";
 import ArtistCard from "../components/common/ArtistCard";
-import SongCardLarge from "../components/common/SongCardLarge";
 import Title from "../components/common/Title";
 import SearchBar from "../components/searchBar/SearchBar";
 import { useQuery } from "@apollo/client";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { playlistActions } from "../store/playlistSlice";
 import { RootState } from "../store";
 import debounce from "debounce";
+import SongCard from "../components/common/SongCard";
 
 interface ArtistInfo {
   id: string;
@@ -108,7 +108,7 @@ const Browser: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
               {songResult.map((song: SongInfo, index: number) => (
                 <div className="h-52" key={index}>
-                  <SongCardLarge
+                  <SongCard
                     handleClick={() => handleSongClick(playlist, index)}
                     imageLink={song.imageLink}
                     songName={song.title}
@@ -116,6 +116,7 @@ const Browser: React.FC = () => {
                     songId={song.id}
                     songUrl={song.streamingLink}
                     liked={songData.includes(song.id)}
+                    type="large"
                   />
                 </div>
               ))}

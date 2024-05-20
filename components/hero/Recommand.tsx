@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Title from "../common/Title";
 import { useQuery } from "@apollo/client";
-import SongCardSmall from "../common/SongCardSmall";
 import { recommandedSongs } from "../../Query/playlistQuery";
 import { PlaylistItem, playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Song } from "../artist/ArtistProfile";
+import SongCard from "../common/SongCard";
 const Recommand : React.FC = () =>  {
   interface ArtistInfo {
     id: string;
@@ -57,7 +57,7 @@ const Recommand : React.FC = () =>  {
         <div className="grid grid-cols-2 gap-5">
           {playlist.map((item : SongInfo , index:number) => (
             <div className="" key={index}>
-              <SongCardSmall
+              <SongCard
                 handleClick={() => handleSongClick(playlist, index)}
                 imageLink={item.imageLink}
                 songName={item.title}
@@ -65,6 +65,7 @@ const Recommand : React.FC = () =>  {
                 songId={item.id}
                 songUrl={item.streamingLink}
                 liked={songData.includes(item.id)}
+                type="small"
               />
             </div>
           ))}

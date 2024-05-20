@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import SongCardSmall from "./common/SongCardSmall";
 import { playlistActions } from "../store/playlistSlice";
-import { useDebugValue } from "react";
 import { RootState } from "../store";
+import SongCard from "./common/SongCard";
 
 const Playlist = () => {
   const { playlist } = useSelector((state: RootState) => state.playlist);
@@ -52,7 +51,7 @@ const Playlist = () => {
           <div className="text-3xl text-gray-400 my-7 mx-4 ">Playlist </div>
           {playlist?.map((song: any, index: number) => (
             <div key={index}>
-              <SongCardSmall
+              <SongCard
                 handleClick={() => handleSongClick(index)}
                 imageLink={song.imageLink}
                 songName={song.title}
@@ -60,6 +59,7 @@ const Playlist = () => {
                 songId={song.id}
                 songUrl={song.streamingLink}
                 liked={songData.includes(song.id)}
+                type="small"
               />
             </div>
           ))}

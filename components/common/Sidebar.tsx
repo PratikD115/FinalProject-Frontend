@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
-import SongCardSmall from "./SongCardSmall";
+import { useQuery } from "@apollo/client";
 import { mostLikedSong } from "../../Query/playlistQuery";
 import Title from "./Title";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../store/playlistSlice";
 import { RootState } from "../../store";
 import { Song } from "../artist/ArtistProfile";
+import SongCard from "./SongCard";
 
 const Sidebar: React.FC = () => {
   const { loading, error, data } = useQuery(mostLikedSong);
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
         <div className="w-full">
           {data.getAllActiveSongs.map((item: SongInfo, index: number) => (
             <div key={index} className="mb-3 ">
-              <SongCardSmall
+              <SongCard
                 handleClick={() => handleSongClick(playlist, index)}
                 imageLink={item.imageLink}
                 songName={item.title}
@@ -66,6 +66,7 @@ const Sidebar: React.FC = () => {
                 songId={item.id}
                 songUrl={item.streamingLink}
                 liked={songData.includes(item.id)}
+                type="small"
               />
             </div>
           ))}

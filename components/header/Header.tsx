@@ -98,13 +98,7 @@ const Header = () => {
               >
                 <Link href="/about">About Us</Link>
               </li>
-              <li
-                className={`mx-5 py-2 ${
-                  router.pathname === "/contact" ? "active" : ""
-                }`}
-              >
-                <Link href="/contact">Contact Us</Link>
-              </li>
+             
             </ul>
           </div>
         </div>

@@ -113,6 +113,9 @@ query( $userId : String!){
                  streamingLink
                  imageLink
                  id
+                 artist{
+                  name
+                 }
             }
        }
        

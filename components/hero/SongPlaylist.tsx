@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Title from "../common/Title";
-import SongCardLarge from "../common/SongCardLarge";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import SongCard from "../common/SongCard";
 
 const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
   title,
@@ -69,7 +69,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
         <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
           {playlist?.map((item: SongInfo, index: number) => (
             <div className="box card hero" key={index}>
-              <SongCardLarge
+              <SongCard
                 handleClick={() => handleSongClick(playlist, index)}
                 imageLink={item.imageLink}
                 songName={item.title}
@@ -77,6 +77,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
                 songId={item.id}
                 songUrl={item.streamingLink}
                 liked={songData.includes(item.id)}
+                type="large"
               />
             </div>
           ))}

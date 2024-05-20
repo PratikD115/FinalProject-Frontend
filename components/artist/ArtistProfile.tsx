@@ -8,13 +8,13 @@ import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import { ARTIST } from "../../Query/artistQuery";
 import { playlistActions } from "../../store/playlistSlice";
-import SongCardSmall from "../common/SongCardSmall";
 import { addArtist, removeArtist } from "../../Query/userQuery";
 import toast from "react-hot-toast";
 import { favouriteActions } from "../../store/favoriteSlice";
 import { RootState } from "../../store";
 import Error from "next/error";
 import { ScaleLoader } from "react-spinners";
+import SongCard from "../common/SongCard";
 
 export interface ArtistInfo {
   id: string;
@@ -206,7 +206,7 @@ export default function ArtistProfile() {
           <div className="mt-5">
             {artistInfo.songs?.map((song: Song, index: number) => (
               <div className="" key={index}>
-                <SongCardSmall
+                <SongCard
                   handleClick={() => {
                     handleSongClick(playlist, index);
                   }}
@@ -216,6 +216,7 @@ export default function ArtistProfile() {
                   songId={song.id}
                   songUrl={song.streamingLink}
                   liked={songData.includes(song.id)}
+                  type="small"
                 />
               </div>
             ))}

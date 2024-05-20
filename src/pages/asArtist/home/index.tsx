@@ -3,25 +3,22 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ArtistSong } from "../../../../Query/artistQuery";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SongCardSmall from "../../../../components/common/SongCardSmall";
 import Title from "../../../../components/common/Title";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { userActions } from "../../../../store/userSlice";
 import { Genres, Language, Mood } from "../../../../Query/enum";
 import { RootState } from "../../../../store";
 import { createSongLink } from "../../../../Query/songQuery";
 import { cloudinaryUpload } from "../../../../utils/imageUpload";
+import SongCard from "../../../../components/common/SongCard";
 
-const drawerWidth = 300;
+
 
 const PermanentDrawer = () => {
   const [openMenu, setOpenMenu] = useState<number>(0);
   const [songData, setSongData] = useState([]);
   const { asArtist } = useSelector((state: RootState) => state.user);
-  const router = useRouter();
   const songNameRef = useRef<HTMLInputElement>(null);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
   const selectLanguageRef = useRef<HTMLSelectElement>(null);
   const selectGenresRef = useRef<HTMLSelectElement>(null);
   const selectMoodRef = useRef<HTMLSelectElement>(null);
@@ -172,7 +169,7 @@ const PermanentDrawer = () => {
           {openMenu === 0 &&
             songData?.map((item: SongInfo, index: number) => (
               <div key={index} className="">
-                <SongCardSmall
+                <SongCard
                   handleClick={() => handleSongClick()}
                   imageLink={item.imageLink}
                   songName={item.title}
@@ -180,6 +177,7 @@ const PermanentDrawer = () => {
                   songId={item.id}
                   songUrl={item.streamingLink}
                   liked={false}
+                  type="small"
                 />
               </div>
             ))}

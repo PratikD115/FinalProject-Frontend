@@ -1,6 +1,5 @@
 import { userInfo, uploadImage } from "../../../Query/userQuery";
 import ArtistCard from "../../../components/common/ArtistCard";
-import SongCardLarge from "../../../components/common/SongCardLarge";
 import Title from "../../../components/common/Title";
 import Layout from "../../../components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
@@ -15,6 +14,7 @@ import { userActions } from "../../../store/userSlice";
 import { useRouter } from "next/router";
 import { RootState } from "../../../store";
 import { cloudinaryUpload } from "../../../utils/imageUpload";
+import SongCard from "../../../components/common/SongCard";
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -145,7 +145,7 @@ const Profile: React.FC = () => {
                 {userProfile?.favourite?.map(
                   (item: SongInfo, index: number) => (
                     <div className="box card hero" key={index}>
-                      <SongCardLarge
+                      <SongCard
                         handleClick={() => handleSongClick(playlist, index)}
                         imageLink={item.imageLink}
                         songName={item.title}
@@ -153,6 +153,7 @@ const Profile: React.FC = () => {
                         songId={item.id}
                         songUrl={item.streamingLink}
                         liked={songData.includes(item.id)}
+                        type="large"
                       />
                     </div>
                   )
