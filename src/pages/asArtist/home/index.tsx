@@ -98,11 +98,7 @@ const PermanentDrawer = () => {
       audioLink = await cloudinaryUpload(audio, "song-audio");
     }
 
-    console.log(songNameRef.current?.value);
-    console.log(selectGenresRef.current?.value);
-    console.log(selectLanguageRef.current?.value);
-    console.log(selectMoodRef.current?.value);
-
+  
     let genresArray = [];
     genresArray.push(selectGenresRef.current.value);
 
@@ -142,7 +138,6 @@ const PermanentDrawer = () => {
   }, [data]);
 
   const handleSongClick = () => {
-    console.log("artist click on the song ");
   };
   return (
     <div className="">

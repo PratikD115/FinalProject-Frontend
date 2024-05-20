@@ -3,7 +3,7 @@ import img from "../../../public/images/login.jpg";
 import Link from "next/link";
 import { LOGIN } from "../../../Query/authQuery";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useMutation } from "@apollo/client";
 import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
@@ -24,18 +24,15 @@ const LoginForm: React.FC = () => {
     const enteredPassword = passwordInputRef.current?.value;
 
     try {
-      console.log("jsut entered");
       const { data } = await login({
         variables: {
           email: enteredEmail,
           password: enteredPassword,
         },
       });
-      console.log(data);
       if (data) {
         const { token, ...user } = data.login;
-        console.log("user");
-        console.log(user);
+       
         setAuthTokenInCookie(token);
         dispatch(
           userActions.login({

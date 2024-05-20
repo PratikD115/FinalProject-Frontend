@@ -72,9 +72,6 @@ const ArtistHome = () => {
       if (selectLanguageRef.current) selectLanguageRef.current.value = "";
       if (data) {
         toast.success("artist Profile create suceessfully");
-        console.log(data);
-        console.log(data.createUserToArtist.id);
-        console.log(typeof data.createUserToArtist.id);
         dispatch(
           userActions.asArtist({ artistId: data.createUserToArtist.id })
         );
@@ -87,7 +84,7 @@ const ArtistHome = () => {
   };
 
   const handleDashboard = () => {
-    console.log(subscribe);
+  
     if (subscribe && isSubscriptionValid(subscribe)) {
       if (asArtist) {
         router.push("asArtist/home");

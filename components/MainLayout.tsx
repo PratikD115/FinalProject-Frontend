@@ -83,7 +83,7 @@ const MainLayout = () => {
       const { favourite, follow, ...user } = getUserById;
       const artistData = follow?.map((item: { id: string }) => item.id);
       const songData = favourite?.map((item: { id: string }) => item.id);
-      console.log(user);
+    
 
       dispatch(
         userActions.login({

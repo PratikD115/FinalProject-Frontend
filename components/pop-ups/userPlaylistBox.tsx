@@ -26,12 +26,10 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const playlistInfo = data.getUserById.playlist?.map(
         (playlistObj: any) => playlistObj // Assuming 'name' is the property containing the playlist name
       );
       setPlaylists(playlistInfo);
-      console.log(playlistInfo);
     }
   }, [data]);
   // Call refetch whenever the component re-renders
@@ -54,7 +52,6 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
   // input the data from the user
   const handleChange = (event: any) => {
     setInputValue(event.target.value);
-    console.log(event.target.value);
   };
 
   return (

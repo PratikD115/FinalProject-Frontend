@@ -4,24 +4,42 @@ import Title from "../../../components/common/Title";
 import Layout from "../../../components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../../store/playlistSlice";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { userActions } from "../../../store/userSlice";
 import { useRouter } from "next/router";
 import { RootState } from "../../../store";
 import { cloudinaryUpload } from "../../../utils/imageUpload";
 import SongCard from "../../../components/common/SongCard";
+import Divider from "@mui/material/Divider";
+
+interface ArtistInfo {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  biography: string;
+  imageLink: string;
+  songs: SongInfo[];
+}
+
+interface SongInfo {
+  id: string;
+  title: string;
+  imageLink: string;
+  songUrl: string;
+  songId: string;
+  artist: ArtistInfo;
+  streamingLink: string;
+}
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
-  const { loading, error, data, refetch } = useQuery(userInfo, {
+  const { data, refetch } = useQuery(userInfo, {
     variables: {
       userId: user?.id,
     },
@@ -31,29 +49,11 @@ const Profile: React.FC = () => {
   const [playlist, setPlaylist] = useState<any>([]);
   const [image, setImage] = useState<File | null>(null);
   const [uploadImageLink] = useMutation(uploadImage);
+  const { songData } = useSelector((state: RootState) => state.favourite);
+
   const handleImageChange = (event: any) => {
     setImage(event.target.files[0]);
   };
-  const { songData } = useSelector((state: RootState) => state.favourite);
-
-  interface ArtistInfo {
-    id: string;
-    name: string;
-    dateOfBirth: string;
-    biography: string;
-    imageLink: string;
-    songs: SongInfo[];
-  }
-
-  interface SongInfo {
-    id: string;
-    title: string;
-    imageLink: string;
-    songUrl: string;
-    songId: string;
-    artist: ArtistInfo;
-    streamingLink: string;
-  }
 
   useEffect(() => {
     if (refetch) {
@@ -78,21 +78,23 @@ const Profile: React.FC = () => {
     );
   };
   const handleArtistClick = (artistId: string) => {
-    console.log(artistId);
+  
     router.push(`/artist/${artistId}`);
   };
 
+  const handleYourPlaylist = () => {
+    router.push("/playlist");
+  };
   const handleUpload = async () => {
     if (!image) {
       toast.error("No file selected");
       return;
     }
-
     const imageLink = await cloudinaryUpload(image, "user-Image");
-    const { data } =await uploadImageLink({
+    const { data } = await uploadImageLink({
       variables: {
         userId: user?.id,
-        imageLink
+        imageLink,
       },
     });
     if (data) {
@@ -119,23 +121,15 @@ const Profile: React.FC = () => {
               <input type="file" onChange={handleImageChange} />
               <button onClick={handleUpload}> upload</button>
             </div>
-            <div className="mt-10">
-              <Title title={"Your Playlists"} />
-              <div className="">
-                {userProfile?.playlist.map((playlist: any, index: number) => (
-                  <div key={index}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      style={{ backgroundColor: "#44454a", color: "white" }}
-                      className="w-full my-1 "
-                    >
-                      {playlist.playlistName}
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ul className="text-base mt-5">
+              <li
+                onClick={handleYourPlaylist}
+                className="flex items-center flex-col mb-2 text-gray-400 cursor-pointer"
+              >
+                Your Playlist
+              </li>
+              <Divider color="white" variant="middle" />
+            </ul>
           </div>
 
           <div className="w-[80%] px-5">

@@ -47,7 +47,6 @@ const Recommand : React.FC = () =>  {
         index,
       })
     );
-    console.log("click the button!!!!");
   };
 
   return (

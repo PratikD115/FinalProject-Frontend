@@ -47,7 +47,7 @@ export default function ArtistProfile() {
   const [addArtistToFollow] = useMutation(addArtist);
   const [removeArtistToFollow] = useMutation(removeArtist);
 
-  const { loading, error, data } = useQuery(ARTIST, {
+  const { loading, data } = useQuery(ARTIST, {
     variables: {
       id: router.query.artistId,
       page,
@@ -135,8 +135,7 @@ export default function ArtistProfile() {
         />
       </div>
     );
-  if (error) {return toast.error("something is wrong")}
-
+ 
   return (
     <div className="flex pb-52">
       <div className="w-[30%] p-5">

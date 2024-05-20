@@ -1,10 +1,11 @@
 import { useQuery } from "@apollo/client";
 import Header from "../../../components/header/Header";
 import { userPlaylist } from "../../../Query/playlistQuery";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { useEffect, useState } from "react";
 import SongCard from "../../../components/common/SongCard";
+import { playlistActions } from "../../../store/playlistSlice";
 
 interface Song {
   title: string;
@@ -24,26 +25,35 @@ const Playlist: React.FC = () => {
   const [playlistArr, setPlaylistArr] = useState<Playlist[]>([]);
   const { user } = useSelector((state: RootState) => state.user);
   const [showIndex, setShowIndex] = useState<number>(0);
+  const [playlist, setPlaylist] = useState([]);
+
   const { songData } = useSelector((state: RootState) => state.favourite);
   const { data } = useQuery(userPlaylist, {
     variables: {
       userId: user?.id,
     },
   });
+  const dispatch = useDispatch();
   useEffect(() => {
     if (data) {
       const {
         getUserById: { playlist },
       } = data;
       setPlaylistArr(playlist);
-      console.log(playlist);
-    } else {
-      console.log("not data availabel");
+      setPlaylist(playlist[showIndex].songs);
     }
-  }, [data]);
-  const handleSongClick = () => {
-    console.log("done");
+  }, [data, showIndex]);
+
+  const handleSongClick = (playlist: any, index: number) => {
+   
+    dispatch(
+      playlistActions.setPlaylistAndIndex({
+        playlist,
+        index,
+      })
+    );
   };
+
   const selectPlaylist = (index: number) => {
     setShowIndex(index);
   };
@@ -79,7 +89,7 @@ const Playlist: React.FC = () => {
               {playlistArr[showIndex].songs.map((song: Song, index: number) => (
                 <div className="box card hero" key={index}>
                   <SongCard
-                    handleClick={() => handleSongClick()}
+                    handleClick={() => handleSongClick(playlist, index)}
                     imageLink={song.imageLink}
                     songName={song.title}
                     artistName={song.artist.name}

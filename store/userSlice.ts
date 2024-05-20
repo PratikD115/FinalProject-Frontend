@@ -62,7 +62,6 @@ const userSlice = createSlice({
       state.profile = action.payload.imageLink;
     },
     asArtist(state, action: PayloadAction<{ artistId: string }>) {
-      console.log(action.payload.artistId);
       state.asArtist = action.payload.artistId;
     },
   },

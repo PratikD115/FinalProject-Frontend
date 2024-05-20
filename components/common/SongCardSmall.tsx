@@ -164,7 +164,6 @@ const SongCardSmall: React.FC<SongCardSmallProps> = ({
   });
 
   const handleAddLike = () => {
-    console.log("user remove from list");
     dispatch(favouriteActions.setSongToData(songId));
     addFavorite({
       variables: {

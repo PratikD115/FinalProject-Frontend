@@ -10,6 +10,7 @@ import { playlistActions } from "../store/playlistSlice";
 import { RootState } from "../store";
 import debounce from "debounce";
 import SongCard from "../components/common/SongCard";
+import { ScaleLoader } from "react-spinners";
 
 interface ArtistInfo {
   id: string;
@@ -41,19 +42,22 @@ const Browser: React.FC = () => {
   const { songData } = useSelector((state: RootState) => state.favourite);
 
   // send request for songs
-  const { data: searchedSong } = useQuery(searchSong, {
+  const { loading: songLoading, data: searchedSong } = useQuery(searchSong, {
     variables: {
       search: query,
     },
     skip: !clicked,
   });
 
-  const { data: searchedArtist } = useQuery(searchArtist, {
-    variables: {
-      search: query,
-    },
-    skip: !clicked,
-  });
+  const { loading: artistLoading, data: searchedArtist } = useQuery(
+    searchArtist,
+    {
+      variables: {
+        search: query,
+      },
+      skip: !clicked,
+    }
+  );
 
   const handleSearch = (query: string) => {
     if (query) {
@@ -70,9 +74,9 @@ const Browser: React.FC = () => {
 
   useEffect(() => {
     if (searchedSong) {
-      // console.log("songresult");
-      // console.log(searchedSong.searchSong);
+     
       setSongResult(searchedSong.searchSong);
+      setPlaylist(searchedSong.searchSong);
     }
 
     if (searchedArtist) {
@@ -81,6 +85,7 @@ const Browser: React.FC = () => {
   }, [searchedSong, searchedArtist]);
 
   const handleSongClick = (playlist: any, index: number) => {
+   
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -98,6 +103,19 @@ const Browser: React.FC = () => {
           </div>
         </>
       )}
+      {(songLoading || artistLoading) && (
+        <div className="flex justify-center items-center min-h-screen">
+          <ScaleLoader
+            color="rgba(40, 189, 41, 1)"
+            height={15}
+            loading={true}
+            margin={3}
+            radius={3}
+            speedMultiplier={2}
+            width={4}
+          />
+        </div>
+      )}
 
       <div className="mt-10">
         {searchedSong && (
@@ -105,6 +123,7 @@ const Browser: React.FC = () => {
             <div className="mb-10">
               <Title title={"Searched Song :"} />
             </div>
+
             <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
               {songResult.map((song: SongInfo, index: number) => (
                 <div className="h-52" key={index}>

@@ -20,12 +20,20 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { RootState } from "../../store";
 
+interface SliderProps {
+  value: number;
+  max: number;
+  onChange: (event: Event) => void; // Define the type for onChange
+  size: string;
+  className: string;
+}
+
 const Player = () => {
   const { playlist } = useSelector((state: RootState) => state.playlist);
   const { index } = useSelector((state: RootState) => state.playlist);
   const audioPlayer: any = useRef<HTMLAudioElement>(null);
   const [volume, setVolume] = useState(30);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [mute, setMute] = useState(false);
   const [elapsed, setElapsed] = useState<number>(0);
   const [duration, setDuration] = useState(0);
@@ -33,21 +41,15 @@ const Player = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  interface SliderProps {
-    value: number;
-    max: number;
-    onChange: (event: Event) => void; // Define the type for onChange
-    size: string;
-    className: string;
-  }
-
   useEffect(() => {
+    console.log("working volume");
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
-    if (isPlaying) {
-      audioPlayer.current?.play();
+  }, [volume]);
 
+  useEffect(() => {
+    if (isPlaying) {
       const interval = setInterval(() => {
         const _duration = Math.floor(audioPlayer.current?.duration);
         const _elapsed = Math.floor(audioPlayer.current?.currentTime);
@@ -60,10 +62,16 @@ const Player = () => {
 
       return () => clearInterval(interval);
     }
-  }, [volume, isPlaying, index]);
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (currentSong) {
+      audioPlayer.current?.play();
+      setIsPlaying(true);
+    }
+  }, [index]);
 
   const handleSliderChange = (event: any, newValue: any) => {
-    console.log("in the function");
     setElapsed(newValue);
     if (newValue) {
       audioPlayer.current.currentTime = newValue;
@@ -190,12 +198,12 @@ const Player = () => {
               className="h-16 w-16 rounded-md border-2 border-gray-400 mr-5"
             />
 
-            <div className="text h-auto w-44">
+            <div className="text h-auto w-44 overflow-hidden">
               <h3 className="text-base text-gray-400 font-semibold">
                 {playlist[index]?.title}
               </h3>
-              <span className="text-gray-500 text-sm overflow-ellipsis">
-                {playlist[index]?.artist?.name} -{playlist[index]?.title}
+              <span className="text-gray-500 text-sm overflow-x-hidden">
+                {playlist[index]?.artist?.name}
               </span>
             </div>
           </div>
