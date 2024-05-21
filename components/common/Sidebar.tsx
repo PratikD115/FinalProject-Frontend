@@ -56,7 +56,7 @@ const Sidebar: React.FC = () => {
       <section className="sidebar hero ">
         <Title title={" Most Liked songs"} />
         <div className="w-full">
-          {data.getAllActiveSongs.map((item: SongInfo, index: number) => (
+          {data.mostLikedSong.map((item: SongInfo, index: number) => (
             <div key={index} className="mb-3 ">
               <SongCard
                 handleClick={() => handleSongClick(playlist, index)}

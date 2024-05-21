@@ -9,7 +9,7 @@ const initialFavoriteState: FavoriteState = {
   artistData: [],
   songData: [],
 };
-console.log(initialFavoriteState);
+
 const favouriteSlice = createSlice({
   name: "favorite",
   initialState: initialFavoriteState,

@@ -49,13 +49,14 @@ export const punjabiTop20Playlist = gql`
 
 export const mostLikedSong = gql`
   query {
-    getAllActiveSongs(limit: 7) {
+    mostLikedSong {
       id
       title
       artist {
         id
         name
       }
+
       imageLink
       streamingLink
     }
@@ -104,21 +105,20 @@ export const addSongToPlaylist = gql`
 `;
 
 export const userPlaylist = gql`
-query( $userId : String!){
-  getUserById(userId: $userId ) {
-       playlist{
-            playlistName
-            songs{
-                 title
-                 streamingLink
-                 imageLink
-                 id
-                 artist{
-                  name
-                 }
-            }
-       }
-       
+  query ($userId: String!) {
+    getUserById(userId: $userId) {
+      playlist {
+        playlistName
+        songs {
+          title
+          streamingLink
+          imageLink
+          id
+          artist {
+            name
+          }
+        }
+      }
+    }
   }
-}
 `;

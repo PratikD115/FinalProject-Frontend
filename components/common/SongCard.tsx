@@ -1,10 +1,8 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { AiOutlineHeart } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
-import ConfirmCard from "../pop-ups/dialogBox";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert, Menu, MenuItem, Snackbar } from "@mui/material";
+import { Menu, MenuItem, Snackbar } from "@mui/material";
 import { useRouter } from "next/router";
 import { addToFavourite, removeToFavourite } from "../../Query/userQuery";
 import { useMutation, useQuery } from "@apollo/client";
@@ -54,7 +52,6 @@ const SongCard = ({
 }: SongCardProps) => {
   const { isLogin } = useSelector((state: RootState) => state.user);
   const { user } = useSelector((state: RootState) => state.user);
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const [userPlaylist, setUserPlaylist] = useState(false);
   const [downloading, setDownloading] = useState(false);

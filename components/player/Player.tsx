@@ -42,7 +42,6 @@ const Player = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("working volume");
     if (audioPlayer.current) {
       audioPlayer.current.volume = volume / 100;
     }
@@ -167,6 +166,25 @@ const Player = () => {
       toast.error("please select the playlist");
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        if (audioPlayer.current.paused) {
+          audioPlayer.current.play();
+          setIsPlaying(true);
+        } else {
+          audioPlayer.current.pause();
+          setIsPlaying(false);
+        }
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className="z-10 bg-gray-700 fixed bottom-0 w-full h-[17vh] text-white ">
