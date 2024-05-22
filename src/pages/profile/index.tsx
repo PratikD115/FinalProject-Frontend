@@ -3,7 +3,6 @@ import ArtistCard from "../../../components/common/ArtistCard";
 import Title from "../../../components/common/Title";
 import Layout from "../../../components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
-import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../../store/playlistSlice";
@@ -14,6 +13,7 @@ import { RootState } from "../../../store";
 import { cloudinaryUpload } from "../../../utils/imageUpload";
 import SongCard from "../../../components/common/SongCard";
 import Divider from "@mui/material/Divider";
+import Image from "next/image";
 
 interface ArtistInfo {
   id: string;
@@ -78,12 +78,15 @@ const Profile: React.FC = () => {
     );
   };
   const handleArtistClick = (artistId: string) => {
-  
     router.push(`/artist/${artistId}`);
   };
 
   const handleYourPlaylist = () => {
     router.push("/playlist");
+  };
+
+  const handleImageCancel = () => {
+    setImage(null);
   };
   const handleUpload = async () => {
     if (!image) {
@@ -108,18 +111,66 @@ const Profile: React.FC = () => {
         <div className="flex">
           <div className="w-[20%] ">
             <div className="card hero box w-52 m-auto mt-8  mx-auto ">
-              <div className=" flex justify-center mx-auto">
-                <ArtistCard
-                  artistImage={profile || ""}
-                  artistName={userProfile?.name}
-                />
+              <div className=" flex justify-center mx-auto w-44">
+                <button
+                  onClick={() => {
+                    const inputElement = document.getElementById("imageInput");
+                    if (inputElement) {
+                      inputElement.click();
+                    }
+                  }}
+                >
+                  <div className="rounded-full bg-black bg-opacity-50 flex justify-center items-center opacity-100 transition-opacity duration-300 hover:opacity-80">
+                    <Image
+                      src={profile || ""}
+                      alt=""
+                      height={200}
+                      width={200}
+                      className="h-44 rounded-full border-2 border-gray-500 cursor-pointer shadow-custom"
+                    />
+                  </div>
+                </button>
               </div>
             </div>
-            <br />
-            <br />
+
             <div className="px-3 flex justify-end w-auto">
-              <input type="file" onChange={handleImageChange} />
-              <button onClick={handleUpload}> upload</button>
+              {!image && (
+                <button
+                  className="mt-2 mr-2 text-green-500"
+                  onClick={() => {
+                    const inputElement = document.getElementById("imageInput");
+                    if (inputElement) {
+                      inputElement.click();
+                    }
+                  }}
+                >
+                  Edit
+                </button>
+              )}
+              {image && (
+                <button
+                  onClick={handleUpload}
+                  className="mt-2 mr-2 text-green-500"
+                >
+                  Upload
+                </button>
+              )}
+              {image && (
+                <button
+                  onClick={handleImageCancel}
+                  className="mt-2 text-red-500"
+                >
+                  Cancel
+                </button>
+              )}
+
+              <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
             </div>
             <ul className="text-base mt-5">
               <li

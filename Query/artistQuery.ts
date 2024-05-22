@@ -31,7 +31,7 @@ interface AllActiveArtistData {
 }
 
 export const ARTIST = gql`
-  query ($id: String!, $page: Float!, $limit: Float!) {
+  query ($id: String!) {
     getArtistById(id: $id) {
       id
       name
@@ -39,6 +39,13 @@ export const ARTIST = gql`
       dateOfBirth
       genres
       biography
+     
+    }
+  }
+`;
+export const artistSong = gql`
+  query ($id: String!, $page: Float!, $limit: Float!) {
+    getArtistById(id: $id) {
       songs(page: $page, limit: $limit) {
         id
         title
@@ -53,6 +60,8 @@ export const ARTIST = gql`
     }
   }
 `;
+
+
 
 export const GET_DATA = gql`
   query {

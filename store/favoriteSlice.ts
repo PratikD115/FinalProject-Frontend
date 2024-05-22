@@ -34,7 +34,10 @@ const favouriteSlice = createSlice({
       );
     },
     setArtistToData(state, action: PayloadAction<string>) {
-      state.artistData.push(action.payload)
+      state.artistData.push(action.payload);
+    },
+    removeArtistAndSong(state) {
+      (state.artistData = []), (state.songData = []);
     },
   },
 });

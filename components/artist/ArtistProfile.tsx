@@ -3,18 +3,20 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { ARTIST } from "../../Query/artistQuery";
+import { ARTIST, artistSong } from "../../Query/artistQuery";
 import { playlistActions } from "../../store/playlistSlice";
 import { addArtist, removeArtist } from "../../Query/userQuery";
 import toast from "react-hot-toast";
 import { favouriteActions } from "../../store/favoriteSlice";
 import { RootState } from "../../store";
-import Error from "next/error";
 import { ScaleLoader } from "react-spinners";
 import SongCard from "../common/SongCard";
+import { Artist, Song } from "../../interface";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export interface ArtistInfo {
   id: string;
@@ -25,7 +27,7 @@ export interface ArtistInfo {
   songs: Song[];
 }
 
-export interface Song {
+export interface SongInfo {
   id: string;
   title: string;
   imageLink: string;
@@ -38,7 +40,8 @@ export interface Song {
 export default function ArtistProfile() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [playlist, setPlaylist] = useState([]);
+  const [mainIndex, setMainIndex] = useState<number>(0);
+  const [playlist, setPlaylist] = useState([[]]);
   const { user } = useSelector((state: RootState) => state.user);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -46,8 +49,15 @@ export default function ArtistProfile() {
   const { artistData } = useSelector((state: RootState) => state.favourite);
   const [addArtistToFollow] = useMutation(addArtist);
   const [removeArtistToFollow] = useMutation(removeArtist);
+  const [hasMore, setHasMore] = useState(true);
 
   const { loading, data } = useQuery(ARTIST, {
+    variables: {
+      id: router.query.artistId,
+    },
+  });
+
+  const { loading: songsLoading, data: songsData } = useQuery(artistSong, {
     variables: {
       id: router.query.artistId,
       page,
@@ -55,7 +65,7 @@ export default function ArtistProfile() {
     },
   });
 
-  const [artistInfo, setArtistInfo] = useState<ArtistInfo>({
+  const [artistInfo, setArtistInfo] = useState<Partial<Artist>>({
     id: "",
     name: "",
     dateOfBirth: "",
@@ -68,30 +78,50 @@ export default function ArtistProfile() {
     if (data) {
       const { getArtistById } = data;
       setArtistInfo(getArtistById);
-      setPlaylist(getArtistById.songs);
     }
-  }, [router.query.artistId, data]);
+  }, [data]);
+
+  useEffect(() => {
+    if (songsData) {
+      const { getArtistById } = songsData;
+
+      if (getArtistById.songs.length < 10) {
+        setHasMore(false);
+      }
+      console.log(getArtistById.songs);
+      setPlaylist((prevPages) => {
+        const newPages = [...prevPages];
+        newPages[page - 1] = getArtistById.songs;
+        return newPages;
+      });
+    }
+  }, [songsData]);
 
   function handlePlayNow() {
+    const flatPlaylist = playlist.flat();
     dispatch(
       playlistActions.setPlaylistAndIndex({
-        playlist: playlist,
+        playlist: flatPlaylist,
         index: 0,
       })
     );
   }
 
-  function handleSongClick(playlist: any, index: number) {
+  function handleSongClick(index: number, songIndex: number) {
+    const flatPlaylist = playlist.flat();
+    const finalIndex = index * 10 + songIndex;
+    console.log(flatPlaylist);
     dispatch(
       playlistActions.setPlaylistAndIndex({
-        playlist,
-        index,
+        playlist: flatPlaylist,
+        index: finalIndex,
       })
     );
   }
 
   const handleFollow = async () => {
-    dispatch(favouriteActions.setArtistToData(artistInfo?.id));
+    if (artistInfo.id)
+      dispatch(favouriteActions.setArtistToData(artistInfo?.id));
     await addArtistToFollow({
       variables: {
         userId: user?.id,
@@ -102,9 +132,11 @@ export default function ArtistProfile() {
   };
   async function handleUnfollow() {
     try {
-      dispatch(favouriteActions.removeArtistToData(artistInfo.id));
+      if (artistInfo.id) {
+        dispatch(favouriteActions.removeArtistToData(artistInfo.id));
+      }
 
-      const { data } = await removeArtistToFollow({
+      await removeArtistToFollow({
         variables: {
           userId: user?.id,
           artistId: router.query.artistId,
@@ -117,13 +149,33 @@ export default function ArtistProfile() {
   }
 
   function handleViewMore() {
-    setLimit(20);
+    if (mainIndex + 1 === page) {
+      setPage((prev) => prev + 1);
+      setMainIndex((prev) => prev + 1);
+    } else {
+      setMainIndex((prev) => prev + 1);
+      if (mainIndex + 2 === page) {
+        setHasMore(false);
+      }
+    }
+  }
+
+  function handleViewLess() {
+    console.log(mainIndex + 1);
+
+    setMainIndex((prev) => {
+      if (prev < 0) {
+        return prev;
+      } else {
+        return prev - 1;
+      }
+    });
+    setHasMore(true);
   }
 
   if (loading)
     return (
       <div className=" h-screen flex justify-center items-center">
-        {" "}
         <ScaleLoader
           color="rgba(40, 189, 41, 1)"
           height={15}
@@ -135,26 +187,28 @@ export default function ArtistProfile() {
         />
       </div>
     );
- 
+
   return (
     <div className="flex pb-52">
       <div className="w-[30%] p-5">
         <div className="img relative h-64 w-64 m-auto">
-          <Image
-            src={artistInfo.imageLink}
-            alt="cover"
-            width={558}
-            height={558}
-            objectFit="cover"
-            className="w-full h-full object-cover rounded-full"
-          />
+          {artistInfo.imageLink && (
+            <Image
+              src={artistInfo.imageLink}
+              alt="cover"
+              width={558}
+              height={558}
+              objectFit="cover"
+              className="w-full h-full object-cover rounded-full"
+            />
+          )}
         </div>
 
         <div className="border border-gray-800 rounded-xl p-2 mt-5">
           <div className="text-2xl text-gray-300 flex items-center justify-start pl-4 font-[lato]">
             About {artistInfo.name}
           </div>
-          <div className="text-base text-gray-400 mt-4 px-5">
+          <div className="text-base text-gray-400 mt-4 px-5 text-justify">
             {artistInfo.biography}
           </div>
         </div>
@@ -178,7 +232,7 @@ export default function ArtistProfile() {
           >
             Play Now
           </Button>
-          {artistData?.includes(artistInfo.id) ? (
+          {artistInfo.id && artistData?.includes(artistInfo.id) ? (
             <Button
               variant="outlined"
               onClick={handleUnfollow}
@@ -203,27 +257,50 @@ export default function ArtistProfile() {
             {artistInfo.name} Songs
           </div>
           <div className="mt-5">
-            {artistInfo.songs?.map((song: Song, index: number) => (
-              <div className="" key={index}>
-                <SongCard
-                  handleClick={() => {
-                    handleSongClick(playlist, index);
-                  }}
-                  imageLink={song.imageLink}
-                  songName={song.title}
-                  artistName={artistInfo.name}
-                  songId={song.id}
-                  songUrl={song.streamingLink}
-                  liked={songData.includes(song.id)}
-                  type="small"
-                />
-              </div>
-            ))}
+            {playlist?.map((pages: Song[], index: number) => {
+              if (index <= mainIndex) {
+                return (
+                  <div className="" key={index}>
+                    {pages.map((song: Song, songIndex: number) => (
+                      <SongCard
+                        handleClick={() => {
+                          handleSongClick(index, songIndex);
+                        }}
+                        imageLink={song.imageLink}
+                        songName={song.title}
+                        artistName={artistInfo.name || " "}
+                        songId={song.id}
+                        songUrl={song.streamingLink}
+                        liked={songData.includes(song.id)}
+                        type="small"
+                      />
+                    ))}
+                  </div>
+                );
+              }
+            })}
           </div>
-          <div className="flex justify-center ">
-            <button onClick={handleViewMore} className="text-gray-500">
-              view more
-            </button>
+          <div className="flex justify-between w-28 m-auto mt-10 bg-slate-700 rounded-md">
+            <div className="w-14 flex justify-center ">
+              {mainIndex !== 0 && (
+                <button onClick={handleViewLess} className="text-green-500">
+                  <ArrowDropUpIcon fontSize="large" />
+                </button>
+              )}
+            </div>
+            <Divider
+              orientation="vertical"
+              color="white"
+              variant="middle"
+              flexItem
+            />
+            <div className="w-14 flex justify-center ml-1">
+              {hasMore && (
+                <button onClick={handleViewMore} className="text-green-500">
+                  <ArrowDropDownIcon fontSize="large" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -5,8 +5,8 @@ import Title from "./Title";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../store/playlistSlice";
 import { RootState } from "../../store";
-import { Song } from "../artist/ArtistProfile";
 import SongCard from "./SongCard";
+import { Song } from "../../interface";
 
 const Sidebar: React.FC = () => {
   const { loading, error, data } = useQuery(mostLikedSong);
@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
     }
   }, [data]);
 
-  const handleSongClick = (playlist: any, index: number) => {
+  const handleSongClick = (playlist: Song[], index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,

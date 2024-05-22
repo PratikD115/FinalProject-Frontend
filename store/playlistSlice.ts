@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface PlaylistItem {
+  id: string;
   imageLink: string;
   title: string;
   artist: Artist;

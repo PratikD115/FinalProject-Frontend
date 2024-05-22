@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { isSubscriptionOperation } from "@apollo/client/utilities";
 import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
+import { favouriteActions } from "../../store/favoriteSlice";
 
 const Header = () => {
   const { isLogin } = useSelector((state: RootState) => state.user);
@@ -37,6 +38,7 @@ const Header = () => {
     handleClose();
     Cookies.remove("authToken");
     dispatch(userActions.logout());
+    dispatch(favouriteActions.removeArtistAndSong());
     router.push("/");
   };
 
@@ -98,7 +100,6 @@ const Header = () => {
               >
                 <Link href="/about">About Us</Link>
               </li>
-             
             </ul>
           </div>
         </div>

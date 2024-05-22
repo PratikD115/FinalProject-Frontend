@@ -8,14 +8,17 @@ export const cloudinaryUpload = async (image: File, path: string) => {
     return;
   }
 
-  const upload_preset = "musicPlayer";
-  const cloud_name = "ddiy656zq";
+  const upload_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET;
+  const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME;
+
   try {
     const uploadData = new FormData();
-    uploadData.append("file", image);
-    uploadData.append("upload_preset", upload_preset);
-    uploadData.append("cloud_name", cloud_name);
-    uploadData.append("folder", path);
+    if (upload_preset && cloud_name) {
+      uploadData.append("file", image);
+      uploadData.append("upload_preset", upload_preset);
+      uploadData.append("cloud_name", cloud_name);
+      uploadData.append("folder", path);
+    }
 
     const loadingToastId = toast.loading("uploading photo", { duration: 0 });
 

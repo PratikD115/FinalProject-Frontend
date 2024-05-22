@@ -31,6 +31,7 @@ export const LOGIN = gql`
       name
       role
       email
+      
       profile
       endDate
       asArtist

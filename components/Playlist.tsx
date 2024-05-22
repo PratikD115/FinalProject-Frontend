@@ -49,7 +49,7 @@ const Playlist = () => {
         </div>
         <div className="w-[70%]  text-white px-5">
           <div className="text-3xl text-gray-400 my-7 mx-4 ">Playlist </div>
-          {playlist?.map((song: any, index: number) => (
+          {playlist?.map((song, index) => (
             <div key={index}>
               <SongCard
                 handleClick={() => handleSongClick(index)}

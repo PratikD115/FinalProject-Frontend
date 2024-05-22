@@ -52,7 +52,7 @@ const SongCard = ({
 }: SongCardProps) => {
   const { isLogin } = useSelector((state: RootState) => state.user);
   const { user } = useSelector((state: RootState) => state.user);
-  const [anchorEl, setAnchorEl] = useState<any>(null);
+  const [anchorEl, setAnchorEl] = useState<any>();
   const [userPlaylist, setUserPlaylist] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [downloadSong] = useMutation(songDownload);

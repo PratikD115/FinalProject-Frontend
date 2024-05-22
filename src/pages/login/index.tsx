@@ -1,23 +1,45 @@
 import Image from "next/image";
 import img from "../../../public/images/login.png";
 import Link from "next/link";
-import { LOGIN } from "../../../Query/authQuery";
+import { LOGIN, User } from "../../../Query/authQuery";
 import { useRouter } from "next/router";
-import { useRef } from "react";
-import { useMutation } from "@apollo/client";
+import { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { userActions } from "../../../store/userSlice";
 import HeaderHome from "../../../components/header/HeaderHome";
 import { Divider } from "@mui/material";
+import { favouriteActions } from "../../../store/favoriteSlice";
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const [user, setUser] = useState<any>({});
+  const [hasUser, setHasUser] = useState(false);
   const [login] = useMutation(LOGIN);
+  const { data: favouriteData } = useQuery(User, {
+    variables: {
+      userId: user?.id,
+    },
+    skip: !hasUser,
+  });
+
+  useEffect(() => {
+
+    if (favouriteData) {
+
+      const { getUserById } = favouriteData;
+
+      const { favourite, follow, ...user } = getUserById;
+      const artistData = follow?.map((item: { id: string }) => item.id);
+      const songData = favourite?.map((item: { id: string }) => item.id);
+       dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
+    }
+  },[favouriteData]);
 
   const handleLogIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -33,7 +55,9 @@ const LoginForm: React.FC = () => {
       });
       if (data) {
         const { token, ...user } = data.login;
-
+        console.log(user);
+        setUser(user);
+        setHasUser(true);
         setAuthTokenInCookie(token);
         dispatch(
           userActions.login({
