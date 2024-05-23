@@ -203,7 +203,7 @@ const Player = () => {
       />
 
       <div className=" pb-1">
-        <div className="mx-3 flex justify-between md:justify-between items-center h-full">
+        <div className="mx-3 flex justify-between lg:justify-between items-center h-full">
           <div className="flex items-center">
             <div className="cursor-pointer" onClick={handleviewMore}>
               <MoreVertIcon />

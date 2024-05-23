@@ -12,10 +12,10 @@ const HeaderHome = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-screen h-[8vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"} bg-slate-950`}
+      className={`fixed top-0 left-0 z-50 w-screen h-[8vh] lg:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"} bg-slate-950`}
     >
       {/* desktop and tablet */}
-      <div className="hidden md:flex justify-between px-7 p-2 ">
+      <div className="hidden lg:flex justify-between px-7 p-2 ">
         <div className="logo flex">
           <Link href="/">
             <h2
@@ -31,7 +31,7 @@ const HeaderHome = () => {
       </div>
 
       {/* mobile */}
-      <div className="flex items-center justify-between md:hidden h-full pl-2 pr-8">
+      <div className="flex items-center justify-between lg:hidden h-full pl-2 pr-8">
         {/* logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="logo flex">

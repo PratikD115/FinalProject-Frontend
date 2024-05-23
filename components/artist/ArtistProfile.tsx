@@ -189,8 +189,8 @@ export default function ArtistProfile() {
     );
 
   return (
-    <div className="flex pb-52">
-      <div className="w-[30%] p-5">
+    <div className="lg:flex md:flex pb-52">
+      <div className="w-[30%] p-5 sm:w-full">
         <div className="img relative h-64 w-64 m-auto">
           {artistInfo.imageLink && (
             <Image
@@ -204,17 +204,17 @@ export default function ArtistProfile() {
           )}
         </div>
 
-        <div className="border border-gray-800 rounded-xl p-2 mt-5">
+        <div className="border border-gray-800 rounded-xl p-2 mt-5 sm:hidden">
           <div className="text-2xl text-gray-300 flex items-center justify-start pl-4 font-[lato]">
             About {artistInfo.name}
           </div>
-          <div className="text-base text-gray-400 mt-4 px-5 text-justify">
+          <div className="text-base text-gray-400 mt-4 px-5 text-justify ">
             {artistInfo.biography}
           </div>
         </div>
       </div>
 
-      <div className="w-[60%] p-6">
+      <div className="w-[60%] p-6 sm:w-full">
         <div className="flex items-center mt-10">
           <div className="text-gray-400 text-3xl font-bold mr-2 font-[lato]">
             {artistInfo.name}

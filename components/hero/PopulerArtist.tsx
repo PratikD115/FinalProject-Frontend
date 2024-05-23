@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { GET_DATA } from "../../Query/artistQuery";
 
+
 const PopulerArtist: React.FC = () => {
   const { loading, error, data } = useQuery(GET_DATA);
   const [artistInfo, setArtistInfo] = useState([]);
@@ -28,21 +29,31 @@ const PopulerArtist: React.FC = () => {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 3,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 2000,
+
     responsive: [
       {
-        breakpoint: 800,
+        breakpoint: 1200,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 560,
+        breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 400,
+        settings: {
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },

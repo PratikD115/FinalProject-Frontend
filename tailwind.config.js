@@ -15,10 +15,11 @@ module.exports = {
         secondary: "#212121",
       },
       screens: {
-        sm: { max: "639px" },
-        // => @media (max-width: 639px) { ... }
-        md: "800px",
-        // => @media (min-width: 768px) { ... }
+        sm: { max: "700px" },
+
+        md: { max: "1100px" },
+
+        lg: { min: "1101px" },
       },
     },
   },

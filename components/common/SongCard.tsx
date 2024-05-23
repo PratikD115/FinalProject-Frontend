@@ -225,7 +225,7 @@ const SongCard = ({
     <>
       {type === "large" && (
         <div>
-          <div className="img relative h-40">
+          <div className="img relative lg:h-40">
             <Image
               onClick={handleClick}
               src={imageLink}
@@ -327,7 +327,7 @@ const SongCard = ({
       )}
       {type === "small" && (
         <div>
-          <div className="box card relative flex hover:bg-gray-600  p-1 rounded-md ">
+          <div className="box card relative flex hover:bg-gray-600  p-1 rounded-md">
             <div className="img relative h-16 w-16 ml-2 mr-7  cursor-pointer">
               <Image
                 onClick={handleClick}
@@ -427,7 +427,7 @@ const SongCard = ({
               <h3 className="text-base text-gray-400 font-semibold">
                 {songName}
               </h3>
-              <span className="text-gray-500 font-semibold text-sm ">
+              <span className="text-gray-500 font-semibold text-sm sm:hidden ">
                 {artistName} -{songName}
               </span>
             </div>

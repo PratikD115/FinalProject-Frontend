@@ -13,15 +13,11 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import StarIcon from "@mui/icons-material/Star";
-import toast from "react-hot-toast";
-import { isSubscriptionOperation } from "@apollo/client/utilities";
-import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
 import { favouriteActions } from "../../store/favoriteSlice";
 
 const Header = () => {
   const { isLogin } = useSelector((state: RootState) => state.user);
-  const { user } = useSelector((state: RootState) => state.user);
 
   const router = useRouter();
 
@@ -58,10 +54,10 @@ const Header = () => {
   };
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-screen h-[8vh] md:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
+      className={`fixed top-0 left-0 z-50 w-screen h-[8vh] lg:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
     >
       {/* desktop and tablet */}
-      <div className="hidden md:flex justify-between px-7 p-2 mt-2">
+      <div className="hidden lg:flex md:flex justify-between px-7 p-2 mt-2">
         {/* logo */}
 
         <div className="logo flex">
@@ -184,36 +180,96 @@ const Header = () => {
       </div>
 
       {/* mobile */}
-      <div className="flex items-center justify-between md:hidden h-full pl-2 pr-8">
+      <div className="flex items-center justify-between lg:hidden md:hidden h-full pl-2 pr-8">
         {/* logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="logo flex">
-            <div>
-              <Image src={logo} alt="logo" width={30} height={30} />
-            </div>
-            <h2 className="text-2xl font-semibold ml-3">MusicalMoment</h2>
-          </div>
+        <Link href="/">
+          <h2
+            className={`text-2xl ml-3 font-extrabold mt-1 mr-5 ${
+              router.pathname === "/" ? "active" : ""
+            }`}
+            style={{ fontFamily: "Dancing Script" }}
+          >
+            Musical Moment
+          </h2>
         </Link>
+        <div className="flex justify-center items-center">
+          <div>
+            <Button
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <Image
+                src={profile || ""}
+                alt="profile"
+                width={40}
+                height={40}
+                onClick={handleClick}
+                className="img w-9 h-9 bg-red-300 rounded-full object-cover cursor-pointer"
+              />
+            </Button>
+          </div>
+          <div>
+            <AiOutlineMenu size={20} onClick={() => setIsMenu(!isMenu)} />
+            {isMenu && (
+              <div className=" bg-gray-900 absolute top-12 left-0 w-full">
+                <ul className=" flex flex-col">
+                  <li className="mx-5 py-2">
+                    <Link href="/">browser</Link>
+                  </li>
 
-        <div>
-          {isMenu && (
-            <div className="bg-transparent  backdrop-blur-3xl  rounded-lg flex flex-col absolute top-16 left-0 w-full">
-              <ul className="shadow-2xl flex flex-col">
-                <li className="mx-5 py-2">
-                  <Link href="/">Discover</Link>
-                </li>
-                <li className="mx-5 py-2">
-                  <Link href="/browser">Browser</Link>
-                </li>
+                  <li className="mx-5 py-2">
+                    <Link href="/browser">Playlist</Link>
+                  </li>
 
-                <li className="mx-5 py-2">
-                  <Link href="/artist">Artists</Link>
-                </li>
-              </ul>
-            </div>
-          )}
-          <AiOutlineMenu size={20} onClick={() => setIsMenu(!isMenu)} />
+                  <li className="mx-5 py-2">
+                    <Link href="/artist">About us</Link>
+                  </li>
+                  <Divider color="white" />
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
+
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleProfileClick}>
+            <PersonIcon fontSize="small" className="mr-2" />
+            Profile
+          </MenuItem>
+
+          <MenuItem onClick={handleLogoutClick}>
+            <LogoutIcon fontSize="small" className="mr-2" />
+            Log out
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleAsArtistClick} className="flex ">
+            <HandshakeIcon fontSize="small" className="mr-2" />
+            <div>
+              Join{" "}
+              <span
+                style={{ fontFamily: "Dancing Script" }}
+                className="font-extrabold text-lg text-green-600"
+              >
+                MusicalMoment{" "}
+              </span>
+              <br />
+              as a{" "}
+              <span
+                style={{ fontFamily: "Dancing Script" }}
+                className="font-extrabold text-lg text-red-600"
+              >
+                Artist
+              </span>
+            </div>
+          </MenuItem>
+        </Menu>
       </div>
     </header>
   );

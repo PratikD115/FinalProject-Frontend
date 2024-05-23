@@ -108,8 +108,8 @@ const Profile: React.FC = () => {
   return (
     <div className="min-h-screen  bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ... font-[lato] text-white">
       <Layout>
-        <div className="flex">
-          <div className="w-[20%] ">
+        <div className=" flex sm:flex-col">
+          <div className="w-[20%] sm:w-[100%] ">
             <div className="card hero box w-52 m-auto mt-8  mx-auto ">
               <div className=" flex justify-center mx-auto w-44">
                 <button
@@ -183,10 +183,10 @@ const Profile: React.FC = () => {
             </ul>
           </div>
 
-          <div className="w-[80%] px-5">
+          <div className="w-[80%] sm:w-[100%] px-5">
             <div className="mt-5">
               <Title title={"Your Favourite :"} />
-              <div className="grid grid-cols-3 md:grid-cols-6 sm:grid-cols-1 gap-5">
+              <div className="grid lg:grid-cols-6 grid-cols-5 sm:grid-cols-3 gap-5">
                 {userProfile?.favourite?.map(
                   (item: SongInfo, index: number) => (
                     <div className="box card hero" key={index}>
@@ -207,7 +207,7 @@ const Profile: React.FC = () => {
             </div>
             <div className="mt-5">
               <Title title={"Followed Artist :"} />
-              <div className="grid grid-cols-3 md:grid-cols-5 sm:grid-cols-1 gap-5">
+              <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols- gap-5">
                 {userProfile?.follow?.map((item: any, index: number) => (
                   <div key={index}>
                     <ArtistCard

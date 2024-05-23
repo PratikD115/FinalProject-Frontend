@@ -29,17 +29,15 @@ const LoginForm: React.FC = () => {
   });
 
   useEffect(() => {
-
     if (favouriteData) {
-
       const { getUserById } = favouriteData;
 
       const { favourite, follow, ...user } = getUserById;
       const artistData = follow?.map((item: { id: string }) => item.id);
       const songData = favourite?.map((item: { id: string }) => item.id);
-       dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
+      dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
     }
-  },[favouriteData]);
+  }, [favouriteData]);
 
   const handleLogIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -79,7 +77,7 @@ const LoginForm: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 pt-20">
       <HeaderHome />
       <div className="container mx-auto  h-[80vh] w-[70%] bg-gray-800 rounded-lg border-gray-400 flex justify-center ">
-        <div className="md:w-1/2 p-[5%] ">
+        <div className="lg:w-1/2 p-[5%] ">
           <Image src={img} alt="kl" className="h-full w-full" />
         </div>
         <Divider
@@ -89,7 +87,7 @@ const LoginForm: React.FC = () => {
           flexItem
         />
 
-        <div className="md:w-1/2 px-[5%]">
+        <div className="lg:w-1/2 px-[5%]">
           <h3 className="text-2xl font-bold mb-5  mt-3 flex justify-center  text-white font-[lato]">
             LOGIN
           </h3>

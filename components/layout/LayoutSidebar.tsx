@@ -41,10 +41,10 @@ const LayoutSidebar = ({ children }: LayoutSidebarProps): JSX.Element => {
 
   return (
     <>
-      <main className="md:flex md:justify-evenly px-5 mt-3">
-        <div className="ml-2 content w-full md:w-[67%]">{children}</div>
+      <main className="lg:flex lg:justify-evenly px-5 mt-3">
+        <div className="ml-2 content w-full lg:w-[67%]">{children}</div>
         <div
-          className="md:w-[30%] border-1 border-solid border-gray-600 rounded-xl p-5"
+          className="lg:w-[30%] border-1 border-solid border-gray-600 rounded-xl p-5"
           style={{ width: sidebarWidth }}
         >
           <Sidebar />

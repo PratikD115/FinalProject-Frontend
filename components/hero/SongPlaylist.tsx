@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Title from "../common/Title";
-import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,9 +28,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
     artist: ArtistInfo;
     streamingLink: string;
   }
-  // const { loading, error, data } = useQuery(query, {
-  //   variables: { page: 1, limit: 10 },
-  // });
+
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
@@ -66,7 +63,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
             View More
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
+        <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols-3 gap-5">
           {playlist?.map((item: SongInfo, index: number) => (
             <div className="box card hero" key={index}>
               <SongCard

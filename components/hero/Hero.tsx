@@ -44,8 +44,8 @@ const Hero: React.FC = () => {
   };
   return (
     <section className="hero">
-      <div className="w-full h-auto md:h-[92vh] md:flex md:justify-between">
-        <div className="w-full h-full md:w-1/2">
+      <div className="w-full h-auto lg:h-[92vh] lg:flex lg:justify-between">
+        <div className="w-full h-full lg:w-1/2">
           <Slider {...settings}>
             {hero1.map((item, index) => (
               <div
@@ -67,7 +67,7 @@ const Hero: React.FC = () => {
             ))}
           </Slider>
         </div>
-        <div className="w-full md:w-1/2 grid grid-cols-2 h-full sm:grid-cols-1">
+        <div className="w-full lg:w-1/2 grid grid-cols-2 h-full sm:grid-cols-1 sm:hidden">
           {hero2.map((item, index) => (
             <div key={index} className="box relative">
               <Image

@@ -38,7 +38,7 @@ const LoginForm = () => {
       <HeaderHome />
 
       <div className="container mx-auto h-[80vh] w-[70%] flex justify-center  bg-gray-800 rounded-lg border-gray-400 ">
-        <div className="md:w-1/2 p-[5%]">
+        <div className="lg:w-1/2 p-[5%]">
           <Image src={img} alt="lk" className="h-full w-full" />
         </div>
         <Divider
@@ -47,7 +47,7 @@ const LoginForm = () => {
           variant="middle"
           flexItem
         />
-        <div className="md:w-1/2 px-[5%] ">
+        <div className="lg:w-1/2 px-[5%] ">
           <h3 className="text-2xl font-bold font-[lato] mb-5  mt-3 flex justify-center text-gray-200">
             SIGNUP
           </h3>

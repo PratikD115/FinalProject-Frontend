@@ -7,6 +7,7 @@ import { playlistActions } from "../../store/playlistSlice";
 import { RootState } from "../../store";
 import SongCard from "./SongCard";
 import { Song } from "../../interface";
+import { ScaleLoader } from "react-spinners";
 
 const Sidebar: React.FC = () => {
   const { loading, error, data } = useQuery(mostLikedSong);
@@ -34,8 +35,8 @@ const Sidebar: React.FC = () => {
   }
   useEffect(() => {
     if (data) {
-      const { getAllActiveSongs } = data;
-      setPlaylist(getAllActiveSongs);
+      const { mostLikedSong } = data;
+      setPlaylist(mostLikedSong);
     }
   }, [data]);
 
@@ -48,15 +49,27 @@ const Sidebar: React.FC = () => {
     );
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading)
+    return (
+      <div className=" h-screen flex justify-center items-center">
+        <ScaleLoader
+          color="rgba(40, 189, 41, 1)"
+          height={15}
+          loading={true}
+          margin={3}
+          radius={3}
+          speedMultiplier={2}
+          width={4}
+        />
+      </div>
+    );
 
   return (
     <>
       <section className="sidebar hero ">
         <Title title={" Most Liked songs"} />
         <div className="w-full">
-          {data.mostLikedSong.map((item: SongInfo, index: number) => (
+          {playlist.map((item: SongInfo, index: number) => (
             <div key={index} className="mb-3 ">
               <SongCard
                 handleClick={() => handleSongClick(playlist, index)}

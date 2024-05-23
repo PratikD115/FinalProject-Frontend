@@ -99,7 +99,7 @@ export const userToArtist = gql`
     $userId: String!
     $dateOfBirth: String!
     $genres: [Genres!]!
-    $language: language!
+    $language: Language!
     $biography: String!
     $imageLink: String!
   ) {

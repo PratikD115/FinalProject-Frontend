@@ -74,7 +74,6 @@ const Browser: React.FC = () => {
 
   useEffect(() => {
     if (searchedSong) {
-     
       setSongResult(searchedSong.searchSong);
       setPlaylist(searchedSong.searchSong);
     }
@@ -85,7 +84,6 @@ const Browser: React.FC = () => {
   }, [searchedSong, searchedArtist]);
 
   const handleSongClick = (playlist: any, index: number) => {
-   
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -124,7 +122,7 @@ const Browser: React.FC = () => {
               <Title title={"Searched Song :"} />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
+            <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols-4 gap-5">
               {songResult.map((song: SongInfo, index: number) => (
                 <div className="h-52" key={index}>
                   <SongCard
@@ -149,7 +147,7 @@ const Browser: React.FC = () => {
             <div className="mb-10">
               <Title title={"Searched Artist :"} />
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-4 sm:grid-cols-1 gap-5">
+            <div className="grid lg:grid-cols-5 grid-cols-4 sm:grid-cols-4 gap-5">
               {artistResult.map((artist: any, index: number) => (
                 <div className="mr-5" key={index}>
                   <ArtistCard

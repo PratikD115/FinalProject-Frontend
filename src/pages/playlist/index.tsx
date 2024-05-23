@@ -45,7 +45,6 @@ const Playlist: React.FC = () => {
   }, [data, showIndex]);
 
   const handleSongClick = (playlist: any, index: number) => {
-   
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -85,7 +84,7 @@ const Playlist: React.FC = () => {
             ))}
           </div>
           <div className="w-[70%] ">
-            <div className="grid grid-cols-2 md:grid-cols-5 sm:grid-cols-1 gap-5">
+            <div className="grid  lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-3 gap-5">
               {playlistArr[showIndex].songs.map((song: Song, index: number) => (
                 <div className="box card hero" key={index}>
                   <SongCard

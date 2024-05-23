@@ -10,9 +10,10 @@ import { Genres, Language, Mood } from "../../../../Query/enum";
 import { RootState } from "../../../../store";
 import { createSongLink } from "../../../../Query/songQuery";
 import { cloudinaryUpload } from "../../../../utils/imageUpload";
-import SongCard from "../../../../components/common/SongCard";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-
+import Image from "next/image";
+import { BsThreeDots } from "react-icons/bs";
 
 const PermanentDrawer = () => {
   const [openMenu, setOpenMenu] = useState<number>(0);
@@ -98,7 +99,6 @@ const PermanentDrawer = () => {
       audioLink = await cloudinaryUpload(audio, "song-audio");
     }
 
-  
     let genresArray = [];
     genresArray.push(selectGenresRef.current.value);
 
@@ -123,10 +123,10 @@ const PermanentDrawer = () => {
       if (selectMoodRef.current) selectMoodRef.current.value = "";
 
       if (data) {
-        toast.success("artist Profile create suceessfully");
+        toast.success("Song upload successfully");
       }
     } catch {
-      toast.error("failed to create artist profile ");
+      toast.error("Failed to create the song");
     }
   };
 
@@ -137,8 +137,7 @@ const PermanentDrawer = () => {
     }
   }, [data]);
 
-  const handleSongClick = () => {
-  };
+  const handleSongClick = () => {};
   return (
     <div className="">
       <HeaderHome />
@@ -159,21 +158,33 @@ const PermanentDrawer = () => {
             </li>
           </ul>
         </div>
-        <div className=" mt-2 min-h-screen w-full p-10">
+        <div className=" mt-2 min-h-screen w-full p-10 mb-28">
           {openMenu === 0 && <Title title={"All Your Songs"} />}
           {openMenu === 0 &&
             songData?.map((item: SongInfo, index: number) => (
               <div key={index} className="">
-                <SongCard
-                  handleClick={() => handleSongClick()}
-                  imageLink={item.imageLink}
-                  songName={item.title}
-                  artistName={item.artist.name}
-                  songId={item.id}
-                  songUrl={item.streamingLink}
-                  liked={false}
-                  type="small"
-                />
+                <div className="box card relative flex hover:bg-gray-600  p-1 rounded-md mr-10 ">
+                  <div className="img relative h-16 w-16 ml-2 mr-7  cursor-pointer">
+                    <Image
+                      src={item.imageLink}
+                      alt="cover"
+                      height={64}
+                      width={64}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </div>
+                  <div className="absolute bottom-6 right-3 text-secondary">
+                    <MoreVertIcon className="text-white" />
+                  </div>
+                  <div className="text mt-2">
+                    <h3 className="text-base text-gray-400 font-semibold">
+                      {item.title}
+                    </h3>
+                    <span className="text-gray-500 font-semibold text-sm ">
+                      {item.artist.name} -{item.title}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           {openMenu === 1 && <Title title="Upload the Song" />}
@@ -281,11 +292,13 @@ const PermanentDrawer = () => {
               </button>
             </form>
           )}
+
+          
+
         </div>
       </div>
     </div>
   );
 };
-
 
 export default PermanentDrawer;
