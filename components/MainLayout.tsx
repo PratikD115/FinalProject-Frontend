@@ -30,8 +30,9 @@ const MainLayout = () => {
   useEffect(() => {
     if (data && authCookie) {
       const { getUserById } = data;
-
+console.log(data)
       const { favourite, follow, ...user } = getUserById;
+      console.log(follow);
       const artistData = follow?.map((item: { id: string }) => item.id);
       const songData = favourite?.map((item: { id: string }) => item.id);
 
@@ -43,6 +44,7 @@ const MainLayout = () => {
           asArtist: user.artistId?.id,
         })
       );
+
       dispatch(favouriteActions.setArtistAndSong({ artistData, songData }));
     }
   }, [data]);

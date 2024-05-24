@@ -25,7 +25,6 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { subscribe } from "diagnostics_channel";
 import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
 
@@ -107,7 +106,11 @@ const SongCard = ({
   const handleDotsClose = async (options: string) => {
     if (isLogin) {
       if (options === "add to playlist") {
-        setUserPlaylist(true);
+        if (subscribe) {
+          setUserPlaylist(true);
+        } else {
+          toast.error("Join as a premium to create the playlist");
+        }
       } else if (options === "share") {
         setShowBox(true);
       } else if (options === "download") {

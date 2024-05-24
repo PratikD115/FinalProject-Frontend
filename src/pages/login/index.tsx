@@ -5,7 +5,11 @@ import { LOGIN, User } from "../../../Query/authQuery";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { setAuthTokenInCookie } from "../../../utils/Authfunctions";
+import {
+  isValidPassword,
+  setAuthTokenInCookie,
+  validateEmail,
+} from "../../../utils/Authfunctions";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { userActions } from "../../../store/userSlice";
@@ -41,8 +45,28 @@ const LoginForm: React.FC = () => {
 
   const handleLogIn = async (event: React.FormEvent) => {
     event.preventDefault();
+
     const enteredEmail = emailInputRef.current?.value;
+    if (!enteredEmail) {
+      toast.error("please enter your email address");
+      return;
+    }
+
+    if (!validateEmail(enteredEmail)) {
+      toast.error("please enter the valid email address");
+      return false;
+    }
     const enteredPassword = passwordInputRef.current?.value;
+    if (!enteredPassword) {
+      toast.error("please enter your password");
+      return;
+    }
+    if (!isValidPassword(enteredPassword)) {
+      toast.error(
+        "Password must be 8+ characters with 1 uppercase letter, 1 special character, and 1 number"
+      );
+      return;
+    }
 
     try {
       const { data } = await login({
@@ -53,7 +77,7 @@ const LoginForm: React.FC = () => {
       });
       if (data) {
         const { token, ...user } = data.login;
-        console.log(user);
+
         setUser(user);
         setHasUser(true);
         setAuthTokenInCookie(token);
@@ -102,11 +126,10 @@ const LoginForm: React.FC = () => {
               </label>
               <input
                 ref={emailInputRef}
-                type="email"
+               
                 id="email"
                 name="email"
                 placeholder="Email"
-                required
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>
@@ -123,7 +146,6 @@ const LoginForm: React.FC = () => {
                 id="password"
                 name="password"
                 placeholder="Password"
-                required
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>

@@ -14,6 +14,7 @@ import { cloudinaryUpload } from "../../../utils/imageUpload";
 import SongCard from "../../../components/common/SongCard";
 import Divider from "@mui/material/Divider";
 import Image from "next/image";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface ArtistInfo {
   id: string;
@@ -102,7 +103,9 @@ const Profile: React.FC = () => {
     });
     if (data) {
       dispatch(userActions.updateProfile({ imageLink }));
+      setImage(null);
     }
+
   };
 
   return (
@@ -160,7 +163,7 @@ const Profile: React.FC = () => {
                   onClick={handleImageCancel}
                   className="mt-2 text-red-500"
                 >
-                  Cancel
+                  <CloseIcon />
                 </button>
               )}
 

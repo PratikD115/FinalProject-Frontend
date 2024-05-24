@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
 interface FavoriteState {
   artistData: string[];
   songData: string[];
 }
-
 const initialFavoriteState: FavoriteState = {
   artistData: [],
   songData: [],
@@ -18,6 +16,9 @@ const favouriteSlice = createSlice({
       state,
       action: PayloadAction<{ artistData: string[]; songData: string[] }>
     ) {
+      console.log(action.payload.songData);
+      console.log(state.artistData);
+      console.log("setartistandosng");
       state.artistData = action.payload.artistData;
       state.songData = action.payload.songData;
     },
@@ -27,17 +28,19 @@ const favouriteSlice = createSlice({
     removeSongToData(state, action: PayloadAction<string>) {
       state.songData = state.songData.filter((song) => song !== action.payload);
     },
-
     removeArtistToData(state, action: PayloadAction<string>) {
+      console.log(state.artistData);
       state.artistData = state.artistData.filter(
         (artist) => artist !== action.payload
       );
     },
     setArtistToData(state, action: PayloadAction<string>) {
+      console.log(state.artistData);
       state.artistData.push(action.payload);
     },
     removeArtistAndSong(state) {
-      (state.artistData = []), (state.songData = []);
+      state.artistData = [];
+      state.songData = [];
     },
   },
 });

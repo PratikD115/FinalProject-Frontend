@@ -57,7 +57,7 @@ export default function ArtistProfile() {
     },
   });
 
-  const { loading: songsLoading, data: songsData } = useQuery(artistSong, {
+  const { data: songsData } = useQuery(artistSong, {
     variables: {
       id: router.query.artistId,
       page,
@@ -88,7 +88,6 @@ export default function ArtistProfile() {
       if (getArtistById.songs.length < 10) {
         setHasMore(false);
       }
-      console.log(getArtistById.songs);
       setPlaylist((prevPages) => {
         const newPages = [...prevPages];
         newPages[page - 1] = getArtistById.songs;
@@ -110,7 +109,7 @@ export default function ArtistProfile() {
   function handleSongClick(index: number, songIndex: number) {
     const flatPlaylist = playlist.flat();
     const finalIndex = index * 10 + songIndex;
-    console.log(flatPlaylist);
+
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist: flatPlaylist,
@@ -120,16 +119,18 @@ export default function ArtistProfile() {
   }
 
   const handleFollow = async () => {
-    if (artistInfo.id)
-      dispatch(favouriteActions.setArtistToData(artistInfo?.id));
     await addArtistToFollow({
       variables: {
         userId: user?.id,
         artistId: router.query.artistId,
       },
     });
+    if (artistInfo.id) {
+      dispatch(favouriteActions.setArtistToData(artistInfo?.id));
+    }
     toast.success(`Now, you are following , ${artistInfo.name}`);
   };
+
   async function handleUnfollow() {
     try {
       if (artistInfo.id) {
@@ -161,8 +162,6 @@ export default function ArtistProfile() {
   }
 
   function handleViewLess() {
-    console.log(mainIndex + 1);
-
     setMainIndex((prev) => {
       if (prev < 0) {
         return prev;

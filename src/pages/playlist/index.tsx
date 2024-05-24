@@ -6,7 +6,7 @@ import { RootState } from "../../../store";
 import { useEffect, useState } from "react";
 import SongCard from "../../../components/common/SongCard";
 import { playlistActions } from "../../../store/playlistSlice";
-
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 interface Song {
   title: string;
   streamingLink: string;
@@ -52,6 +52,9 @@ const Playlist: React.FC = () => {
       })
     );
   };
+  const handleDeletePlaylist = () => {
+    console.log("delete the palylist");
+  };
 
   const selectPlaylist = (index: number) => {
     setShowIndex(index);
@@ -70,7 +73,7 @@ const Playlist: React.FC = () => {
       )}
       {playlistArr.length !== 0 && (
         <div className="flex min-h-screen pt-10">
-          <div className="w-[20%] flex pl-5 pt-5 flex-col ">
+          <div className="w-[20%] flex pl-5 pt-5 flex-col">
             {playlistArr.map((playlist, index) => (
               <div
                 className={`cursor-pointer ${
@@ -79,7 +82,17 @@ const Playlist: React.FC = () => {
                 key={index}
                 onClick={() => selectPlaylist(index)}
               >
-                {playlist.playlistName}
+                <button className="border-gray-200 py-1 rounded-lg mb-2 w-[90%] bg-gray-700 flex justify-between px-2">
+                  <div> {playlist.playlistName}</div>
+                  <div onClick={handleDeletePlaylist}>
+                    <DeleteTwoToneIcon
+                      className={`cursor-pointer ${
+                        index === showIndex ? "text-red-400" : "hidden"
+                      }`}
+                      fontSize="small"
+                    />
+                  </div>
+                </button>
               </div>
             ))}
           </div>

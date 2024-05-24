@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { SIGNUP } from "../../../Query/authQuery";
 import HeaderHome from "../../../components/header/HeaderHome";
 import { Divider } from "@mui/material";
+import toast from "react-hot-toast";
+import { isValidPassword, validateEmail } from "../../../utils/Authfunctions";
 
 const LoginForm = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -14,14 +16,41 @@ const LoginForm = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const [signUp, { loading, error, data }] = useMutation(SIGNUP);
+  const [signUp] = useMutation(SIGNUP);
 
   const handleSingUp = async (event: React.FormEvent) => {
     event.preventDefault();
     const enteredName = nameInputRef.current?.value;
+    if (!enteredName) {
+      toast.error("please enter the name");
+      return;
+    }
+
     const enteredEmail = emailInputRef.current?.value;
+    if (!enteredEmail) {
+      toast.error("please enter the email address");
+      return;
+    }
+
+    if (!validateEmail(enteredEmail)) {
+      toast.error("please enter the valid email address");
+      return false;
+    }
+
     const enteredPassword = passwordInputRef.current?.value;
-    const { data } = await signUp({
+    if (!enteredPassword) {
+      toast.error("please enter the password");
+      return;
+    }
+    if (!isValidPassword(enteredPassword)) {
+      toast.error(
+        "Password must be 8+ characters with 1 uppercase letter, 1 special character, and 1 number"
+      );
+      return;
+    }
+
+    //sending requert
+    await signUp({
       variables: {
         email: enteredEmail,
         name: enteredName,
@@ -65,7 +94,6 @@ const LoginForm = () => {
                 id="username"
                 name="username"
                 placeholder="Username"
-                required
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>
@@ -82,7 +110,6 @@ const LoginForm = () => {
                 id="email"
                 name="email"
                 placeholder="Example@gmail.com"
-                required
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>
@@ -99,7 +126,6 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 placeholder="Password"
-                required
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>
