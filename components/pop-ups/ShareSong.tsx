@@ -38,11 +38,11 @@ const Share: React.FC<{ shareOpen: boolean; onClose: any }> = ({
   };
 
   return (
-    <Menu open={shareOpen} onClose={onClose}>
+    <Menu open={shareOpen} onClose={onClose} className="z-20">
       <MenuItem onClick={handleWhatsAppClick}>
         <WhatsAppIcon />
         WhatsApp
-      </MenuItem>
+      </MenuItem>===+++++=
       <MenuItem onClick={handleFacebookClick}>
         <FacebookIcon />
         Facebook

@@ -1,12 +1,13 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Header from "../../../components/header/Header";
-import { userPlaylist } from "../../../Query/playlistQuery";
+import { deletePlaylist, userPlaylist } from "../../../Query/playlistQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { useEffect, useState } from "react";
 import SongCard from "../../../components/common/SongCard";
 import { playlistActions } from "../../../store/playlistSlice";
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+
 interface Song {
   title: string;
   streamingLink: string;
@@ -26,6 +27,7 @@ const Playlist: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [showIndex, setShowIndex] = useState<number>(0);
   const [playlist, setPlaylist] = useState([]);
+  const [playlistDelete] = useMutation(deletePlaylist);
 
   const { songData } = useSelector((state: RootState) => state.favourite);
   const { data } = useQuery(userPlaylist, {
@@ -53,7 +55,12 @@ const Playlist: React.FC = () => {
     );
   };
   const handleDeletePlaylist = () => {
-    console.log("delete the palylist");
+    // await playlistDelete({
+    //   variables: {
+    //     playlistId: user?.id,
+       
+    //   },
+    // });
   };
 
   const selectPlaylist = (index: number) => {
@@ -84,14 +91,14 @@ const Playlist: React.FC = () => {
               >
                 <button className="border-gray-200 py-1 rounded-lg mb-2 w-[90%] bg-gray-700 flex justify-between px-2">
                   <div> {playlist.playlistName}</div>
-                  <div onClick={handleDeletePlaylist}>
+                  {/* <div onClick={()=> handleDeletePlaylist(playlist)}>
                     <DeleteTwoToneIcon
                       className={`cursor-pointer ${
                         index === showIndex ? "text-red-400" : "hidden"
                       }`}
                       fontSize="small"
                     />
-                  </div>
+                  </div> */}
                 </button>
               </div>
             ))}

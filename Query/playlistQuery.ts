@@ -122,3 +122,12 @@ export const userPlaylist = gql`
     }
   }
 `;
+
+export const deletePlaylist = gql`
+mutation ($playlistId : String!){
+  deletePlaylist(playlistId: playlistId) {
+    id   
+    playlistName   
+  }
+}
+`;
