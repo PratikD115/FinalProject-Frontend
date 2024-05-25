@@ -27,6 +27,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
+import { base64ToBlob } from "../../utils/songDownload";
 
 interface SongCardProps {
   handleClick: () => void;
@@ -73,14 +74,14 @@ const SongCard = ({
   ) => {
     if (result) {
       if (id) {
-        const { data } = await songToPlaylist({
+         await songToPlaylist({
           variables: {
             songId: songId,
             playlistId: id,
           },
         });
       } else if (name) {
-        const { data } = await createPlaylist({
+        await createPlaylist({
           variables: {
             userId: user?.id,
             playlistName: name,
@@ -91,16 +92,7 @@ const SongCard = ({
     }
     setUserPlaylist(false);
   };
-  const base64ToBlob = (base64String: string) => {
-    const byteCharacters = atob(base64String);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: "audio/mpeg" });
-  };
-
+  
   const fileName = user?.id;
 
   const handleDotsClose = async (options: string) => {
@@ -125,7 +117,6 @@ const SongCard = ({
 
             const blob = base64ToBlob(data.downloadSong);
             const url = window.URL.createObjectURL(blob);
-
             const link = document.createElement("a");
             link.href = url;
             if (fileName) {

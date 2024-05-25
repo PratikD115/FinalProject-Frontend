@@ -1,5 +1,5 @@
 import Image from "next/image";
-import songImage from "../../public/images/songImage.png";
+import songImage from "../public/images/songImage.png";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
@@ -13,17 +13,16 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { playlistActions } from "../../store/playlistSlice";
+import { playlistActions } from "../store/playlistSlice";
 import { useRouter } from "next/router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Link from "next/link";
 import toast from "react-hot-toast";
-import { RootState } from "../../store";
+import { RootState } from "../store";
 
 interface SliderProps {
   value: number;
   max: number;
-  onChange: (event: Event) => void; // Define the type for onChange
+  onChange: (event: Event) => void; 
   size: string;
   className: string;
 }

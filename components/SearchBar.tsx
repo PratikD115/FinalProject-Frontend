@@ -1,5 +1,5 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { useState, MouseEvent, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -7,7 +7,6 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -25,10 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             value={searchQuery}
             onChange={handleChange}
           />
-          <div
-           
-            className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-700 bg-gray-800 border-r border-y border-gray-300 rounded-r-md hover:bg-gray-400 focus:outline-none "
-          >
+          <div className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-700 bg-gray-800 border-r border-y border-gray-300 rounded-r-md hover:bg-gray-400 focus:outline-none ">
             <SearchIcon />
           </div>
         </form>

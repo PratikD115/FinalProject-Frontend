@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { searchArtist, searchSong } from "../Query/searchQuery";
-import ArtistCard from "../components/common/ArtistCard";
-import Title from "../components/common/Title";
-import SearchBar from "../components/searchBar/SearchBar";
+import { searchArtist, searchSong } from "../../Query/searchQuery";
+import ArtistCard from "../common/ArtistCard";
+import Title from "../common/Title";
+import SearchBar from "../SearchBar";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { playlistActions } from "../store/playlistSlice";
-import { RootState } from "../store";
+import { playlistActions } from "../../store/playlistSlice";
+import { RootState } from "../../store";
 import debounce from "debounce";
-import SongCard from "../components/common/SongCard";
+import SongCard from "../common/SongCard";
 import { ScaleLoader } from "react-spinners";
 
 interface ArtistInfo {

@@ -1,8 +1,8 @@
 import Layout from "../../../components/layout/Layout";
 import LayoutSidebar from "../../../components/layout/LayoutSidebar";
-import Browser from "../../../page/Browser";
+import Browser from "../../../components/page/Browser";
 
-const  BrowserPage  : React.FC = () =>{
+const BrowserPage: React.FC = () => {
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 ...">
       <Layout>
@@ -12,7 +12,6 @@ const  BrowserPage  : React.FC = () =>{
       </Layout>
     </div>
   );
-
-}
+};
 
 export default BrowserPage;

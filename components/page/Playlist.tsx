@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { playlistActions } from "../store/playlistSlice";
-import { RootState } from "../store";
-import SongCard from "./common/SongCard";
+import { playlistActions } from "../../store/playlistSlice";
+import { RootState } from "../../store";
+import SongCard from "../common/SongCard";
 
 const Playlist = () => {
   const { playlist } = useSelector((state: RootState) => state.playlist);

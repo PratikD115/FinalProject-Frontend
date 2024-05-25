@@ -1,5 +1,5 @@
 import Layout from "../../components/layout/Layout";
-import Home from "../../page/Home";
+import Home from "../../components/page/Home";
 
 const Music: React.FC = () => {
   return (
@@ -12,4 +12,3 @@ const Music: React.FC = () => {
 };
 
 export default Music;
-

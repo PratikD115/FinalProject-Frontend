@@ -1,14 +1,14 @@
 import React from "react";
-import Hero from "../components/hero/Hero";
-import Recommand from "../components/hero/Recommand";
-import LayoutSidebar from "../components/layout/LayoutSidebar";
-import PopulerArtist from "../components/hero/PopulerArtist";
+import Hero from "../hero/Hero";
+import Recommand from "../hero/Recommand";
+import LayoutSidebar from "../layout/LayoutSidebar";
+import PopulerArtist from "../hero/PopulerArtist";
 import {
   englishTop20Playlist,
   hindiTop20Playlist,
   punjabiTop20Playlist,
-} from "../Query/playlistQuery";
-import SongPlaylist from "../components/hero/SongPlaylist";
+} from "../../Query/playlistQuery";
+import SongPlaylist from "../hero/SongPlaylist";
 import { useQuery } from "@apollo/client";
 
 const Home: React.FC = () => {
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const { data: punjabiTop20PlaylistData } = useQuery(punjabiTop20Playlist, {
     variables: { page: 3, limit: 10 },
   });
-  
+
   return (
     <div>
       <Hero />
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
           playlistData={punjabiTop20PlaylistData}
         />
         <Recommand />
-      </LayoutSidebar> 
+      </LayoutSidebar>
     </div>
   );
 };

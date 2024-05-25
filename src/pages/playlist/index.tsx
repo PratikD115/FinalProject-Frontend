@@ -21,6 +21,7 @@ interface Artist {
 interface Playlist {
   playlistName: string;
   songs: Song[];
+  id: string;
 }
 const Playlist: React.FC = () => {
   const [playlistArr, setPlaylistArr] = useState<Playlist[]>([]);
@@ -30,7 +31,7 @@ const Playlist: React.FC = () => {
   const [playlistDelete] = useMutation(deletePlaylist);
 
   const { songData } = useSelector((state: RootState) => state.favourite);
-  const { data } = useQuery(userPlaylist, {
+  const { data, refetch } = useQuery(userPlaylist, {
     variables: {
       userId: user?.id,
     },
@@ -42,7 +43,7 @@ const Playlist: React.FC = () => {
         getUserById: { playlist },
       } = data;
       setPlaylistArr(playlist);
-      setPlaylist(playlist[showIndex].songs);
+      setPlaylist(playlist[showIndex]?.songs);
     }
   }, [data, showIndex]);
 
@@ -54,13 +55,15 @@ const Playlist: React.FC = () => {
       })
     );
   };
-  const handleDeletePlaylist = () => {
-    // await playlistDelete({
-    //   variables: {
-    //     playlistId: user?.id,
-       
-    //   },
-    // });
+  const handleDeletePlaylist = async (playlistId: string) => {
+    await playlistDelete({
+      variables: {
+        playlistId: playlistId,
+      },
+    });
+    if (refetch) {
+      refetch();
+    }
   };
 
   const selectPlaylist = (index: number) => {
@@ -91,14 +94,14 @@ const Playlist: React.FC = () => {
               >
                 <button className="border-gray-200 py-1 rounded-lg mb-2 w-[90%] bg-gray-700 flex justify-between px-2">
                   <div> {playlist.playlistName}</div>
-                  {/* <div onClick={()=> handleDeletePlaylist(playlist)}>
+                  <div onClick={() => handleDeletePlaylist(playlist.id)}>
                     <DeleteTwoToneIcon
                       className={`cursor-pointer ${
                         index === showIndex ? "text-red-400" : "hidden"
                       }`}
                       fontSize="small"
                     />
-                  </div> */}
+                  </div>
                 </button>
               </div>
             ))}

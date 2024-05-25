@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import Player from "../../components/player/Player";
+import Player from "../../components/Player";
 import { useRouter } from "next/router";
 import MainLayout from "../../components/MainLayout";
 import { Provider } from "react-redux";
@@ -11,7 +11,10 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const App: React.FC<{Component : any, pageProps: any}> = ({ Component , pageProps}) => {
+const App: React.FC<{ Component: any; pageProps: any }> = ({
+  Component,
+  pageProps,
+}) => {
   const router = useRouter();
   let display = true;
   const routePath = router.pathname;

@@ -78,7 +78,7 @@ const Header = () => {
                   router.pathname === "/browser" ? "active" : ""
                 }`}
               >
-                <Link href="/browser">Browser</Link>
+                <Link href="/browser">Browse</Link>
               </li>
               {subscribe && (
                 <li

@@ -5,7 +5,7 @@ import { recommandedSongs } from "../../Query/playlistQuery";
 import { PlaylistItem, playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { SongInfo } from "../artist/ArtistProfile";
+import { SongInfo } from "../page/ArtistProfile";
 
 import SongCard from "../common/SongCard";
 const Recommand: React.FC = () => {

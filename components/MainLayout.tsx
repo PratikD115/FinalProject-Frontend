@@ -30,9 +30,7 @@ const MainLayout = () => {
   useEffect(() => {
     if (data && authCookie) {
       const { getUserById } = data;
-console.log(data)
       const { favourite, follow, ...user } = getUserById;
-      console.log(follow);
       const artistData = follow?.map((item: { id: string }) => item.id);
       const songData = favourite?.map((item: { id: string }) => item.id);
 
@@ -54,7 +52,6 @@ console.log(data)
       const token = authCookie.split(" ")[1];
       const decoded = jwt.decode(token);
       setPayload(decoded as jwt.JwtPayload);
-      console.log(decoded);
     }
   };
 

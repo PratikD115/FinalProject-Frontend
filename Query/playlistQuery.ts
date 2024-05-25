@@ -108,6 +108,7 @@ export const userPlaylist = gql`
   query ($userId: String!) {
     getUserById(userId: $userId) {
       playlist {
+        id
         playlistName
         songs {
           title
@@ -124,10 +125,10 @@ export const userPlaylist = gql`
 `;
 
 export const deletePlaylist = gql`
-mutation ($playlistId : String!){
-  deletePlaylist(playlistId: playlistId) {
-    id   
-    playlistName   
+  mutation ($playlistId: String!) {
+    deletePlaylist(playlistId: $playlistId) {
+      id
+      playlistName
+    }
   }
-}
 `;

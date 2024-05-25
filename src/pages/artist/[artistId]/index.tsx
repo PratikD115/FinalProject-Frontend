@@ -1,5 +1,5 @@
 import React from "react";
-import ArtistProfile from "../../../../components/artist/ArtistProfile";
+import ArtistProfile from "../../../../components/page/ArtistProfile";
 
 import Layout from "../../../../components/layout/Layout";
 
