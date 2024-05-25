@@ -97,6 +97,10 @@ const LoginForm: React.FC = () => {
     }
   };
 
+  const handleForgetPassword = () => {
+    console.log('handlefogetPassowrd');
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 pt-20">
       <HeaderHome />
@@ -126,7 +130,6 @@ const LoginForm: React.FC = () => {
               </label>
               <input
                 ref={emailInputRef}
-               
                 id="email"
                 name="email"
                 placeholder="Email"
@@ -149,18 +152,19 @@ const LoginForm: React.FC = () => {
                 className="block w-full px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:bg-white"
               />
             </div>
+            {/* <div className="text-white text-end cursor-pointer hover:text-gray-200" onClick={handleForgetPassword}>Forgot Password?</div> */}
             <div className="mb-6 mt-10">
               <button
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
-                LogIn
+               LogIn
               </button>
             </div>
           </form>
 
-          <div className="text-sm mt-10 text-white ">
-            Create new account:{" "}
+          <div className="text-sm mt-10 text-white  ">
+           <span className="mr-1">Create new Account:</span>
             <Link href="/signup" className="text-sky-400 underline">
               signup
             </Link>

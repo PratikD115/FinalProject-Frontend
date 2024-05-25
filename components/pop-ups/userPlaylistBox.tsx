@@ -72,7 +72,7 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
         ) : (
           <div
             onClick={handleCreateNew}
-            className="text-sm text-blue-600 underline"
+            className="text-sm text-blue-600 underline cursor-pointer"
           >
             Create New Playlist
           </div>

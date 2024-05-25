@@ -1,6 +1,5 @@
 import { useLayoutEffect, useState } from "react";
 import Image from "next/image";
-import logo from "../../public/images/logo.png";
 import Link from "next/link";
 import { AiOutlineMenu } from "react-icons/ai";
 import LoginIcon from "@mui/icons-material/Login";
@@ -56,10 +55,9 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 z-50 w-screen h-[8vh] lg:shadow-md shadow-2xl backdrop-filter backdrop-blur-sm ${"text-white"}`}
     >
-      {/* desktop and tablet */}
+  
       <div className="hidden lg:flex md:flex justify-between px-7 p-2 mt-2">
-        {/* logo */}
-
+      
         <div className="logo flex">
           <Link href="/">
             <h2
@@ -75,10 +73,10 @@ const Header = () => {
             <ul className="flex">
               <li
                 className={`mx-5 py-2 ${
-                  router.pathname === "/browser" ? "active" : ""
+                  router.pathname === "/browse" ? "active" : ""
                 }`}
               >
-                <Link href="/browser">Browse</Link>
+                <Link href="/browse">Browse</Link>
               </li>
               {subscribe && (
                 <li
@@ -146,7 +144,7 @@ const Header = () => {
                 <MenuItem onClick={handleAsArtistClick} className="flex ">
                   <HandshakeIcon fontSize="small" className="mr-2" />
                   <div>
-                    Join{" "}
+                    Join
                     <span
                       style={{ fontFamily: "Dancing Script" }}
                       className="font-extrabold text-lg text-green-600"
@@ -170,7 +168,7 @@ const Header = () => {
           {!isLogin && (
             <Link
               href="/login"
-              className="flex justify-between items-center bg-green-500 px-4 py-1.5 pb-2 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black font-[lato]"
+              className="flex justify-between items-center bg-green-500 px-4 py-1.5 text-sm text-white rounded-full mx-3 hover:bg-green-600 hover:border-1 hover:border-black font-[lato]"
             >
               <span className="">LogIn</span>
               <LoginIcon fontSize="small" />
@@ -215,11 +213,11 @@ const Header = () => {
               <div className=" bg-gray-900 absolute top-12 left-0 w-full">
                 <ul className=" flex flex-col">
                   <li className="mx-5 py-2">
-                    <Link href="/">browser</Link>
+                    <Link href="/">browse</Link>
                   </li>
 
                   <li className="mx-5 py-2">
-                    <Link href="/browser">Playlist</Link>
+                    <Link href="/browse">Playlist</Link>
                   </li>
 
                   <li className="mx-5 py-2">

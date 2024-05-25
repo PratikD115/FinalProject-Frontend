@@ -39,7 +39,6 @@ export const ARTIST = gql`
       dateOfBirth
       genres
       biography
-     
     }
   }
 `;
@@ -61,9 +60,7 @@ export const artistSong = gql`
   }
 `;
 
-
-
-export const GET_DATA = gql`
+export const ArtistInfo = gql`
   query {
     getAllActiveArtist {
       id

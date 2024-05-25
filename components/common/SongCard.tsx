@@ -2,10 +2,9 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Menu, MenuItem, Snackbar } from "@mui/material";
-import { useRouter } from "next/router";
+import { Menu, MenuItem } from "@mui/material";
 import { addToFavourite, removeToFavourite } from "../../Query/userQuery";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import UserPlaylist from "../pop-ups/userPlaylistBox";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {
@@ -74,7 +73,7 @@ const SongCard = ({
   ) => {
     if (result) {
       if (id) {
-         await songToPlaylist({
+        await songToPlaylist({
           variables: {
             songId: songId,
             playlistId: id,
@@ -92,8 +91,8 @@ const SongCard = ({
     }
     setUserPlaylist(false);
   };
-  
-  const fileName = user?.id;
+
+  const fileName = "song";
 
   const handleDotsClose = async (options: string) => {
     if (isLogin) {
@@ -143,17 +142,9 @@ const SongCard = ({
     }
   };
 
-  const [addFavorite] = useMutation(addToFavourite, {
-    onError: (err: Error) => {
-      setError(err);
-    },
-  });
+  const [addFavorite] = useMutation(addToFavourite);
 
-  const [removeFavorite] = useMutation(removeToFavourite, {
-    onError: (err: Error) => {
-      setError(err);
-    },
-  });
+  const [removeFavorite] = useMutation(removeToFavourite);
 
   const handleAddLike = () => {
     if (isLogin) {
@@ -183,31 +174,21 @@ const SongCard = ({
   };
 
   const handleWhatsAppClick = () => {
-    // Replace the URL with your sharing URL
     window.open(
-      "whatsapp://send?text=Check%20out%20this%20link:%20https://example.com",
+      "https://web.whatsapp.com/",
       "_blank"
     );
   };
 
   const handleFacebookClick = () => {
-    // Replace the URL with your sharing URL
-    window.open(
-      "https://www.facebook.com/sharer/sharer.php?u=https://example.com",
-      "_blank"
-    );
+    window.open("https://www.facebook.com/", "_blank");
   };
 
   const handleLinkedInClick = () => {
-    // Replace the URL with your sharing URL
-    window.open(
-      "https://www.linkedin.com/shareArticle?url=https://example.com",
-      "_blank"
-    );
+    window.open("https://www.linkedin.com/", "_blank");
   };
 
   const handleInstagramClick = () => {
-    // Replace the URL with your Instagram profile URL
     window.open("https://www.instagram.com/", "_blank");
   };
 

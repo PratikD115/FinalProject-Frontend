@@ -50,7 +50,7 @@ const HeaderHome = () => {
                   <Link href="/">Discover</Link>
                 </li>
                 <li className="mx-5 py-2">
-                  <Link href="/browser">Browser</Link>
+                  <Link href="/browse">Browse</Link>
                 </li>
 
                 <li className="mx-5 py-2">

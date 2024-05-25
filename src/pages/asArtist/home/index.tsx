@@ -73,28 +73,28 @@ const PermanentDrawer = () => {
     // Access input values using refs
 
     if (!songNameRef.current?.value) {
-      toast.error("enter name");
+      toast.error("Please enter name");
       return;
     }
     if (!selectGenresRef.current?.value) {
-      toast.error("genres ");
+      toast.error("please select genres ");
       return;
     }
     if (!selectLanguageRef.current?.value) {
-      toast.error("langauge");
+      toast.error(" Please select langauge");
       return;
     }
     if (!selectMoodRef.current?.value) {
-      toast.error("Please mood");
+      toast.error("Please select mood");
       return;
     }
     if (!image) {
-      toast.error("please select the image");
+      toast.error("Please select the image");
     } else {
       imageLink = await cloudinaryUpload(image, "song-Image");
     }
     if (!audio) {
-      toast.error("please select the audio");
+      toast.error("Please select the audio");
     } else {
       audioLink = await cloudinaryUpload(audio, "song-audio");
     }
@@ -137,7 +137,6 @@ const PermanentDrawer = () => {
     }
   }, [data]);
 
-  const handleSongClick = () => {};
   return (
     <div className="">
       <HeaderHome />

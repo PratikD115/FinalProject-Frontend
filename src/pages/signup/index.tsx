@@ -139,7 +139,7 @@ const LoginForm = () => {
             </div>
           </form>
           <div className="text-sm mt-8 text-white">
-            Already have account:{" "}
+            Already have Account:{" "}
             <Link href="/login" className="text-sky-400 underline">
               login
             </Link>

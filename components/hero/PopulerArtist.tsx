@@ -1,14 +1,13 @@
 import Slider from "react-slick";
 import Title from "../common/Title";
 import ArtistCard from "../common/ArtistCard";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { GET_DATA } from "../../Query/artistQuery";
-
+import { ArtistInfo } from "../../Query/artistQuery";
 
 const PopulerArtist: React.FC = () => {
-  const { loading, error, data } = useQuery(GET_DATA);
+ const { data } = useQuery(ArtistInfo);
   const [artistInfo, setArtistInfo] = useState([]);
   const router = useRouter();
 
@@ -17,14 +16,11 @@ const PopulerArtist: React.FC = () => {
       const { getAllActiveArtist } = data;
       setArtistInfo(getAllActiveArtist);
     }
-  });
+  }, [data]);
 
   const handleClick = (id: string) => {
     router.push(`/artist/${id}`);
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   const settings = {
     dots: false,
@@ -63,7 +59,7 @@ const PopulerArtist: React.FC = () => {
     <section className="treading hero">
       <Title title="Popular Artist" />
       <Slider {...settings}>
-        {data.getAllActiveArtist.map((item: any, index: number) => (
+        {artistInfo.map((item: any, index: number) => (
           <div className="box card hero m-5" key={index}>
             <div className="mr-5">
               <ArtistCard
