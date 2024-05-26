@@ -21,6 +21,28 @@ export const Genres = [
   "other",
 ];
 
+export const GenresOptions: Option[] = [
+  { value: "rock", label: "Rock" },
+  { value: "fusion", label: "Fusion" },
+  { value: "romantic", label: "Romantic" },
+  { value: "pop", label: "Pop" },
+  { value: "jazz", label: "Jazz" },
+  { value: "classical", label: "Classic" },
+  { value: "hip_hop", label: "Hip_hop" },
+  { value: "electronic", label: "Electronic" },
+  { value: "country", label: "Country" },
+  { value: "blues", label: "Blues" },
+  { value: "indie", label: "Indie" },
+  { value: "folk", label: "Folk" },
+  { value: "rap", label: "Rap" },
+  { value: "soul", label: "Soul" },
+  { value: "disco", label: "Disco" },
+  { value: "techno", label: "Techno" },
+  { value: "chill_out", label: "Chill_out" },
+  { value: "sufi", label: "Sufi" },
+  { value: "sad", label: "Sad" },
+  { value: "other", label: "Other" },
+];
 export const Language = [
   "hindi",
   "punjabi",
@@ -31,6 +53,21 @@ export const Language = [
   "gujarati",
   "english",
   "other",
+];
+export interface Option {
+  value: string;
+  label: string;
+}
+export const LanguageOptions: Option[] = [
+  { value: "english", label: "English" },
+  { value: "punjabi", label: "Punjabi" },
+  { value: "hindi", label: "Hindi" },
+  { value: "bengali", label: "Bengali" },
+  { value: "tamil", label: "Tamil" },
+  { value: "telugu", label: "Telugu" },
+  { value: "marathi", label: "Marathi" },
+  { value: "gujarati", label: "Gujarati" },
+  { value: "other", label: "Other" },
 ];
 
 export const Mood = [
@@ -50,4 +87,23 @@ export const Mood = [
   "danceable",
   "joyful",
   "other",
+];
+
+export const MoodOptions: Option[] = [
+  { value: "happy", label: "Happy" },
+  { value: "sad", label: "Sad" },
+  { value: "romantic", label: "Romantic" },
+  { value: "energetic", label: "Energetic" },
+  { value: "peaceful", label: "Peaceful" },
+  { value: "calm", label: "Calm" },
+  { value: "party", label: "Party" },
+  { value: "love", label: "Love" },
+  { value: "inspirational", label: "Inspirational" },
+  { value: "hopefull", label: "Hopeful" },
+  { value: "exciting", label: "Exciting" },
+  { value: "chill", label: "Chill" },
+  { value: "anxious", label: "Anxious" },
+  { value: "danceable", label: "Danceable" },
+  { value: "joyful", label: "Joyful" },
+  { value: "other", label: "Other" },
 ];

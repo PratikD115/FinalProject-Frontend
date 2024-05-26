@@ -11,25 +11,7 @@ import { RootState } from "../../store";
 import debounce from "debounce";
 import SongCard from "../common/SongCard";
 import { ScaleLoader } from "react-spinners";
-
-interface ArtistInfo {
-  id: string;
-  name: string;
-  dateOfBirth: string;
-  biography: string;
-  imageLink: string;
-  songs: SongInfo[];
-}
-
-interface SongInfo {
-  id: string;
-  title: string;
-  imageLink: string;
-  songUrl: string;
-  songId: string;
-  artist: ArtistInfo;
-  streamingLink: string;
-}
+import { ArtistState, SongState } from "../../interface";
 
 const Browser: React.FC = () => {
   const [clicked, setClicked] = useState(false);
@@ -83,7 +65,7 @@ const Browser: React.FC = () => {
     }
   }, [searchedSong, searchedArtist]);
 
-  const handleSongClick = (playlist: any, index: number) => {
+  const handleSongClick = (playlist: SongState[], index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -123,7 +105,7 @@ const Browser: React.FC = () => {
             </div>
 
             <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols-4 gap-5">
-              {songResult.map((song: SongInfo, index: number) => (
+              {songResult.map((song: SongState, index: number) => (
                 <div className="h-52" key={index}>
                   <SongCard
                     handleClick={() => handleSongClick(playlist, index)}
@@ -148,7 +130,7 @@ const Browser: React.FC = () => {
               <Title title={"Searched Artist :"} />
             </div>
             <div className="grid lg:grid-cols-5 grid-cols-4 sm:grid-cols-4 gap-5">
-              {artistResult.map((artist: any, index: number) => (
+              {artistResult.map((artist: ArtistState, index: number) => (
                 <div className="mr-5" key={index}>
                   <ArtistCard
                     onClick={() => handleArtistClick(artist.id)}

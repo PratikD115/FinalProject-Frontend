@@ -16,13 +16,14 @@ import { userActions } from "../../../store/userSlice";
 import HeaderHome from "../../../components/header/HeaderHome";
 import { Divider } from "@mui/material";
 import { favouriteActions } from "../../../store/favoriteSlice";
+import { UserState } from "../../../interface";
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<UserState>();
   const [hasUser, setHasUser] = useState(false);
   const [login] = useMutation(LOGIN);
   const { data: favouriteData } = useQuery(User, {

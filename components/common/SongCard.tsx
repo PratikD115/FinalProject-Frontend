@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
@@ -27,6 +27,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { isSubscriptionValid } from "../../utils/subscriptions";
 import { RootState } from "../../store";
 import { base64ToBlob } from "../../utils/songDownload";
+import { SongState } from "../../interface";
 
 interface SongCardProps {
   handleClick: () => void;
@@ -51,7 +52,7 @@ const SongCard = ({
 }: SongCardProps) => {
   const { isLogin } = useSelector((state: RootState) => state.user);
   const { user } = useSelector((state: RootState) => state.user);
-  const [anchorEl, setAnchorEl] = useState<any>();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>();
   const [userPlaylist, setUserPlaylist] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [downloadSong] = useMutation(songDownload);
@@ -62,8 +63,10 @@ const SongCard = ({
   const { subscribe } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  const handleDotsClick = (event: React.MouseEvent) => {
-    setAnchorEl(event.currentTarget);
+  const handleDotsClick = (event: any) => {
+    if (event.currentTarget) {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const closeUserPlaylist = async (
@@ -174,10 +177,7 @@ const SongCard = ({
   };
 
   const handleWhatsAppClick = () => {
-    window.open(
-      "https://web.whatsapp.com/",
-      "_blank"
-    );
+    window.open("https://web.whatsapp.com/", "_blank");
   };
 
   const handleFacebookClick = () => {

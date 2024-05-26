@@ -11,7 +11,7 @@ import FastForwardIcon from "@mui/icons-material/FastForward";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import { useState, useEffect, useRef, ChangeEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../store/playlistSlice";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ import { RootState } from "../store";
 interface SliderProps {
   value: number;
   max: number;
-  onChange: (event: Event) => void; 
+  onChange: (event: Event) => void;
   size: string;
   className: string;
 }
@@ -170,7 +170,7 @@ const Player = () => {
     const handleKeyDown = (event: any) => {
       if (event.code === "Space") {
         event.preventDefault();
-        if (audioPlayer.current.paused) {
+        if (audioPlayer.current?.paused) {
           audioPlayer.current.play();
           setIsPlaying(true);
         } else {

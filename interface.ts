@@ -1,24 +1,46 @@
-export interface Song {
+export interface UserState {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  favourite: SongState[];
+  follow: ArtistState[];
+  playlist: PlaylistState[];
+  role: string;
+  profile: string;
+  artistId: ArtistState;
+  subscribe: string;
+}
+
+export interface SongState {
   id: string;
   title: string;
-  artist: Artist;
+  artist: ArtistState;
   genres: string[];
-  isActive: boolean;
-  likes: number;
   language: string;
   streamingLink: string;
   imageLink: string;
   mood: string[];
+  isActive: boolean;
+  likes: number;
 }
 
-export interface Artist {
+export interface ArtistState {
   id: string;
   name: string;
-  language: string;
-  isActive: boolean;
   imageLink: string;
   dateOfBirth: string;
   genres: string[];
   biography: string;
-  songs: Song[] | [];
+  songs: SongState[];
+  isActive: boolean;
+  language: string;
+  follower: UserState[];
+}
+
+export interface PlaylistState {
+  id: string;
+  playlistName: string;
+  user: UserState;
+  songs: SongState[];
 }

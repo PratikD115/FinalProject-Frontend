@@ -1,19 +1,27 @@
 import HeaderHome from "../../../../components/header/HeaderHome";
 import { useMutation, useQuery } from "@apollo/client";
 import { ArtistSong } from "../../../../Query/artistQuery";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Title from "../../../../components/common/Title";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { Genres, Language, Mood } from "../../../../Query/enum";
+import {
+  Genres,
+  Language,
+  Mood,
+  GenresOptions,
+  Option,
+  MoodOptions,
+  LanguageOptions,
+} from "../../../../Query/enum";
 import { RootState } from "../../../../store";
 import { createSongLink } from "../../../../Query/songQuery";
 import { cloudinaryUpload } from "../../../../utils/imageUpload";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-
 import Image from "next/image";
-import { BsThreeDots } from "react-icons/bs";
+
+import Select, { MultiValue, StylesConfig } from "react-select";
 
 const PermanentDrawer = () => {
   const [openMenu, setOpenMenu] = useState<number>(0);
@@ -21,16 +29,12 @@ const PermanentDrawer = () => {
   const { asArtist } = useSelector((state: RootState) => state.user);
   const songNameRef = useRef<HTMLInputElement>(null);
   const selectLanguageRef = useRef<HTMLSelectElement>(null);
-  const selectGenresRef = useRef<HTMLSelectElement>(null);
-  const selectMoodRef = useRef<HTMLSelectElement>(null);
-  const dateRef = useRef<HTMLInputElement>(null);
   const { user } = useSelector((state: RootState) => state.user);
   const [image, setImage] = useState<File | null>(null);
   const [audio, setAudio] = useState<File | null>(null);
   const [createSong] = useMutation(createSongLink);
-
-  const dispatch = useDispatch();
-
+  const [selectedGenres, setSelectedGenres] = useState<MultiValue<Option>>([]);
+  const [selectedMood, setSelectedMood] = useState<MultiValue<Option>>([]);
   interface ArtistInfo {
     id: string;
     name: string;
@@ -59,68 +63,72 @@ const PermanentDrawer = () => {
     setOpenMenu(index);
   };
 
-  const handleSongImageChange = (event: any) => {
-    setImage(event.target.files[0]);
-  };
+ const handleSongImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+   if (event.target.files && event.target.files[0]) {
+     setImage(event.target.files[0]);
+   }
+ };
 
-  const handleSongAudioChange = (event: any) => {
-    setAudio(event.target.files[0]);
-  };
+
+ const handleSongAudioChange = (event: ChangeEvent<HTMLInputElement>) => {
+   if (event.target.files && event.target.files[0]) {
+     setAudio(event.target.files[0]);
+   }
+ };
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     let imageLink: string = "";
     let audioLink: string = "";
-    // Access input values using refs
 
     if (!songNameRef.current?.value) {
-      toast.error("Please enter name");
-      return;
-    }
-    if (!selectGenresRef.current?.value) {
-      toast.error("please select genres ");
+      toast.error("Please Name of the song");
       return;
     }
     if (!selectLanguageRef.current?.value) {
-      toast.error(" Please select langauge");
+      toast.error("Please select the langauge of song");
       return;
     }
-    if (!selectMoodRef.current?.value) {
-      toast.error("Please select mood");
+    if (selectedGenres.length === 0) {
+      toast.error("Please select the prefered Song Genres");
+      return;
+    }
+
+    if (selectedMood.length === 0) {
+      toast.error("Please select the mood of the song");
       return;
     }
     if (!image) {
-      toast.error("Please select the image");
+      toast.error("Please select the song Thumbnail");
     } else {
-      imageLink = await cloudinaryUpload(image, "song-Image");
+      imageLink = await cloudinaryUpload(image, "song-Image", "image");
     }
     if (!audio) {
-      toast.error("Please select the audio");
+      toast.error("Please select the song audio file");
     } else {
-      audioLink = await cloudinaryUpload(audio, "song-audio");
+      audioLink = await cloudinaryUpload(audio, "song-audio", "video");
     }
 
-    let genresArray = [];
-    genresArray.push(selectGenresRef.current.value);
+    const genresValues: string[] = selectedGenres.map((option) => option.value);
+    const moodValues: string[] = selectedMood.map((option) => option.value);
 
-    let moodArray = [];
-    moodArray.push(selectMoodRef.current.value);
+    //sending query
     try {
       const { data } = await createSong({
         variables: {
           title: songNameRef.current.value,
           artist: asArtist,
-          genres: genresArray,
+          genres: genresValues,
           language: selectLanguageRef.current.value,
-          mood: moodArray,
+          mood: moodValues,
           streamingLink: audioLink,
           imageLink: imageLink,
         },
       });
 
       if (songNameRef.current) songNameRef.current.value = "";
-      if (selectGenresRef.current) selectGenresRef.current.value = "";
       if (selectLanguageRef.current) selectLanguageRef.current.value = "";
-      if (selectMoodRef.current) selectMoodRef.current.value = "";
+      if (image) setImage(null);
+      if (audio) setAudio(null);
 
       if (data) {
         toast.success("Song upload successfully");
@@ -128,6 +136,38 @@ const PermanentDrawer = () => {
     } catch {
       toast.error("Failed to create the song");
     }
+  };
+
+
+  const customStyles: StylesConfig<Option, true> = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: "#111827", 
+      borderColor: "black",
+      color: "white", 
+      borderWidth: "2px",
+      borderRadius: "0.375rem",
+      boxShadow: "none",
+      padding: "0.25rem",
+      "&:hover": {
+        borderColor: "black", 
+      },
+    }),
+    option: (provided) => ({
+      ...provided,
+      backgroundColor: "#111827", 
+      color: "white",
+      "&:hover": {
+        backgroundColor: "#1F2937", 
+      },
+    }),
+  };
+
+  const handleGenresChange = (selectedOptions: MultiValue<Option>) => {
+    setSelectedGenres(selectedOptions);
+  };
+  const handleMoodChange = (selectedOptions: MultiValue<Option>) => {
+    setSelectedMood(selectedOptions);
   };
 
   useEffect(() => {
@@ -203,6 +243,23 @@ const PermanentDrawer = () => {
                     className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900 text-white rounded-md"
                   />
                 </div>
+                <div>
+                  <label
+                    htmlFor="selectField"
+                    className="block text-gray-200 text-sm"
+                  >
+                    Please your prefered song language
+                  </label>
+                  <select
+                    id="selectField"
+                    ref={selectLanguageRef}
+                    className="border border-green-500 h-12 w-96 rounded-md text-white bg-gray-900 fontlg"
+                  >
+                    {LanguageOptions.map((item, index) => (
+                      <option value={`${item.value}`}>{item.label}</option>
+                    ))}
+                  </select>
+                </div>
                 {/* select the genres of song  */}
                 <div>
                   <label
@@ -211,35 +268,17 @@ const PermanentDrawer = () => {
                   >
                     Select Your Song Genres
                   </label>
-                  <select
-                    id="selectField"
-                    ref={selectGenresRef}
-                    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-                  >
-                    {Genres.map((item, index) => (
-                      <option value={`${item}`}>{item}</option>
-                    ))}
-                  </select>
+                  <Select
+                    isMulti
+                    options={GenresOptions}
+                    value={selectedGenres}
+                    onChange={handleGenresChange}
+                    styles={customStyles}
+                    className="w-96 mb-2 border border-green-500 rounded-md"
+                  />
                 </div>
 
                 {/* select the language of song */}
-                <div>
-                  <label
-                    htmlFor="selectField"
-                    className="block text-gray-200 text-sm"
-                  >
-                    please your prefered song language
-                  </label>
-                  <select
-                    id="selectField"
-                    ref={selectLanguageRef}
-                    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-                  >
-                    {Language.map((item, index) => (
-                      <option value={`${item}`}>{item}</option>
-                    ))}
-                  </select>
-                </div>
 
                 {/* select the mood of Song  */}
                 <div>
@@ -247,26 +286,25 @@ const PermanentDrawer = () => {
                     htmlFor="selectField"
                     className="block text-gray-200 text-sm"
                   >
-                    please your prefered song mood
+                    Select Your Song Mood
                   </label>
-                  <select
-                    id="selectField"
-                    ref={selectMoodRef}
-                    className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-                  >
-                    {Mood.map((item, index) => (
-                      <option value={`${item}`}>{item}</option>
-                    ))}
-                  </select>
+                  <Select
+                    isMulti
+                    options={MoodOptions}
+                    value={selectedMood}
+                    onChange={handleMoodChange}
+                    styles={customStyles}
+                    className="w-96 mb-2 border border-green-500 rounded-md"
+                  />
                 </div>
 
                 {/* select the song image */}
                 <div>
                   <label
                     htmlFor="selectField"
-                    className="block text-gray-200 text-sm"
+                    className="block text-gray-300 text-sm mb-2"
                   >
-                    please select the image
+                    Please select the Song Thumbnail
                   </label>
 
                   <input type="file" onChange={handleSongImageChange} />
@@ -276,24 +314,25 @@ const PermanentDrawer = () => {
                 <div>
                   <label
                     htmlFor="selectField"
-                    className="block text-gray-200 text-sm"
+                    className="block text-gray-300 text-sm mb-2"
                   >
-                    please select the audio
+                    Please select the Song Audio file
                   </label>
-                  <input type="file" onChange={handleSongAudioChange} />
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleSongAudioChange}
+                  />
                 </div>
               </div>
               <button
                 type="submit"
-                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 mt-5"
+                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 mt-10"
               >
-                upload Song
+                Upload Song
               </button>
             </form>
           )}
-
-          
-
         </div>
       </div>
     </div>

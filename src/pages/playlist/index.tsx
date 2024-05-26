@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import SongCard from "../../../components/common/SongCard";
 import { playlistActions } from "../../../store/playlistSlice";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import { SongState } from "../../../interface";
 
 interface Song {
   title: string;
@@ -47,7 +48,7 @@ const Playlist: React.FC = () => {
     }
   }, [data, showIndex]);
 
-  const handleSongClick = (playlist: any, index: number) => {
+  const handleSongClick = (playlist: SongState[], index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,

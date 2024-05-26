@@ -1,7 +1,5 @@
 import React from "react";
-import { AiFillPlayCircle, AiOutlineHeart } from "react-icons/ai";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { BsPlayCircle, BsThreeDots } from "react-icons/bs";
 import { hero1, hero2 } from "../../public/data/data";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

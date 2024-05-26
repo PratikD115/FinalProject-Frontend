@@ -14,28 +14,11 @@ import { favouriteActions } from "../../store/favoriteSlice";
 import { RootState } from "../../store";
 import { ScaleLoader } from "react-spinners";
 import SongCard from "../common/SongCard";
-import { Artist, Song } from "../../interface";
+import {  ArtistState, SongState } from "../../interface";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-export interface ArtistInfo {
-  id: string;
-  name: string;
-  dateOfBirth: string;
-  biography: string;
-  imageLink: string;
-  songs: Song[];
-}
 
-export interface SongInfo {
-  id: string;
-  title: string;
-  imageLink: string;
-  songUrl: string;
-  songId: string;
-  artist: ArtistInfo;
-  streamingLink: string;
-}
 
 export default function ArtistProfile() {
   const router = useRouter();
@@ -65,7 +48,7 @@ export default function ArtistProfile() {
     },
   });
 
-  const [artistInfo, setArtistInfo] = useState<Partial<Artist>>({
+  const [artistInfo, setArtistInfo] = useState<Partial<ArtistState>>({
     id: "",
     name: "",
     dateOfBirth: "",
@@ -256,11 +239,11 @@ export default function ArtistProfile() {
             {artistInfo.name} Songs
           </div>
           <div className="mt-5">
-            {playlist?.map((pages: Song[], index: number) => {
+            {playlist?.map((pages: SongState[], index: number) => {
               if (index <= mainIndex) {
                 return (
                   <div className="" key={index}>
-                    {pages.map((song: Song, songIndex: number) => (
+                    {pages.map((song: SongState, songIndex: number) => (
                       <SongCard
                         handleClick={() => {
                           handleSongClick(index, songIndex);

@@ -31,7 +31,7 @@ export const LOGIN = gql`
       name
       role
       email
-      
+
       profile
       endDate
       asArtist
@@ -59,6 +59,18 @@ export const User = gql`
       subscribe {
         expireDate
       }
+    }
+  }
+`;
+
+export const changePassword = gql`
+  mutation ($userId: String!, $password: String!, $confirmPassword: String!) {
+    changePassword(
+      userId: $userId
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      id
     }
   }
 `;

@@ -8,31 +8,31 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { PlaylistState, SongState } from "../../interface";
 
 const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
-  const [inputValue, setInputValue] = useState(null);
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
-
-  const [playlists, setPlaylists] = useState([]);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [selectedPlaylist, setSelectedPlaylist] = useState<string>();
+  const [playlists, setPlaylists] = useState<PlaylistState[]>([]);
   const { user } = useSelector((state: RootState) => state.user);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>();
-  const [isCreateNew, setIsCreateNew] = useState(false);
-  const { loading, error, data, refetch } = useQuery(getAllPlaylist, {
+  const [isCreateNew, setIsCreateNew] = useState<boolean>(false);
+  const { data, refetch } = useQuery(getAllPlaylist, {
     variables: { userId: user?.id },
   });
 
   useEffect(() => {
     if (data) {
       const playlistInfo = data.getUserById.playlist?.map(
-        (playlistObj: any) => playlistObj // Assuming 'name' is the property containing the playlist name
+        (playlistObj: SongState[]) => playlistObj
       );
       setPlaylists(playlistInfo);
     }
   }, [data]);
-  // Call refetch whenever the component re-renders
+
   useEffect(() => {
     if (refetch) {
       refetch();
@@ -40,7 +40,7 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
   }, [refetch]);
 
   // if user click on the playlist
-  const handlePlaylistClick = (index: number, prePlaylist: any) => {
+  const handlePlaylistClick = (index: number, prePlaylist: string) => {
     setSelectedButtonIndex(index);
     setSelectedPlaylist(prePlaylist);
   };
@@ -50,8 +50,10 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
   };
 
   // input the data from the user
-  const handleChange = (event: any) => {
-    setInputValue(event.target.value);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target) {
+      setInputValue(event.target?.value);
+    }
   };
 
   return (
@@ -81,7 +83,7 @@ const UserPlaylist: React.FC<{ onClose: any }> = ({ onClose }) => {
         <div className="mt-3">
           <div className="font=[lato] text-sm">Playlists :</div>
           <div className="mt-3">
-            {playlists?.map((playlist: any, index: number) => (
+            {playlists?.map((playlist: PlaylistState, index: number) => (
               <Button
                 key={index}
                 onClick={() => handlePlaylistClick(index, playlist.id)}

@@ -1,23 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {  SongState } from "../interface";
 
-export interface PlaylistItem {
-  id: string;
-  imageLink: string;
-  title: string;
-  artist: Artist;
-  streamingLink: string;
-}
 
-interface Artist {
-  imageLink: string;
-  name: string;
-}
-interface PlaylistState {
-  playlist: PlaylistItem[];
+
+
+interface UserPlaylist {
+  playlist: SongState[];
   index: number;
 }
 
-const initialPlaylistState: PlaylistState = { playlist: [], index: 0 };
+const initialPlaylistState: UserPlaylist = { playlist: [], index: 0 };
 
 const playlistSlice = createSlice({
   name: "playlist",
@@ -25,7 +17,7 @@ const playlistSlice = createSlice({
   reducers: {
     setPlaylistAndIndex(
       state,
-      action: PayloadAction<{ playlist: PlaylistItem[]; index: number }>
+      action: PayloadAction<{ playlist: SongState[]; index: number }>
     ) {
       state.playlist = action.payload.playlist;
       state.index = action.payload.index;

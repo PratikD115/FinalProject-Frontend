@@ -5,30 +5,13 @@ import { playlistActions } from "../../store/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import SongCard from "../common/SongCard";
+import { PlaylistState, SongState } from "../../interface";
 
-const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
+
+const SongPlaylist: React.FC<{ title: string, playlistData: any }> = ({
   title,
   playlistData,
 }) => {
-  interface ArtistInfo {
-    id: string;
-    name: string;
-    dateOfBirth: string;
-    biography: string;
-    imageLink: string;
-    songs: SongInfo[];
-  }
-
-  interface SongInfo {
-    id: string;
-    title: string;
-    imageLink: string;
-    songUrl: string;
-    songId: string;
-    artist: ArtistInfo;
-    streamingLink: string;
-  }
-
   const dispatch = useDispatch();
   const router = useRouter();
   const [playlist, setPlaylist] = useState([]);
@@ -46,7 +29,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
     router.push("/queue");
   };
 
-  const handleSongClick = (playlist: any, index: number) => {
+  const handleSongClick = (playlist: SongState[], index: number) => {
     dispatch(playlistActions.setPlaylistAndIndex({ playlist, index }));
   };
 
@@ -64,7 +47,7 @@ const SongPlaylist: React.FC<{ title: string; playlistData: any }> = ({
           </div>
         </div>
         <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols-3 gap-5">
-          {playlist?.map((item: SongInfo, index: number) => (
+          {playlist?.map((item: SongState, index: number) => (
             <div className="box card hero" key={index}>
               <SongCard
                 handleClick={() => handleSongClick(playlist, index)}

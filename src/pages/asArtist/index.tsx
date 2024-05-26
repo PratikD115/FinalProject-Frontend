@@ -8,11 +8,16 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { isSubscriptionValid } from "../../../utils/subscriptions";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { userToArtist } from "../../../Query/artistQuery";
-import { Genres, Language } from "../../../Query/enum";
+import { Option, GenresOptions, Language } from "../../../Query/enum";
 import { userActions } from "../../../store/userSlice";
 import { RootState } from "../../../store";
+import Select, {
+  MultiValue,
+  SingleValue,
+  StylesConfig,
+} from "react-select";
 
 const ArtistHome = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -30,11 +35,13 @@ const ArtistHome = () => {
   const { asArtist } = useSelector((state: RootState) => state.user);
   const { subscribe } = useSelector((state: RootState) => state.user);
 
+  const [selectedGenres, setSelectedGenres] = useState<MultiValue<Option>>([]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Access input values using refs
 
-    if (!selectGenresRef.current?.value) {
+    if (selectedGenres.length === 0) {
       toast.error("which type of song are you prefered");
       return;
     }
@@ -50,17 +57,24 @@ const ArtistHome = () => {
       toast.error("Please tell me about your self");
       return;
     }
-    try {
-      let genresArray = [];
-      genresArray.push(selectGenresRef.current.value);
+    if (messageRef.current?.value.length < 50) {
+      toast.error("biography must be 50 character long");
+      return;
+    }
 
+    try {
+      const genresValues: string[] = selectedGenres.map(
+        (option) => option.value
+      );
+
+      console.log(genresValues);
       const { data } = await addUserToArtist({
         variables: {
           name: user?.name,
           userId: user?.id,
           dateOfBirth: dateRef.current.value.toString(),
-          genres: genresArray,
-          language: selectLanguageRef.current.value,
+          genres: genresValues,
+          language: "hindi",
           biography: messageRef.current.value,
           imageLink: profile,
         },
@@ -84,7 +98,6 @@ const ArtistHome = () => {
   };
 
   const handleDashboard = () => {
-  
     if (subscribe && isSubscriptionValid(subscribe)) {
       if (asArtist) {
         router.push("asArtist/home");
@@ -98,11 +111,43 @@ const ArtistHome = () => {
       router.push("/subscription");
     }
   };
+  const customStyles: StylesConfig<Option, true> = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: "#111827", 
+      borderColor: "black",
+      color: "white", 
+      borderWidth: "2px",
+      borderRadius: "0.375rem",
+      boxShadow: "none",
+      padding: "0.25rem",
+      "&:hover": {
+        borderColor: "black", 
+      },
+    }),
+    option: (provided) => ({
+      ...provided,
+      backgroundColor: "#111827", 
+      color: "white",
+      "&:hover": {
+        backgroundColor: "#1F2937", 
+      },
+    }),
+  };
+
+  const handleGenresChange = (selectedOptions: MultiValue<Option>) => {
+    setSelectedGenres(selectedOptions);
+  };
+
+  const handleLanguageChange = () => {
+    const selectedLanguage = selectLanguageRef.current?.value;
+    console.log(selectedLanguage); 
+  };
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-900 ">
       <Header />
-      <div className="flex justify-end items-center  text-white pt-[8vh]">
-        <div className="w-[60%] text-center">
+      <div className="flex justify-end items-center  pt-[8vh]">
+        <div className="w-[60%] text-center text-white">
           <h1 className="text-4xl font-bold">
             Discover the perfect stage for your melodies
           </h1>
@@ -171,15 +216,14 @@ const ArtistHome = () => {
                 >
                   Select Your Song Genres
                 </label>
-                <select
-                  id="selectField"
-                  ref={selectGenresRef}
-                  className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
-                >
-                  {Genres.map((item, index) => (
-                    <option value={`${item}`}>{item}</option>
-                  ))}
-                </select>
+                <Select
+                  isMulti
+                  options={GenresOptions}
+                  value={selectedGenres}
+                  onChange={handleGenresChange}
+                  styles={customStyles}
+                  className="w-96 mb-2 border border-green-500 rounded-md"
+                />
               </div>
               <div>
                 <label
@@ -191,7 +235,8 @@ const ArtistHome = () => {
                 <select
                   id="selectField"
                   ref={selectLanguageRef}
-                  className="w-96 h-8 py-5 px-4 mb-2 border border-green-500 bg-gray-900  text-white rounded-md"
+                  onChange={handleLanguageChange}
+                  className="border-2 border-green-500 h-12 w-96 rounded-md text-white bg-gray-900 "
                 >
                   {Language.map((item, index) => (
                     <option value={`${item}`}>{item}</option>

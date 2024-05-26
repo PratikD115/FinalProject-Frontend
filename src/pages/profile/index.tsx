@@ -3,7 +3,7 @@ import ArtistCard from "../../../components/common/ArtistCard";
 import Title from "../../../components/common/Title";
 import Layout from "../../../components/layout/Layout";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playlistActions } from "../../../store/playlistSlice";
 import toast from "react-hot-toast";
@@ -12,30 +12,10 @@ import { useRouter } from "next/router";
 import { RootState } from "../../../store";
 import { cloudinaryUpload } from "../../../utils/imageUpload";
 import SongCard from "../../../components/common/SongCard";
-import Divider from "@mui/material/Divider";
 import Image from "next/image";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
-interface ArtistInfo {
-  id: string;
-  name: string;
-  dateOfBirth: string;
-  biography: string;
-  imageLink: string;
-  songs: SongInfo[];
-}
-
-interface SongInfo {
-  id: string;
-  title: string;
-  imageLink: string;
-  songUrl: string;
-  songId: string;
-  artist: ArtistInfo;
-  streamingLink: string;
-}
+import { ArtistState, SongState, UserState } from "../../../interface";
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -48,14 +28,16 @@ const Profile: React.FC = () => {
     },
   });
   const dispatch = useDispatch();
-  const [userProfile, setUserProfile] = useState<any>(null);
-  const [playlist, setPlaylist] = useState<any>([]);
+  const [userProfile, setUserProfile] = useState<UserState>();
+  const [playlist, setPlaylist] = useState<SongState[]>([]);
   const [image, setImage] = useState<File | null>(null);
   const [uploadImageLink] = useMutation(uploadImage);
   const { songData } = useSelector((state: RootState) => state.favourite);
 
-  const handleImageChange = (event: any) => {
-    setImage(event.target.files[0]);
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImage(event.target.files[0]);
+    }
   };
 
   useEffect(() => {
@@ -72,7 +54,7 @@ const Profile: React.FC = () => {
     }
   });
 
-  const handleSongClick = (playlist: any, index: number) => {
+  const handleSongClick = (playlist: SongState[], index: number) => {
     dispatch(
       playlistActions.setPlaylistAndIndex({
         playlist,
@@ -93,14 +75,14 @@ const Profile: React.FC = () => {
   };
 
   const handlePasswordChange = () => {
-    console.log("change password");
+    router.push("/setPassword");
   };
   const handleUpload = async () => {
     if (!image) {
       toast.error("No file selected");
       return;
     }
-    const imageLink = await cloudinaryUpload(image, "user-Image");
+    const imageLink = await cloudinaryUpload(image, "user-Image", "image");
     const { data } = await uploadImageLink({
       variables: {
         userId: user?.id,
@@ -128,7 +110,7 @@ const Profile: React.FC = () => {
                     }
                   }}
                 >
-                  <div className="rounded-full bg-black bg-opacity-50 flex justify-center items-center opacity-100 transition-opacity duration-300 hover:opacity-80">
+                  <div className="rounded-full bg-black bg-opacity-50 flex justify-center items-center opacity-100 transition-opacity duration-300 hover:opacity-70">
                     <Image
                       src={profile || ""}
                       alt=""
@@ -184,13 +166,13 @@ const Profile: React.FC = () => {
             <ul className="text-base mt-5">
               <li
                 onClick={handlePasswordChange}
-                className="flex items-center flex-col mb-2 text-gray-400 cursor-pointer bg-gray-800 py-1 rounded-md mx-2"
+                className="flex items-center flex-col mb-2 text-gray-400 cursor-pointer bg-gray-800 py-1 rounded-md mx-2 hover:bg-gray-700"
               >
-               Change Password
+                Change Password
               </li>
               <li
                 onClick={handleYourPlaylist}
-                className="flex items-center flex-col mb-2 text-gray-400 cursor-pointer bg-gray-800 py-1 rounded-md mx-2"
+                className="flex items-center flex-col mb-2 text-gray-400 cursor-pointer bg-gray-800 py-1 rounded-md mx-2 hover:bg-gray-700"
               >
                 Your Playlist
               </li>
@@ -201,36 +183,36 @@ const Profile: React.FC = () => {
             <div className="mt-5">
               <Title title={"Your Favourite :"} />
               <div className="grid lg:grid-cols-6 grid-cols-5 sm:grid-cols-3 gap-5">
-                {userProfile?.favourite?.map(
-                  (item: SongInfo, index: number) => (
-                    <div className="box card hero" key={index}>
-                      <SongCard
-                        handleClick={() => handleSongClick(playlist, index)}
-                        imageLink={item.imageLink}
-                        songName={item.title}
-                        artistName={item.artist.name}
-                        songId={item.id}
-                        songUrl={item.streamingLink}
-                        liked={songData.includes(item.id)}
-                        type="large"
-                      />
-                    </div>
-                  )
-                )}
+                {userProfile?.favourite?.map((item: SongState, index: number) => (
+                  <div className="box card hero" key={index}>
+                    <SongCard
+                      handleClick={() => handleSongClick(playlist, index)}
+                      imageLink={item.imageLink}
+                      songName={item.title}
+                      artistName={item.artist.name}
+                      songId={item.id}
+                      songUrl={item.streamingLink}
+                      liked={songData.includes(item.id)}
+                      type="large"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
             <div className="mt-5">
               <Title title={"Followed Artist :"} />
               <div className="grid lg:grid-cols-6 grid-cols-4 sm:grid-cols- gap-5">
-                {userProfile?.follow?.map((item: any, index: number) => (
-                  <div key={index}>
-                    <ArtistCard
-                      onClick={() => handleArtistClick(item.id)}
-                      artistImage={item.imageLink}
-                      artistName={item.name}
-                    />
-                  </div>
-                ))}
+                {userProfile?.follow?.map(
+                  (item: ArtistState, index: number) => (
+                    <div key={index}>
+                      <ArtistCard
+                        onClick={() => handleArtistClick(item.id)}
+                        artistImage={item.imageLink}
+                        artistName={item.name}
+                      />
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </div>

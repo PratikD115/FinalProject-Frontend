@@ -5,6 +5,7 @@ import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ArtistInfo } from "../../Query/artistQuery";
+import { ArtistState } from "../../interface";
 
 const PopulerArtist: React.FC = () => {
  const { data } = useQuery(ArtistInfo);
@@ -59,7 +60,7 @@ const PopulerArtist: React.FC = () => {
     <section className="treading hero">
       <Title title="Popular Artist" />
       <Slider {...settings}>
-        {artistInfo.map((item: any, index: number) => (
+        {artistInfo.map((item: ArtistState, index: number) => (
           <div className="box card hero m-5" key={index}>
             <div className="mr-5">
               <ArtistCard
