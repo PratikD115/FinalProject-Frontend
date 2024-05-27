@@ -9,8 +9,10 @@ import { changePassword } from "../../../Query/authQuery";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { ScaleLoader } from "react-spinners";
+import Cookies from "js-cookie";
 
 const setPassword: React.FC = () => {
+  const token = Cookies.get("authToken");
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const { user } = useSelector((state: RootState) => state.user);
@@ -39,14 +41,16 @@ const setPassword: React.FC = () => {
       toast.error("password and confirm password must be same");
       return;
     }
-
-    console.log(user?.id);
-
     const { data } = await updatePassword({
       variables: {
         userId: user?.id,
         password: passwordRef.current?.value,
         confirmPassword: confirmPasswordRef.current?.value,
+      },
+      context: {
+        headers: {
+          authorization: token ? token : "",
+        },
       },
     });
     if (loading) {

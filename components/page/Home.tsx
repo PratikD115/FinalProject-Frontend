@@ -10,10 +10,18 @@ import {
 } from "../../Query/playlistQuery";
 import SongPlaylist from "../hero/SongPlaylist";
 import { useQuery } from "@apollo/client";
+import Cookies from "js-cookie";
 
 const Home: React.FC = () => {
+  const token = Cookies.get("authToken");
+  console.log(token);
   const { data: hindiTop20PlaylistData } = useQuery(hindiTop20Playlist, {
     variables: { page: 1, limit: 10 },
+    context: {
+      headers: {
+        authorization: token ? token : "",
+      },
+    },
   });
 
   const { data: englishTop20PlaylistData } = useQuery(englishTop20Playlist, {
